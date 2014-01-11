@@ -2,15 +2,11 @@
 //MataSharp; Public C# implementation of the non public 'Mata' API.
 using System;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using HtmlAgilityPack;
 
 namespace MataSharp
 {
