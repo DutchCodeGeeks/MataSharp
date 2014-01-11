@@ -1,0 +1,8 @@
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\bin\Release\MataSharp.dll
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\bin\Release\MataSharp.pdb
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\bin\Release\HtmlAgilityPack.dll
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\bin\Release\Newtonsoft.Json.dll
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\bin\Release\Newtonsoft.Json.xml
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\obj\Release\MataSharp.csprojResolveAssemblyReference.cache
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\obj\Release\MataSharp.dll
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\obj\Release\MataSharp.pdb
