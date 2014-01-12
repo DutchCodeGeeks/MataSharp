@@ -263,7 +263,7 @@ namespace MataSharp
         /// <summary>
         /// <para>Sends current message instance.</para>
         /// </summary>
-        public void Send() //make it return bool
+        public void Send()
         {
             if (this.CanSend == false) throw new System.Security.Authentication.AuthenticationException("This message is marked as not sendable!");
             if (this.Sender == null || this.Recipients == null) throw new Exception("Sender and/or Recipients cannot be null!");
