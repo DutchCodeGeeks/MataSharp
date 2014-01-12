@@ -23,21 +23,6 @@ namespace MataSharp
         public string TeacherCode { get; set; }
         public int GroupID { get; set; }
 
-        /// <summary>
-        /// Returns all Magisterpersons filterd by the given search filter as a list.
-        /// </summary>
-        /// <param name="SearchFilter">The search filter to use as string.</param>
-        /// <returns>List containing MagisterPerson instances</returns>
-        public static List<MagisterPerson> GetPersons(string SearchFilter)
-        {
-            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterPerson>();
-
-            string URL = "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
-
-            string personsRAW = _Session.HttpClient.client.DownloadString(URL);
-            return JArray.Parse(personsRAW).ToList().ConvertAll(p => p.ToObject<MagisterStylePerson>().ToPerson());
-        }
-
         public bool Equals(MagisterPerson Person)
         {
             if (Person != null && this.ID == Person.ID && this.Group == Person.Group && this.GroupID == Person.GroupID)
@@ -52,7 +37,7 @@ namespace MataSharp
         /// <returns>A MagisterStylePerson instance.</returns>
         internal MagisterStylePerson ToMagisterStyle()
         {
-            var tmpPerson = (GetPersons(this.Name).Count == 1) ? GetPersons(this.Name)[0] : this; //Takes the person from the server, if it are more or less than one, use this instance instead.
+            var tmpPerson = (_Session.Mata.GetPersons(this.Name).Count == 1) ? _Session.Mata.GetPersons(this.Name)[0] : this; //Takes the person from the server, if it are more or less than one, use this instance instead.
             return new MagisterStylePerson()
                 {
                     Id = tmpPerson.ID,

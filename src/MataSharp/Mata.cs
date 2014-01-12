@@ -57,7 +57,7 @@ namespace MataSharp
 
             _Session.HttpClient.client.Headers[HttpRequestHeader.Cookie] = "SESSION_ID=" + this.SessionID + "&fileDownload=true"; //yummy! cookies!
 
-            this.Person = MagisterPerson.GetPersons(this.Name)[0]; //Get itself as MagisterPerson from the servers.
+            this.Person = this.GetPersons(this.Name)[0]; //Get itself as MagisterPerson from the servers.
             _Session.Mata = this;
         }
 
@@ -91,6 +91,21 @@ namespace MataSharp
                 });
             }
             return tmplst;
+        }
+
+        /// <summary>
+        /// Returns all Magisterpersons filterd by the given search filter as a list.
+        /// </summary>
+        /// <param name="SearchFilter">The search filter to use as string.</param>
+        /// <returns>List containing MagisterPerson instances</returns>
+        public List<MagisterPerson> GetPersons(string SearchFilter)
+        {
+            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterPerson>();
+
+            string URL = "https://" + this.School.URL + "/api/personen/" + this.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
+
+            string personsRAW = _Session.HttpClient.client.DownloadString(URL);
+            return JArray.Parse(personsRAW).ToList().ConvertAll(p => p.ToObject<MagisterStylePerson>().ToPerson());
         }
 
         public List<Homework> GetHomework()
