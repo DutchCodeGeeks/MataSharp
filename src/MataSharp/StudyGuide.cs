@@ -19,7 +19,7 @@ namespace MataSharp
 
     public partial class StudyGuidePart
     {
-        public Attachment[] Attachments { get; set; }
+        public List<Attachment> Attachments { get; set; }
         public int ID { get; set; }
         public bool Visible { get; set; }
         public string Description { get; set; }
@@ -129,10 +129,10 @@ namespace MataSharp
         {
             var expireDate = (this.TotEnMet != null && this.TotEnMet != "") ? DateTime.Parse(this.TotEnMet, CultureInfo.InvariantCulture) : new DateTime();
             var beginDate = (this.Van != null && this.Van != "") ? DateTime.Parse(this.Van, CultureInfo.InvariantCulture) : new DateTime();
-
+            
             return new StudyGuidePart()
             {
-                Attachments = this.Bronnen,
+                Attachments = new List<Attachment>(this.Bronnen),
                 ID = this.Id,
                 Visible = this.IsZichtbaar,
                 Description = this.Omschrijving,
