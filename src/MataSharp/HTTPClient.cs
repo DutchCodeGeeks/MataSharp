@@ -19,7 +19,7 @@ namespace MataSharp
         {
             byte[] tmpArr = this.client.UploadValues(URL, Values);
             string unStripped = Encoding.ASCII.GetString(tmpArr);
-            return Regex.Replace(unStripped, "\r|\n", string.Empty);
+            return Regex.Replace(unStripped, "\r|\n", "\n");
         }
 
         public string Post(string URL, string Content)
@@ -27,7 +27,7 @@ namespace MataSharp
             this.client.Headers[HttpRequestHeader.ContentType] = "application/json;charset=UTF-8";
             byte[] tmpArr = this.client.UploadData(URL, System.Text.Encoding.ASCII.GetBytes(Content));
             string unStripped = Encoding.ASCII.GetString(tmpArr);
-            return Regex.Replace(unStripped, "\r|\n", string.Empty);
+            return Regex.Replace(unStripped, "\r|\n", "\n");
         }
 
         public void Delete(string URL)
@@ -44,7 +44,7 @@ namespace MataSharp
             this.client.Headers[HttpRequestHeader.ContentType] = "application/json;charset=UTF-8";
             byte[] tmpArr = this.client.UploadData(URL, "PUT", System.Text.Encoding.ASCII.GetBytes(Data));
             string unStripped = Encoding.ASCII.GetString(tmpArr);
-            return Regex.Replace(unStripped, "\r|\n", string.Empty);
+            return Regex.Replace(unStripped, "\r|\n", "\n");
         }
 
         public string DownloadFile(string URL, string filename, string Dir)

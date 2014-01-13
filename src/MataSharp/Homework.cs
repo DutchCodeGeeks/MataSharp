@@ -108,7 +108,8 @@ namespace MataSharp
 
         public Homework ToHomework()
         {
-            string tmpContent = Regex.Replace(this.Inhoud, "</p>|&quot;", "");
+            string tmpContent = Regex.Replace(this.Inhoud, "</p>|&quot;|&#x200b;", "");
+            tmpContent = Regex.Replace(tmpContent, "<[^>]*>", ""); //Strip HTML tags
             tmpContent = Regex.Replace(tmpContent, "<br />|<p />|<p>", "\n");
             tmpContent = Regex.Replace(tmpContent, "&nbsp;", " ");
 
