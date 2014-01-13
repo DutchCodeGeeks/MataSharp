@@ -111,6 +111,21 @@ namespace MataSharp
             return FolderType_ID.Where(x => x.Key == this._FolderType).ElementAt(0).Value;
         }
 
+        internal static string DayOfWeekToString(DayOfWeek dayOfWeek)
+        {
+            switch(dayOfWeek)
+            {
+                case DayOfWeek.Monday: return "maandag";
+                case DayOfWeek.Tuesday: return "dinsdag";
+                case DayOfWeek.Wednesday: return "woensdag";
+                case DayOfWeek.Thursday: return "donderdag";
+                case DayOfWeek.Friday: return "vrijdag";
+                case DayOfWeek.Saturday:return "zaterdag";
+                case DayOfWeek.Sunday: return "zondag";
+                default: return "maandag";
+            }
+        }
+
         /// <summary>
         /// Creates new MagisterMessage that forwards the current message.
         /// </summary>
@@ -165,7 +180,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br>Om  " + this.SentDate.Value.ToString() + ",&nbsp;&nbsp;&nbsp;&nbsp;Schreef " + this.Sender.Name + ":<br><br>\"" + this.Body + "\"",
+                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.Value.DayOfWeek) + " " + this.SentDate.Value.ToString() + "<br>Aan: " + String.Join(", ",this.Recipients.Select(x=>x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -203,7 +218,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br>Om  " + this.SentDate.Value.ToString() + ",&nbsp;&nbsp;&nbsp;&nbsp;Schreef " + this.Sender.Name + ":<br><br>\"" + this.Body + "\"",
+                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.Value.DayOfWeek) + " " + this.SentDate.Value.ToString() + "<br>Aan: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -237,7 +252,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br>Om  " + this.SentDate.Value.ToString() + ",&nbsp;&nbsp;&nbsp;&nbsp;Schreef " + this.Sender.Name + ":<br><br>\"" + this.Body + "\"",
+                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.Value.DayOfWeek) + " " + this.SentDate.Value.ToString() + "<br>Aan: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
