@@ -71,7 +71,7 @@ namespace MataSharp
 
             string URL = "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
 
-            string personsRAW = _Session.HttpClient.client.DownloadString(URL);
+            string personsRAW = _Session.HttpClient.DownloadString(URL);
             return JArray.Parse(personsRAW).ToList().ConvertAll(p => p.ToObject<MagisterStylePerson>());
         }
 

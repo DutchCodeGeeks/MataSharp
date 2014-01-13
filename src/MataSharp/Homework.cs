@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Globalization;
 using Newtonsoft.Json;
 
@@ -108,11 +106,6 @@ namespace MataSharp
 
         public Homework ToHomework()
         {
-            string tmpContent = Regex.Replace(this.Inhoud, "</p>|&quot;|&#x200b;", "");
-            tmpContent = Regex.Replace(tmpContent, "<br />|<p />|<p>", "\n");
-            tmpContent = Regex.Replace(tmpContent, "&nbsp;", " ");
-            tmpContent = Regex.Replace(tmpContent, "<[^>]*>", ""); //Strip HTML tags
-
             return new Homework()
             {
                 Notes = this.AantekeningLeerling,
@@ -121,7 +114,7 @@ namespace MataSharp
                 End = DateTime.Parse(this.Einde, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
                 ID = this.Id,
                 InfoType = this.InfoType,
-                Content = tmpContent,
+                Content = this.Inhoud,
                 EndBySchoolHour = this.LesuurTM,
                 BeginBySchoolHour = this.LesuurVan,
                 Location = this.Lokatie,

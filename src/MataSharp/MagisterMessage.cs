@@ -335,11 +335,6 @@ namespace MataSharp
 
         public MagisterMessage ToMagisterMessage()
         {
-            string tmpBody = Regex.Replace(this.Inhoud, "</p>|&quot;|&#x200b;", "");
-            tmpBody = Regex.Replace(tmpBody, "<br />|<p />|<p>", "\n");
-            tmpBody = Regex.Replace(tmpBody, "&nbsp;", " ");
-            tmpBody = Regex.Replace(tmpBody, "<[^>]*>", ""); //Strip HTML tags
-
             var tmpReceivers = this.Ontvangers.OrderBy(p => p.Achternaam).ToList().ConvertAll(p => p.ToPerson());
 
             var tmpCopiedReceivers = this.KopieOntvangers.OrderBy(p => p.Achternaam).ToList().ConvertAll(p => p.ToPerson());
@@ -355,7 +350,7 @@ namespace MataSharp
                 Ref = this.Ref,
                 Subject = this.Onderwerp,
                 Sender = this.Afzender.ToPerson(),
-                Body = tmpBody,
+                Body = this.Inhoud,
                 Recipients = tmpReceivers,
                 CC = tmpCopiedReceivers,
                 SentDate = DateTime.Parse(this.VerstuurdOp, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),

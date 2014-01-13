@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
-using System.Web;
 
 namespace MataSharp
 {
@@ -20,6 +19,18 @@ namespace MataSharp
             byte[] tmpArr = this.client.UploadValues(URL, Values);
             string unStripped = Encoding.ASCII.GetString(tmpArr);
             return Regex.Replace(unStripped, "\r|\n", "\n");
+        }
+
+        public string DownloadString(string URL)
+        {
+            var unStripped = this.client.DownloadString(URL);
+
+            string stripped = Regex.Replace(unStripped, "</p>|&quot;|&#x200b;", "");
+            stripped = Regex.Replace(stripped, "<br />|<p />|<p>", "\n");
+            stripped = Regex.Replace(stripped, "&nbsp;", " ");
+            stripped = Regex.Replace(stripped, "<[^>]*>", ""); //Strip HTML tags
+
+            return stripped;
         }
 
         public string Post(string URL, string Content)

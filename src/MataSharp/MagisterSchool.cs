@@ -26,7 +26,7 @@ namespace MataSharp
 
             string URL = "https://schoolkiezer.magister.net/home/query?filter=" + SearchFilter;
 
-            string schoolsRAW = _Session.HttpClient.client.DownloadString(URL);
+            string schoolsRAW = _Session.HttpClient.DownloadString(URL);
             return JArray.Parse(schoolsRAW).ToList().ConvertAll(s => s.ToObject<MagisterSchool>());
         }
 

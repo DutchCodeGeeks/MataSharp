@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace MataSharp
 {
@@ -32,14 +29,14 @@ namespace MataSharp
 
             string URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten?$skip=0&$top=" + Ammount;
 
-            string CompactMessagesRAW = _Session.HttpClient.client.DownloadString(URL);
+            string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
             var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
 
             List<MagisterMessage> list = new List<MagisterMessage>();
             foreach (var CompactMessage in CompactMessages.Items.ToList().ConvertAll(m => JsonConvert.DeserializeObject<MessageFolderItem>(m.ToString())))
             {
                 URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten/" + CompactMessage.Id;
-                string MessageRAW = _Session.HttpClient.client.DownloadString(URL);
+                string MessageRAW = _Session.HttpClient.DownloadString(URL);
                 var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
                 list.Add(MessageClean.ToMagisterMessage());
             }
@@ -57,7 +54,7 @@ namespace MataSharp
 
             string URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten?$skip=0&$top=" + Ammount;
 
-            string CompactMessagesRAW = _Session.HttpClient.client.DownloadString(URL);
+            string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
             var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
 
             List<MagisterMessage> list = new List<MagisterMessage>();
@@ -66,7 +63,7 @@ namespace MataSharp
                 if (CompactMessage.IsGelezen == false)
                 {
                     URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten/" + CompactMessage.Id;
-                    string MessageRAW = _Session.HttpClient.client.DownloadString(URL);
+                    string MessageRAW = _Session.HttpClient.DownloadString(URL);
                     var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
                     list.Add(MessageClean.ToMagisterMessage());
                 }
@@ -86,7 +83,7 @@ namespace MataSharp
             {
                 string URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten?$skip=" + (i * 25) + "&$top=" + ((i * 25) + 25);
 
-                string CompactMessagesRAW = _Session.HttpClient.client.DownloadString(URL);
+                string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
                 var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
 
                 foreach (var CompactMessage in CompactMessages.Items.ToList().ConvertAll(m => JsonConvert.DeserializeObject<MessageFolderItem>(m.ToString())))
@@ -94,7 +91,7 @@ namespace MataSharp
                     if (CompactMessage.IsGelezen == false)
                     {
                         URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten/" + CompactMessage.Id;
-                        string MessageRAW = _Session.HttpClient.client.DownloadString(URL);
+                        string MessageRAW = _Session.HttpClient.DownloadString(URL);
                         var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
                         list.Add(MessageClean.ToMagisterMessage());
                     }

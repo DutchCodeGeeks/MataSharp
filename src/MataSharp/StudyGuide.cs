@@ -68,7 +68,7 @@ namespace MataSharp
             {
                 string URL = "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/studiewijzers/" + this.Id + "/onderdelen/" + StudyGuidePartsListItem.Id;
 
-                string partRaw = _Session.HttpClient.client.DownloadString(URL);
+                string partRaw = _Session.HttpClient.DownloadString(URL);
                 var partClean = JsonConvert.DeserializeObject<StudieWijzerOnderdeel>(partRaw);
 
                 tmpStudyGuideParts.Add(partClean.ToReadableStyle());

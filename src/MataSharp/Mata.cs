@@ -68,7 +68,7 @@ namespace MataSharp
         {
             string url = "https://" + this.School.URL + "/api/personen/" + this.UserID + "/communicatie/berichten/mappen?$skip=0&$top=50";
 
-            string MessageFoldersRAW = _Session.HttpClient.client.DownloadString(url);
+            string MessageFoldersRAW = _Session.HttpClient.DownloadString(url);
             var MessageFolders = JArray.Parse(MessageFoldersRAW).ToArray();
 
             List<MagisterMessageFolder> tmplst = new List<MagisterMessageFolder>();
@@ -104,7 +104,7 @@ namespace MataSharp
 
             string URL = "https://" + this.School.URL + "/api/personen/" + this.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
 
-            string personsRAW = _Session.HttpClient.client.DownloadString(URL);
+            string personsRAW = _Session.HttpClient.DownloadString(URL);
             return JArray.Parse(personsRAW).ToList().ConvertAll(p => p.ToObject<MagisterStylePerson>().ToPerson());
         }
 
@@ -112,7 +112,7 @@ namespace MataSharp
         {
             string URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/huiswerk/huiswerk";
 
-            string homeworkListRaw = _Session.HttpClient.client.DownloadString(URL);
+            string homeworkListRaw = _Session.HttpClient.DownloadString(URL);
             var homeworkListClean = JsonConvert.DeserializeObject<HuiswerkLijst>(homeworkListRaw);
 
             var compactHomeworkItemDays = homeworkListClean.Items.Select(x=>x.Items);
@@ -124,7 +124,7 @@ namespace MataSharp
                 foreach (var compactHomeworkItem in compactHomeworkItemDay)
                 {
                     URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/huiswerk/huiswerk/" + compactHomeworkItem.Id;
-                    string homeworkItemRaw = _Session.HttpClient.client.DownloadString(URL);
+                    string homeworkItemRaw = _Session.HttpClient.DownloadString(URL);
                     var tmpHomework = JsonConvert.DeserializeObject<Huiswerk>(homeworkItemRaw).ToHomework();
                     tmpHomework.ClassAbbreviation = compactHomeworkItem.VakAfkortingen; //Full homework from the server doesn't contain the classAbbreviations.
                     tmpList.Add(tmpHomework);
@@ -137,7 +137,7 @@ namespace MataSharp
         {
             string URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/huiswerk/taken";
 
-            string homeworkListRaw = _Session.HttpClient.client.DownloadString(URL);
+            string homeworkListRaw = _Session.HttpClient.DownloadString(URL);
             var homeworkListClean = JsonConvert.DeserializeObject<HuiswerkLijst>(homeworkListRaw);
 
             var compactIDs_Days = homeworkListClean.Items.Select(x => x.Items.Select(y => y.Id));
@@ -149,7 +149,7 @@ namespace MataSharp
                 foreach (int compactID in compactIDday)
                 {
                     URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/huiswerk/huiswerk/" + compactID;
-                    string homeworkItemRaw = _Session.HttpClient.client.DownloadString(URL);
+                    string homeworkItemRaw = _Session.HttpClient.DownloadString(URL);
                     tmpList.Add(JsonConvert.DeserializeObject<Huiswerk>(homeworkItemRaw).ToHomework());
                 }
             }
@@ -160,7 +160,7 @@ namespace MataSharp
         {
             string URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/huiswerk/toetsen";
 
-            string homeworkListRaw = _Session.HttpClient.client.DownloadString(URL);
+            string homeworkListRaw = _Session.HttpClient.DownloadString(URL);
             var homeworkListClean = JsonConvert.DeserializeObject<HuiswerkLijst>(homeworkListRaw);
 
             var compactIDs_Days = homeworkListClean.Items.Select(x => x.Items.Select(y => y.Id));
@@ -172,7 +172,7 @@ namespace MataSharp
                 foreach (int compactID in compactIDday)
                 {
                     URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/huiswerk/huiswerk/" + compactID;
-                    string homeworkItemRaw = _Session.HttpClient.client.DownloadString(URL);
+                    string homeworkItemRaw = _Session.HttpClient.DownloadString(URL);
                     tmpList.Add(JsonConvert.DeserializeObject<Huiswerk>(homeworkItemRaw).ToHomework());
                 }
             }
@@ -183,7 +183,7 @@ namespace MataSharp
         {
             string URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/studiewijzers?$skip=0&$top=50";
 
-            string compactStudyGuidesRaw = _Session.HttpClient.client.DownloadString(URL);
+            string compactStudyGuidesRaw = _Session.HttpClient.DownloadString(URL);
             var compactStudyGuidesClean = JsonConvert.DeserializeObject<StudieWijzerLijst>(compactStudyGuidesRaw).Items;
 
             var list = new List<StudyGuide>();
@@ -191,7 +191,7 @@ namespace MataSharp
             {
                 URL = "https://" + School.URL + "/api/leerlingen/" + this.UserID + "/studiewijzers/" + compactStudyGuide.Id;
 
-                string studyGuideRaw = _Session.HttpClient.client.DownloadString(URL);
+                string studyGuideRaw = _Session.HttpClient.DownloadString(URL);
                 var studyGuideClean = JsonConvert.DeserializeObject<StudieWijzer>(studyGuideRaw);
 
                 list.Add(studyGuideClean.ToStudyGuide());
@@ -203,14 +203,14 @@ namespace MataSharp
         {
             string URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/opdrachten/status/openstaand?$skip=0&$top=30";
 
-            string CompactAssignmentsRaw = _Session.HttpClient.client.DownloadString(URL);
+            string CompactAssignmentsRaw = _Session.HttpClient.DownloadString(URL);
             var CompactAssignments = JsonConvert.DeserializeObject<AssignmentFolder>(CompactAssignmentsRaw);
 
             List<Assignment> list = new List<Assignment>();
             foreach (var CompactAssignment in CompactAssignments.Items.ToList().ConvertAll(m => JsonConvert.DeserializeObject<AssignmentFolderListItem>(m.ToString())))
             {
                 URL = "https://" + School.URL + "/api/leerlingen/" + this.UserID + "/opdrachten/" + CompactAssignment.Id;
-                string AssignmentRaw = _Session.HttpClient.client.DownloadString(URL);
+                string AssignmentRaw = _Session.HttpClient.DownloadString(URL);
                 var AssignmentClean = JsonConvert.DeserializeObject<AssignmentFolderItem>(AssignmentRaw);
                 list.Add(AssignmentClean.toAssignment());
             }
@@ -221,7 +221,7 @@ namespace MataSharp
         {
             string URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/digitaallesmateriaal/vakken";
 
-            string compactUtilitiesRaw = _Session.HttpClient.client.DownloadString(URL);
+            string compactUtilitiesRaw = _Session.HttpClient.DownloadString(URL);
             var compactUtilities = JArray.Parse(compactUtilitiesRaw).ToList().ConvertAll(u => u.ToObject<DigitaalLesMatriaalLijstItem>());
 
             var tmpList = new List<DigitalSchoolUtility>();
@@ -229,7 +229,7 @@ namespace MataSharp
             {
                 URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/digitaallesmateriaal/vakken/" + compactUtility.Id;
 
-                string utilityRaw = _Session.HttpClient.client.DownloadString(URL);
+                string utilityRaw = _Session.HttpClient.DownloadString(URL);
                 var utility = JsonConvert.DeserializeObject<DigitaalLesMatriaal[]>(utilityRaw)[0];
                 utility.Id = compactUtility.Id; //Fix for the 'small' problem in the Mata API.
                 tmpList.Add(utility.ToDigitalSchoolUtility());

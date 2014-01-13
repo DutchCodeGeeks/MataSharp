@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Globalization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace MataSharp
 {
@@ -127,7 +124,7 @@ namespace MataSharp
             {
                 string URL = "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/opdrachten/" + this.Id + "/versie/" + compactAssignmentVersion.Id;
 
-                string versionRaw = _Session.HttpClient.client.DownloadString(URL);
+                string versionRaw = _Session.HttpClient.DownloadString(URL);
                 var versionClean = JsonConvert.DeserializeObject<MagisterStyleAssignmentVersion>(versionRaw);
 
                 tmpVersions.Add(versionClean.ToVersion());
