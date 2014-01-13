@@ -14,7 +14,7 @@ namespace MataSharp
     {
         public static Mata Mata; 
         public static MagisterSchool School; 
-        public static MataHTTPClient HttpClient = new MataHTTPClient(); 
+        public readonly static MataHTTPClient HttpClient = new MataHTTPClient(); 
     }
 
     /// <summary>

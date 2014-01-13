@@ -23,12 +23,9 @@ namespace MataSharp
 
         public string DownloadString(string URL)
         {
-            var unStripped = this.client.DownloadString(URL);
-
-            string stripped = Regex.Replace(unStripped, "</p>|&quot;|&#x200b;", "");
-            stripped = Regex.Replace(stripped, "<br />|<p />|<p>", "\n");
+            string stripped = Regex.Replace(this.client.DownloadString(URL), "<br />|<p />|<p>", "\n");
             stripped = Regex.Replace(stripped, "&nbsp;", " ");
-            stripped = Regex.Replace(stripped, "<[^>]*>", ""); //Strip HTML tags
+            stripped = Regex.Replace(stripped, "<[^>]*>|&quot;|&#x200b;", "");
 
             return stripped;
         }

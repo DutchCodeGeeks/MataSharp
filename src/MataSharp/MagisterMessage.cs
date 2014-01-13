@@ -99,7 +99,7 @@ namespace MataSharp
             this.School = School;
         }
 
-        internal static Dictionary<MessageFolderType, int> FolderType_ID = new Dictionary<MessageFolderType, int>()
+        internal readonly static Dictionary<MessageFolderType, int> FolderType_ID = new Dictionary<MessageFolderType, int>()
                 {
                     {MessageFolderType.Inbox, -101},
                     {MessageFolderType.Bin, -102},
