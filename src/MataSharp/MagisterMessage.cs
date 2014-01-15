@@ -178,7 +178,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.Value.DayOfWeek) + " " + this.SentDate.Value.ToString() + "<br>Aan: " + String.Join(", ",this.Recipients.Select(x=>x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"",
+                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.Value.DayOfWeek) + " " + this.SentDate.Value.ToString() + "<br>Aan: " + String.Join(", ",this.Recipients.Select(x=>x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -215,7 +215,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.Value.DayOfWeek) + " " + this.SentDate.Value.ToString() + "<br>Aan: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"",
+                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.Value.DayOfWeek) + " " + this.SentDate.Value.ToString() + "<br>Aan: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -248,7 +248,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.Value.DayOfWeek) + " " + this.SentDate.Value.ToString() + "<br>Aan: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"",
+                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.Value.DayOfWeek) + " " + this.SentDate.Value.ToString() + "<br>Aan: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -281,6 +281,20 @@ namespace MataSharp
             if (string.IsNullOrEmpty(this.Body) || string.IsNullOrEmpty(this.Subject)) throw new Exception("Body and/or Subject cannot be null or empty!");
 
             this.ToMagisterStyle().Send();
+        }
+
+        /// <summary>
+        /// Sends current message instance. Except for throwing expections (MagsiterMessage.Send()), this method returns a boolean value.
+        /// </summary>
+        /// <returns>Boolean value that shows if sending the current instance succeded.</returns>
+        public bool TrySend()
+        {
+            try
+            {
+                this.Send();
+                return true;
+            }
+            catch { return false; }
         }
 
         /// <summary>

@@ -22,10 +22,7 @@ namespace MataSharp
 
         public bool Equals(MagisterPerson Person)
         {
-            if (Person != null && this.ID == Person.ID && this.Group == Person.Group && this.GroupID == Person.GroupID)
-                return true;
-            else
-                return false;
+            return this.ID == Person.ID;
         }
 
         /// <summary>

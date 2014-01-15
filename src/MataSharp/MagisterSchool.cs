@@ -32,10 +32,7 @@ namespace MataSharp
 
         public bool IsEqual(MagisterSchool School)
         {
-            if (School != null && this.Name == School.Name && this.URL == School.URL)
-                return true;
-            else
-                return false;
+            return (School != null && this.Name == School.Name && this.URL == School.URL);
         }
     }
 }
