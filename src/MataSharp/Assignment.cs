@@ -39,7 +39,7 @@ namespace MataSharp
 
     internal partial struct AssignmentFolder
     {
-        public object[] Items { get; set; }
+        public AssignmentFolderItem[] Items { get; set; }
         public object Paging { get; set; }
         public int TotalCount { get; set; } //Looks like that's broken at their side.
     }

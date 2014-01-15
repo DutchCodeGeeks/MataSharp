@@ -132,8 +132,7 @@ namespace MataSharp
         /// <returns>A new MagisterMessage instance ready to be send.</returns>
         public MagisterMessage CreateForwardMessage()
         {
-            var tmpSubject = this.Subject;
-            if (tmpSubject[0] != 'F' || tmpSubject[1] != 'W' || tmpSubject[2] != ':' || tmpSubject[3] != ' ') tmpSubject = "FW: " + tmpSubject;
+            var tmpSubject = (this.Subject[0] != 'F' || this.Subject[1] != 'W' || this.Subject[2] != ':' || this.Subject[3] != ' ') ? "FW: " + this.Subject : this.Subject;
 
             return new MagisterMessage()
             {
@@ -166,8 +165,7 @@ namespace MataSharp
         /// <returns>A new MagisterMessage instance ready to be send.</returns>
         public MagisterMessage CreateForwardMessage(string ContentAdd)
         {
-            var tmpSubject = this.Subject;
-            if (tmpSubject[0] != 'F' || tmpSubject[1] != 'W' || tmpSubject[2] != ':' || tmpSubject[3] != ' ') tmpSubject = "FW: " + tmpSubject;
+            var tmpSubject = (this.Subject[0] != 'F' || this.Subject[1] != 'W' || this.Subject[2] != ':' || this.Subject[3] != ' ') ? "FW: " + this.Subject : this.Subject;
 
             return new MagisterMessage()
             {
@@ -199,8 +197,7 @@ namespace MataSharp
         /// <returns>A new MagisterMessage instance ready to be send.</returns>
         public MagisterMessage CreateReplyToAllMessage(string ContentAdd)
         {
-            var tmpSubject = this.Subject;
-            if (tmpSubject[0] != 'R' || tmpSubject[1] != 'E' || tmpSubject[2] != ':' || tmpSubject[3] != ' ') tmpSubject = "RE: " + tmpSubject;
+            var tmpSubject = (this.Subject[0] != 'R' || this.Subject[1] != 'E' || this.Subject[2] != ':' || this.Subject[3] != ' ') ? "RE: " + this.Subject : this.Subject;
 
             var tmpCC = this.Recipients.ToList().Where(p => p.ID != _Session.Mata.Person.ID).ToList(); //Should get the current receivers and pull itself out. :)
             if (this.CC != null) tmpCC.AddRange(this.CC.ToList().Where(p => p.ID != _Session.Mata.Person.ID).ToList());
@@ -237,8 +234,7 @@ namespace MataSharp
         /// <returns>A new MagisterMessage instance ready to be send.</returns>
         public MagisterMessage CreateReplyMessage(string ContentAdd)
         {
-            var tmpSubject = this.Subject;
-            if (tmpSubject[0] != 'R' || tmpSubject[1] != 'E' || tmpSubject[2] != ':' || tmpSubject[3] != ' ') tmpSubject = "RE: " + tmpSubject;
+            var tmpSubject = (this.Subject[0] != 'R' || this.Subject[1] != 'E' || this.Subject[2] != ':' || this.Subject[3] != ' ') ? "RE: " + this.Subject : this.Subject;
 
             return new MagisterMessage()
             {

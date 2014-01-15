@@ -23,7 +23,7 @@ namespace MataSharp
         [JsonIgnore]
         public string MIME
         {
-            get { return (!string.IsNullOrEmpty(this.Name)) ? MimeMapping.GetMimeMapping(this.Name) : "application/octet-stream"; }
+            get { return (!string.IsNullOrWhiteSpace(this.Name)) ? MimeMapping.GetMimeMapping(this.Name) : "application/octet-stream"; }
         }
 
         private string URL()

@@ -207,7 +207,7 @@ namespace MataSharp
             var CompactAssignments = JsonConvert.DeserializeObject<AssignmentFolder>(CompactAssignmentsRaw);
 
             List<Assignment> list = new List<Assignment>();
-            foreach (var CompactAssignment in CompactAssignments.Items.ToList().ConvertAll(m => JsonConvert.DeserializeObject<AssignmentFolderListItem>(m.ToString())))
+            foreach (var CompactAssignment in CompactAssignments.Items)
             {
                 URL = "https://" + School.URL + "/api/leerlingen/" + this.UserID + "/opdrachten/" + CompactAssignment.Id;
                 string AssignmentRaw = _Session.HttpClient.DownloadString(URL);

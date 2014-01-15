@@ -33,7 +33,7 @@ namespace MataSharp
             var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
 
             List<MagisterMessage> list = new List<MagisterMessage>();
-            foreach (var CompactMessage in CompactMessages.Items.ToList().ConvertAll(m => JsonConvert.DeserializeObject<MessageFolderItem>(m.ToString())))
+            foreach (var CompactMessage in CompactMessages.Items)
             {
                 URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten/" + CompactMessage.Id;
                 string MessageRAW = _Session.HttpClient.DownloadString(URL);
@@ -58,15 +58,12 @@ namespace MataSharp
             var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
 
             List<MagisterMessage> list = new List<MagisterMessage>();
-            foreach (var CompactMessage in CompactMessages.Items.ToList().ConvertAll(m => JsonConvert.DeserializeObject<MessageFolderItem>(m.ToString())))
+            foreach (var CompactMessage in CompactMessages.Items.Where(m => m.IsGelezen == false))
             {
-                if (CompactMessage.IsGelezen == false)
-                {
-                    URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten/" + CompactMessage.Id;
-                    string MessageRAW = _Session.HttpClient.DownloadString(URL);
-                    var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                    list.Add(MessageClean.ToMagisterMessage());
-                }
+                URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten/" + CompactMessage.Id;
+                string MessageRAW = _Session.HttpClient.DownloadString(URL);
+                var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
+                list.Add(MessageClean.ToMagisterMessage());
             }
             return list;
         }
@@ -86,15 +83,12 @@ namespace MataSharp
                 string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
                 var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
 
-                foreach (var CompactMessage in CompactMessages.Items.ToList().ConvertAll(m => JsonConvert.DeserializeObject<MessageFolderItem>(m.ToString())))
+                foreach (var CompactMessage in CompactMessages.Items.Where(m => m.IsGelezen == false))
                 {
-                    if (CompactMessage.IsGelezen == false)
-                    {
-                        URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten/" + CompactMessage.Id;
-                        string MessageRAW = _Session.HttpClient.DownloadString(URL);
-                        var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                        list.Add(MessageClean.ToMagisterMessage());
-                    }
+                    URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten/" + CompactMessage.Id;
+                    string MessageRAW = _Session.HttpClient.DownloadString(URL);
+                    var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
+                    list.Add(MessageClean.ToMagisterMessage());
                 }
             }
             return list;
@@ -120,7 +114,7 @@ namespace MataSharp
 
     internal partial struct MagisterStyleMessageFolder
     {
-        public object[] Items { get; set; }
+        public MessageFolderItem[] Items { get; set; }
         public int TotalCount { get; set; }
         public object Paging { get; set; }
     }
@@ -130,9 +124,9 @@ namespace MataSharp
         public int Id { get; set; }
         public object Ref {get; set; }
         public string Onderwerp { get; set; }
-        public object Afzender { get; set; }
+        public MagisterStylePerson Afzender { get; set; }
         public string IngekortBericht { get; set; }
-        public object[] Ontvangers { get; set; }
+        public MagisterStylePerson[] Ontvangers { get; set; }
         public string Ontvangen { get; set; }
         public bool IsGelezen { get; set; }
         public int Status { get; set; }
