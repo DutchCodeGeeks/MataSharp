@@ -18,11 +18,16 @@ namespace MataSharp
         public string Description { get; set; }
         public string Group { get; set; }
         public string TeacherCode { get; set; }
-        public int GroupID { get; set; }
+        public int GroupID { get; internal set; }
+
+        internal MagisterPerson Original { get; set; }
 
         public bool Equals(MagisterPerson Person)
         {
-            return this.ID == Person.ID;
+            return (this.ID == Person.ID && this.Initials == Person.Initials && this.SurName == Person.SurName &&
+                this.FirstName == Person.FirstName && this.NamePrefix == Person.NamePrefix &&
+                this.Name == Person.Name && this.Description == Person.Description &&
+                this.Group == Person.Group && this.TeacherCode == Person.TeacherCode);
         }
 
         /// <summary>
@@ -31,7 +36,9 @@ namespace MataSharp
         /// <returns>A MagisterStylePerson instance.</returns>
         internal MagisterStylePerson ToMagisterStyle()
         {
-            var tmpPerson = (_Session.Mata.GetPersons(this.Name).Count == 1) ? _Session.Mata.GetPersons(this.Name)[0] : this; //Takes the person from the server, if it are more or less than one, use this instance instead.
+            var tmpPerson = (!this.Original.Equals(this)) ?
+                (_Session.Mata.GetPersons(this.Name).Count == 1) ? _Session.Mata.GetPersons(this.Name)[0] : this
+                : this;
             return new MagisterStylePerson()
                 {
                     Id = tmpPerson.ID,
@@ -45,6 +52,11 @@ namespace MataSharp
                     DocentCode = tmpPerson.TeacherCode,
                     Type = tmpPerson.GroupID
                 };
+        }
+
+        public MagisterPerson Clone()
+        {
+            return (MagisterPerson)this.MemberwiseClone();
         }
     }
     internal partial struct MagisterStylePerson
@@ -102,7 +114,7 @@ namespace MataSharp
                 tmpPerson.Naam;
             //This all above ISN'T needed but makes everything a bit nicer :)
 
-            return new MagisterPerson()
+            var person = new MagisterPerson()
             {
                 ID = tmpPerson.Id,
                 Ref = tmpPerson.Ref,
@@ -116,6 +128,9 @@ namespace MataSharp
                 GroupID = tmpPerson.Type,
                 Initials = tmpPerson.Voorletters,
             };
+
+            person.Original = person.Clone();
+            return person;
         }
     }
 }

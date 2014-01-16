@@ -67,7 +67,7 @@ namespace MataSharp
         /// <summary>
         /// Returns new MagisterMessage.
         /// </summary>
-        public MagisterMessage()
+        internal MagisterMessage()
         {
             //Auto Fill-In some magic things >:D
             this.Mata = _Session.Mata;
@@ -89,14 +89,14 @@ namespace MataSharp
         }
 
         /// <summary>
-        /// More customisable version, returns new MagisterMessage
+        /// Returns new MagisterMessage
         /// </summary>
         /// <param name="Mata">The mata instance to use.</param>
         /// <param name="School">The school to use.</param>
-        public MagisterMessage(Mata Mata, MagisterSchool School) : this()
+        public MagisterMessage(Mata Mata = null, MagisterSchool School = null) : this()
         {
-            this.Mata = Mata;
-            this.School = School;
+            this.Mata = Mata ?? _Session.Mata;
+            this.School = School ?? _Session.School;
         }
 
         internal readonly static Dictionary<MessageFolderType, int> FolderType_ID = new Dictionary<MessageFolderType, int>()

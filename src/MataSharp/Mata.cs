@@ -12,8 +12,8 @@ namespace MataSharp
 {
     internal static class _Session 
     {
-        public static Mata Mata; 
-        public static MagisterSchool School; 
+        public static Mata Mata;
+        public static MagisterSchool School;
         public readonly static MataHTTPClient HttpClient = new MataHTTPClient(); 
     }
 
@@ -69,22 +69,22 @@ namespace MataSharp
             string url = "https://" + this.School.URL + "/api/personen/" + this.UserID + "/communicatie/berichten/mappen?$skip=0&$top=50";
 
             string MessageFoldersRAW = _Session.HttpClient.DownloadString(url);
-            var MessageFolders = JArray.Parse(MessageFoldersRAW).ToArray();
+            //var MessageFolders = JArray.Parse(MessageFoldersRAW).ToArray();
+            var MessageFolders = JsonConvert.DeserializeObject<MagisterStyleMessageFolderListItem[]>(MessageFoldersRAW);
 
             List<MagisterMessageFolder> tmplst = new List<MagisterMessageFolder>();
             foreach (var MessageFolder in MessageFolders)
             {
-                var tmp = JsonConvert.DeserializeObject<MagisterStyleMessageFolderListItem>(MessageFolder.ToString());
-                var tmpType = (tmp.Id == -101) ? MessageFolderType.Inbox : (tmp.Id == -102) ? MessageFolderType.Bin : MessageFolderType.SentMessages;
+                var tmpType = MagisterMessage.FolderType_ID.First(x => x.Value == MessageFolder.Id).Key;
 
                 tmplst.Add(new MagisterMessageFolder()
                 {
-                    Name = tmp.Naam,
-                    UnreadMessagesCount = tmp.OngelezenBerichten,
-                    ID = tmp.Id,
-                    ParentID = tmp.ParentId,
-                    Ref = tmp.Ref,
-                    MessagesURI = tmp.BerichtenUri,
+                    Name = MessageFolder.Naam,
+                    UnreadMessagesCount = MessageFolder.OngelezenBerichten,
+                    ID = MessageFolder.Id,
+                    ParentID = MessageFolder.ParentId,
+                    Ref = MessageFolder.Ref,
+                    MessagesURI = MessageFolder.BerichtenUri,
                     School = this.School,
                     Mata = this,
                     FolderType = tmpType
@@ -94,7 +94,7 @@ namespace MataSharp
         }
 
         /// <summary>
-        /// Returns all Magisterpersons filterd by the given search filter as a list.
+        /// Returns all Magisterpersons filtered by the given search filter as a list.
         /// </summary>
         /// <param name="SearchFilter">The search filter to use as string.</param>
         /// <returns>List containing MagisterPerson instances</returns>
@@ -239,17 +239,17 @@ namespace MataSharp
 
         public MagisterMessageFolder Inbox
         {
-            get { return this.GetMessageFolders().Where(mf => mf.FolderType == MessageFolderType.Inbox).ElementAt(0); }
+            get { return this.GetMessageFolders().FirstOrDefault(mf => mf.FolderType == MessageFolderType.Inbox) ?? new MagisterMessageFolder(); }
         }
 
         public MagisterMessageFolder SentMessages
         {
-            get { return this.GetMessageFolders().Where(mf => mf.FolderType == MessageFolderType.SentMessages).ElementAt(0); }
+            get { return this.GetMessageFolders().FirstOrDefault(mf => mf.FolderType == MessageFolderType.SentMessages) ?? new MagisterMessageFolder(); }
         }
 
         public MagisterMessageFolder Bin
         {
-            get { return this.GetMessageFolders().Where(mf => mf.FolderType == MessageFolderType.Bin).ElementAt(0); }
+            get { return this.GetMessageFolders().FirstOrDefault(mf => mf.FolderType == MessageFolderType.Bin) ?? new MagisterMessageFolder(); }
         }
 
         ~Mata() { this.Dispose(); }
