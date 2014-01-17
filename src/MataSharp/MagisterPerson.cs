@@ -80,12 +80,22 @@ namespace MataSharp
 
         private static List<MagisterStylePerson> GetPersons(string SearchFilter)
         {
-            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterStylePerson>();
+            if (!Mata.checkedPersons.ContainsKey(SearchFilter))
+            {
+                if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterStylePerson>();
 
-            string URL = "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
+                string URL = "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
 
-            string personsRAW = _Session.HttpClient.DownloadString(URL);
-            return JsonConvert.DeserializeObject<MagisterStylePerson[]>(personsRAW).ToList();
+                string personsRAW = _Session.HttpClient.DownloadString(URL);
+
+                var persons = JsonConvert.DeserializeObject<MagisterStylePerson[]>(personsRAW).ToList();
+                Mata.checkedPersons.Add(SearchFilter, persons);
+                return persons;
+            }
+            else
+            {
+                return Mata.checkedPersons.First(x => x.Key == SearchFilter).Value;
+            }
         }
 
         public MagisterPerson ToPerson(bool download)

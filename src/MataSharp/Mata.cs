@@ -93,6 +93,8 @@ namespace MataSharp
             return tmplst;
         }
 
+        internal static Dictionary<string, List<MagisterStylePerson>> checkedPersons = new Dictionary<string, List<MagisterStylePerson>>();
+
         /// <summary>
         /// Returns all Magisterpersons filtered by the given search filter as a list.
         /// </summary>
@@ -100,12 +102,22 @@ namespace MataSharp
         /// <returns>List containing MagisterPerson instances</returns>
         public List<MagisterPerson> GetPersons(string SearchFilter)
         {
-            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterPerson>();
+            if (!checkedPersons.ContainsKey(SearchFilter))
+            {
+                if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterPerson>();
 
-            string URL = "https://" + this.School.URL + "/api/personen/" + this.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
+                string URL = "https://" + this.School.URL + "/api/personen/" + this.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
 
-            string personsRAW = _Session.HttpClient.DownloadString(URL);
-            return JArray.Parse(personsRAW).ToList().ConvertAll(p => p.ToObject<MagisterStylePerson>().ToPerson(false));
+                string personsRAW = _Session.HttpClient.DownloadString(URL);
+                
+                var personRaw = JArray.Parse(personsRAW).ToList().ConvertAll(p => p.ToObject<MagisterStylePerson>());
+                checkedPersons.Add(SearchFilter, personRaw);
+                return personRaw.ConvertAll(p => p.ToPerson(false));
+            }
+            else
+            {
+                return checkedPersons.First(x => x.Key == SearchFilter).Value.ConvertAll(p => p.ToPerson(false));
+            }
         }
 
         public List<Homework> GetHomework()
