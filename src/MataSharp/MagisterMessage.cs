@@ -67,7 +67,7 @@ namespace MataSharp
         /// <summary>
         /// Returns new MagisterMessage.
         /// </summary>
-        internal MagisterMessage()
+        public MagisterMessage()
         {
             //Auto Fill-In some magic things >:D
             this.Mata = _Session.Mata;
@@ -92,11 +92,10 @@ namespace MataSharp
         /// Returns new MagisterMessage
         /// </summary>
         /// <param name="Mata">The mata instance to use.</param>
-        /// <param name="School">The school to use.</param>
-        public MagisterMessage(Mata Mata = null, MagisterSchool School = null) : this()
+        public MagisterMessage(Mata Mata) : this()
         {
             this.Mata = Mata ?? _Session.Mata;
-            this.School = School ?? _Session.School;
+            this.School = Mata.School ?? _Session.School;
         }
 
         internal readonly static Dictionary<MessageFolderType, int> FolderType_ID = new Dictionary<MessageFolderType, int>()
@@ -108,7 +107,7 @@ namespace MataSharp
 
         private int FolderTypeAsInt()
         {
-            return FolderType_ID.Where(x => x.Key == this._FolderType).ElementAt(0).Value;
+            return FolderType_ID.First(x => x.Key == this._FolderType).Value;
         }
 
         internal static string DayOfWeekToString(DayOfWeek dayOfWeek)
