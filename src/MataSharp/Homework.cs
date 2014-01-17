@@ -110,7 +110,7 @@ namespace MataSharp
             {
                 Notes = this.AantekeningLeerling,
                 _Done = this.Afgerond,
-                Teachers = this.Docenten.ToList().ConvertAll(p => p.ToPerson()),
+                Teachers = this.Docenten.ToList().ConvertAll(p => p.ToPerson(true)),
                 End = DateTime.Parse(this.Einde, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
                 ID = this.Id,
                 InfoType = this.InfoType,

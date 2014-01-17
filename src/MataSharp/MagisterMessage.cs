@@ -69,6 +69,9 @@ namespace MataSharp
         /// </summary>
         public MagisterMessage()
         {
+            if (_Session.Mata == null || (_Session.School == null && _Session.Mata.School == null))
+                throw new NullReferenceException("All usable Mata instances are null!\nTry to use 'MagisterMessage(Mata)' instead.");
+
             //Auto Fill-In some magic things >:D
             this.Mata = _Session.Mata;
             this.School = _Session.School;
@@ -92,10 +95,27 @@ namespace MataSharp
         /// Returns new MagisterMessage
         /// </summary>
         /// <param name="Mata">The mata instance to use.</param>
-        public MagisterMessage(Mata Mata) : this()
+        public MagisterMessage(Mata Mata)
         {
+            if ((_Session.Mata == null || (_Session.School == null && _Session.Mata.School == null)) && (Mata == null || (_Session.School == null && Mata.School == null)))
+                throw new NullReferenceException("All usable Mata instances are null!");
+
             this.Mata = Mata ?? _Session.Mata;
             this.School = this.Mata.School;
+            this.CanSend = true;
+
+            this.ID = 0;
+            this._IsRead = false;
+            this.State = 0;
+            this.IDOriginal = 0;
+            this.IDOrginalReceiver = 0;
+            this._FolderType = 0;
+            this.Deleted = false;
+            this.IDKey = 0;
+            this.SenderGroupID = this.Mata.Person.GroupID;
+            this.Sender = this.Mata.Person;
+            this.Recipients = new List<MagisterPerson>();
+            this.CC = new List<MagisterPerson>();
         }
 
         internal readonly static Dictionary<MessageFolderType, int> FolderType_ID = new Dictionary<MessageFolderType, int>()
@@ -198,8 +218,8 @@ namespace MataSharp
         {
             var tmpSubject = (this.Subject[0] != 'R' || this.Subject[1] != 'E' || this.Subject[2] != ':' || this.Subject[3] != ' ') ? "RE: " + this.Subject : this.Subject;
 
-            var tmpCC = this.Recipients.ToList().Where(p => p.ID != _Session.Mata.Person.ID).ToList(); //Should get the current receivers and pull itself out. :)
-            if (this.CC != null) tmpCC.AddRange(this.CC.ToList().Where(p => p.ID != _Session.Mata.Person.ID).ToList());
+            var tmpCC = this.Recipients.ToList().Where(p => p.ID != this.Mata.Person.ID).ToList(); //Should get the current receivers and pull itself out. :)
+            if (this.CC != null) tmpCC.AddRange(this.CC.ToList().Where(p => p.ID != this.Mata.Person.ID).ToList());
             tmpCC.OrderBy(p => p.SurName);
 
             return new MagisterMessage()
@@ -279,7 +299,7 @@ namespace MataSharp
             if (this.Sender == null || this.Recipients == null) throw new Exception("Sender and/or Recipients cannot be null!");
             if (string.IsNullOrEmpty(this.Body) || string.IsNullOrEmpty(this.Subject)) throw new Exception("Body and/or Subject cannot be null or empty!");
 
-            this.ToMagisterStyle().Send();
+            this.ToMagisterStyle().Send(this.Mata);
         }
 
         /// <summary>
@@ -359,9 +379,9 @@ namespace MataSharp
 
         public MagisterMessage ToMagisterMessage()
         {
-            var tmpReceivers = this.Ontvangers.OrderBy(p => p.Achternaam).ToList().ConvertAll(p => p.ToPerson());
+            var tmpReceivers = this.Ontvangers.OrderBy(p => p.Achternaam).ToList().ConvertAll(p => p.ToPerson(true));
 
-            var tmpCopiedReceivers = this.KopieOntvangers.OrderBy(p => p.Achternaam).ToList().ConvertAll(p => p.ToPerson());
+            var tmpCopiedReceivers = this.KopieOntvangers.OrderBy(p => p.Achternaam).ToList().ConvertAll(p => p.ToPerson(true));
 
             var tmpAttachments = this.Bijlagen.ToList();
             tmpAttachments.ForEach(x => x.Type = AttachmentType.Message);
@@ -373,7 +393,7 @@ namespace MataSharp
                 ID = this.Id,
                 Ref = this.Ref,
                 Subject = this.Onderwerp,
-                Sender = this.Afzender.ToPerson(),
+                Sender = this.Afzender.ToPerson(true),
                 Body = this.Inhoud,
                 Recipients = tmpReceivers,
                 CC = tmpCopiedReceivers,
@@ -392,9 +412,9 @@ namespace MataSharp
             };
         }
 
-        public void Send()
+        internal void Send(Mata Mata)
         {
-            string URL = "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/berichten/";
+            string URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/";
             _Session.HttpClient.Post(URL, JsonConvert.SerializeObject(this));
         }
     }

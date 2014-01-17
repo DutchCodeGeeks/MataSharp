@@ -54,6 +54,10 @@ namespace MataSharp
                 };
         }
 
+        /// <summary>
+        /// Clones the current MagisterPerson instance.
+        /// </summary>
+        /// <returns>A new MagisterPerson instance that's identical to the current one.</returns>
         public MagisterPerson Clone()
         {
             return (MagisterPerson)this.MemberwiseClone();
@@ -81,14 +85,18 @@ namespace MataSharp
             string URL = "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
 
             string personsRAW = _Session.HttpClient.DownloadString(URL);
-            return JArray.Parse(personsRAW).ToList().ConvertAll(p => p.ToObject<MagisterStylePerson>());
+            return JsonConvert.DeserializeObject<MagisterStylePerson[]>(personsRAW).ToList();
         }
 
-        public MagisterPerson ToPerson()
+        public MagisterPerson ToPerson(bool download)
         {
             MagisterStylePerson tmpPerson;
-            try { tmpPerson = (MagisterStylePerson.GetPersons(this.Naam).Count == 1) ? MagisterStylePerson.GetPersons(this.Naam)[0] : this; } //Main building ground.
-            catch { tmpPerson = this; }
+            if (download)
+            {
+                try { tmpPerson = (MagisterStylePerson.GetPersons(this.Naam).Count == 1) ? MagisterStylePerson.GetPersons(this.Naam)[0] : this; } //Main building ground.
+                catch { tmpPerson = this; }
+            }
+            else { tmpPerson = this; }
 
             List<string> splitted = (tmpPerson.Naam != null) ? tmpPerson.Naam.Split(' ').ToList() : null;
 

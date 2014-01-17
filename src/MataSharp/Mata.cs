@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 namespace MataSharp
 {
     internal static class _Session 
-    {
+    { //This still feels dirty..
         public static Mata Mata;
         public static MagisterSchool School;
         public readonly static MataHTTPClient HttpClient = new MataHTTPClient(); 
@@ -105,7 +105,7 @@ namespace MataSharp
             string URL = "https://" + this.School.URL + "/api/personen/" + this.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
 
             string personsRAW = _Session.HttpClient.DownloadString(URL);
-            return JArray.Parse(personsRAW).ToList().ConvertAll(p => p.ToObject<MagisterStylePerson>().ToPerson());
+            return JArray.Parse(personsRAW).ToList().ConvertAll(p => p.ToObject<MagisterStylePerson>().ToPerson(false));
         }
 
         public List<Homework> GetHomework()

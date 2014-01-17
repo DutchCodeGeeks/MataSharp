@@ -137,7 +137,7 @@ namespace MataSharp
             {
                 Grade = this.Beoordeling,
                 Attachments = tmpAttachments,
-                Teachers = this.Docenten.ToList().ConvertAll(p => p.ToPerson()),
+                Teachers = this.Docenten.ToList().ConvertAll(p => p.ToPerson(true)),
                 ID = this.Id,
                 HandInTime = (this.IngeleverdOp != null) ? DateTime.Parse(this.IngeleverdOp, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime(),
                 DeadLine = (this.InleverenVoor != null) ? DateTime.Parse(this.InleverenVoor,CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime(),
