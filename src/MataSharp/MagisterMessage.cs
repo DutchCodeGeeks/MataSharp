@@ -95,15 +95,15 @@ namespace MataSharp
         public MagisterMessage(Mata Mata) : this()
         {
             this.Mata = Mata ?? _Session.Mata;
-            this.School = Mata.School ?? _Session.School;
+            this.School = this.Mata.School;
         }
 
         internal readonly static Dictionary<MessageFolderType, int> FolderType_ID = new Dictionary<MessageFolderType, int>()
-                {
-                    {MessageFolderType.Inbox, -101},
-                    {MessageFolderType.Bin, -102},
-                    {MessageFolderType.SentMessages,-103}
-                };
+        {
+            {MessageFolderType.Inbox, -101},
+            {MessageFolderType.Bin, -102},
+            {MessageFolderType.SentMessages,-103}
+        };
 
         private int FolderTypeAsInt()
         {
@@ -314,7 +314,7 @@ namespace MataSharp
                 Ref = this.Ref,
                 Onderwerp = this.Subject,
                 Afzender = this.Sender.ToMagisterStyle(),
-                Inhoud = this.Body,
+                Inhoud = Regex.Replace(this.Body, "[\r\n]", "<br>"),
                 Ontvangers = tmpReceivers,
                 KopieOntvangers = tmpCC,
                 CC = tmpCC,
