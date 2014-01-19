@@ -16,8 +16,15 @@ namespace MataSharp
         public DateTime Date { get; internal set; }
         [JsonProperty("Grootte")]
         public int Size { get; internal set; }
+
         [JsonIgnore]
         internal AttachmentType Type { get; set; }
+
+        [JsonIgnore]
+        public int StudyGuideID { get; set; }
+        [JsonIgnore]
+        public int StudyGuidePartID { get; set; }
+
         [JsonIgnore]
         public string MIME
         {
@@ -30,8 +37,10 @@ namespace MataSharp
                 return "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/berichten/bijlagen/" + this.ID;
             else if (this.Type == AttachmentType.Assignment_pupil)
                 return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/opdrachten/bijlagen/Ingeleverd/" + this.ID;
-            else
+            else if (this.Type == AttachmentType.Assignment_teacher)
                 return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/opdrachten/bijlagen/" + this.ID;
+            else
+                return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/studiewijzers/" + this.StudyGuideID + "/onderdelen/" + this.StudyGuidePartID + "/bijlagen/" + this.ID;
         }
 
         /// <summary>
@@ -50,6 +59,7 @@ namespace MataSharp
     {
         Message,
         Assignment_teacher,
-        Assignment_pupil
+        Assignment_pupil,
+        StudyGuide
     };
 }

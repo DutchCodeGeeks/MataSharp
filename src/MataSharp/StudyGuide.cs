@@ -71,7 +71,7 @@ namespace MataSharp
                 string partRaw = _Session.HttpClient.DownloadString(URL);
                 var partClean = JsonConvert.DeserializeObject<StudieWijzerOnderdeel>(partRaw);
 
-                tmpStudyGuideParts.Add(partClean.ToReadableStyle());
+                tmpStudyGuideParts.Add(partClean.ToReadableStyle(this.Id));
             }
 
             var expireDate = (!string.IsNullOrWhiteSpace(this.TotEnMet)) ? DateTime.Parse(this.TotEnMet, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime();
@@ -125,14 +125,21 @@ namespace MataSharp
         public string Van { get; set; }
         public int Volgnummer { get; set; }
 
-        public StudyGuidePart ToReadableStyle() //;)
+        public StudyGuidePart ToReadableStyle(int ParentID) //;)
         {
+            var thisID = this.Id;
+
             var expireDate = (!string.IsNullOrWhiteSpace(this.TotEnMet)) ? DateTime.Parse(this.TotEnMet, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime();
             var beginDate = (!string.IsNullOrWhiteSpace(this.Van)) ? DateTime.Parse(this.Van, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime();
-            
+
+            var tmpAttachments = new List<Attachment>(this.Bronnen);
+            tmpAttachments.ForEach(a => a.Type = AttachmentType.StudyGuide);
+            tmpAttachments.ForEach(a => a.StudyGuideID = ParentID);
+            tmpAttachments.ForEach(a => a.StudyGuidePartID = thisID);
+
             return new StudyGuidePart()
             {
-                Attachments = new List<Attachment>(this.Bronnen),
+                Attachments = tmpAttachments,
                 ID = this.Id,
                 Visible = this.IsZichtbaar,
                 Description = this.Omschrijving,

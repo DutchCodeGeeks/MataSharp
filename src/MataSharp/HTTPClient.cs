@@ -54,20 +54,23 @@ namespace MataSharp
             return Regex.Replace(unStripped, "\r|\n", "\n");
         }
 
-        public string DownloadFile(string URL, string filename, string Dir)
+        public string DownloadFile(string URL, string Filename, string DIR)
         {
             var currentDIR = Directory.GetCurrentDirectory() + "\\";
-            var dir = (!string.IsNullOrWhiteSpace(Dir)) ? currentDIR + Dir + "\\" : currentDIR;
+            var dir = (!string.IsNullOrWhiteSpace(DIR)) ? currentDIR + DIR + "\\" : currentDIR;
 
-            this.client.DownloadFile(URL, filename);
+            this.client.DownloadFile(URL, Filename);
 
-            if (!string.IsNullOrWhiteSpace(Dir))
+            if (!string.IsNullOrWhiteSpace(DIR))
             {
-                if (!Directory.Exists(Dir)) Directory.CreateDirectory(Dir);
-                File.Move(currentDIR + filename, dir + filename);
+                if (!Directory.Exists(DIR)) Directory.CreateDirectory(DIR);
+
+                string destination = dir + Filename;
+                if (File.Exists(destination)) File.Delete(destination);
+                File.Move(currentDIR + Filename, destination);
             }
 
-            return dir + filename;
+            return dir + Filename;
         }
         public void Dispose() { this.client.Dispose(); }
     }
