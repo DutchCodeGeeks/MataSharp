@@ -82,10 +82,10 @@ namespace MataSharp
         public AssignmentVersion ToVersion()
         {
             var tmpHandedInAttachments = this.LeerlingBijlagen.ToList();
-            tmpHandedInAttachments.ForEach(x => x.Type = AttachmentType.Assignment_pupil);
+            tmpHandedInAttachments.ForEach(a => a.Type = AttachmentType.Assignment_pupil);
 
             var tmpFeedbackAttachments = this.FeedbackBijlagen.ToList();
-            tmpFeedbackAttachments.ForEach(x => x.Type = AttachmentType.Assignment_teacher);
+            tmpFeedbackAttachments.ForEach(a => a.Type = AttachmentType.Assignment_teacher);
 
             return new AssignmentVersion()
             {
@@ -131,7 +131,7 @@ namespace MataSharp
             }
 
             var tmpAttachments = this.Bijlagen.ToList();
-            tmpAttachments.ForEach(x => x.Type = AttachmentType.Assignment_teacher);
+            tmpAttachments.ForEach(a => a.Type = AttachmentType.Assignment_teacher);
 
             return new Assignment()
             {

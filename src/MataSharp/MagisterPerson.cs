@@ -80,7 +80,7 @@ namespace MataSharp
 
         private static List<MagisterStylePerson> GetPersons(string SearchFilter)
         {
-            if (!Mata.checkedPersons.ContainsKey(SearchFilter))
+            if (!_Session.checkedPersons.ContainsKey(SearchFilter))
             {
                 if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterStylePerson>();
 
@@ -89,12 +89,12 @@ namespace MataSharp
                 string personsRAW = _Session.HttpClient.DownloadString(URL);
 
                 var persons = JsonConvert.DeserializeObject<MagisterStylePerson[]>(personsRAW).ToList();
-                Mata.checkedPersons.Add(SearchFilter, persons);
+                _Session.checkedPersons.Add(SearchFilter, persons);
                 return persons;
             }
             else
             {
-                return Mata.checkedPersons.First(x => x.Key == SearchFilter).Value;
+                return _Session.checkedPersons.First(x => x.Key == SearchFilter).Value;
             }
         }
 

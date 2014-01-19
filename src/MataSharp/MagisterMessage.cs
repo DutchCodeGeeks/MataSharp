@@ -384,7 +384,7 @@ namespace MataSharp
             var tmpCopiedReceivers = this.KopieOntvangers.OrderBy(p => p.Achternaam).ToList().ConvertAll(p => p.ToPerson(true));
 
             var tmpAttachments = this.Bijlagen.ToList();
-            tmpAttachments.ForEach(x => x.Type = AttachmentType.Message);
+            tmpAttachments.ForEach(a => a.Type = AttachmentType.Message);
 
             var tmpFolderType = MagisterMessage.FolderType_ID.Where(x => x.Value == this.BerichtMapId).ElementAt(0).Key;
 

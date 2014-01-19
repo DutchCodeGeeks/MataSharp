@@ -1,9 +1,9 @@
 ﻿//(c) 2014 Lieuwe Rooijakkers
 //MataSharp; Public C# implementation of the non public 'Mata' API.
 using System;
-using System.Net;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Net;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -14,7 +14,14 @@ namespace MataSharp
     { //This still feels dirty..
         public static Mata Mata;
         public static MagisterSchool School;
-        public readonly static MataHTTPClient HttpClient = new MataHTTPClient(); 
+        public readonly static MataHTTPClient HttpClient = new MataHTTPClient();
+        public static Dictionary<string, List<MagisterStylePerson>> checkedPersons = new Dictionary<string, List<MagisterStylePerson>>();
+
+        internal static void Dispose()
+        {
+            HttpClient.Dispose();
+            checkedPersons.Clear();
+        }
     }
 
     /// <summary>
@@ -69,7 +76,6 @@ namespace MataSharp
             string url = "https://" + this.School.URL + "/api/personen/" + this.UserID + "/communicatie/berichten/mappen?$skip=0&$top=50";
 
             string MessageFoldersRAW = _Session.HttpClient.DownloadString(url);
-            //var MessageFolders = JArray.Parse(MessageFoldersRAW).ToArray();
             var MessageFolders = JsonConvert.DeserializeObject<MagisterStyleMessageFolderListItem[]>(MessageFoldersRAW);
 
             List<MagisterMessageFolder> tmplst = new List<MagisterMessageFolder>();
@@ -93,8 +99,6 @@ namespace MataSharp
             return tmplst;
         }
 
-        internal static Dictionary<string, List<MagisterStylePerson>> checkedPersons = new Dictionary<string, List<MagisterStylePerson>>();
-
         /// <summary>
         /// Returns all Magisterpersons filtered by the given search filter as a list.
         /// </summary>
@@ -102,7 +106,7 @@ namespace MataSharp
         /// <returns>List containing MagisterPerson instances</returns>
         public List<MagisterPerson> GetPersons(string SearchFilter)
         {
-            if (!checkedPersons.ContainsKey(SearchFilter))
+            if (!_Session.checkedPersons.ContainsKey(SearchFilter))
             {
                 if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterPerson>();
 
@@ -111,12 +115,12 @@ namespace MataSharp
                 string personsRAW = _Session.HttpClient.DownloadString(URL);
                 
                 var personRaw = JArray.Parse(personsRAW).ToList().ConvertAll(p => p.ToObject<MagisterStylePerson>());
-                checkedPersons.Add(SearchFilter, personRaw);
+                _Session.checkedPersons.Add(SearchFilter, personRaw);
                 return personRaw.ConvertAll(p => p.ToPerson(false));
             }
             else
             {
-                return checkedPersons.First(x => x.Key == SearchFilter).Value.ConvertAll(p => p.ToPerson(false));
+                return _Session.checkedPersons.First(x => x.Key == SearchFilter).Value.ConvertAll(p => p.ToPerson(false));
             }
         }
 
@@ -265,7 +269,7 @@ namespace MataSharp
         }
 
         ~Mata() { this.Dispose(); }
-        public void Dispose() { _Session.HttpClient.Dispose(); GC.Collect(); }
+        public void Dispose() { _Session.Dispose(); GC.Collect(); }
     }
 
     internal partial struct MagisterStyleMata
