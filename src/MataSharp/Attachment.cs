@@ -21,9 +21,9 @@ namespace MataSharp
         internal AttachmentType Type { get; set; }
 
         [JsonIgnore]
-        public int StudyGuideID { get; set; }
+        internal int StudyGuideID { get; set; }
         [JsonIgnore]
-        public int StudyGuidePartID { get; set; }
+        internal int StudyGuidePartID { get; set; }
 
         [JsonIgnore]
         public string MIME

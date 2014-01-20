@@ -72,6 +72,7 @@ namespace MataSharp
 
             return dir + Filename;
         }
+
         public void Dispose() { this.client.Dispose(); }
     }
 }

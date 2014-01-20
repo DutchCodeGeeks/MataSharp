@@ -25,7 +25,11 @@ namespace MataSharp
         public List<MagisterPerson> Teachers { get; set; }
         public DateTime End { get; set; }
         public int ID { get; set; }
-        public int InfoType { get; set; }
+        internal int InfoType;
+        public HomeworkType Type
+        {
+            get { return HomeworkType_ID.First(x => x.Value == this.InfoType).Key; }
+        }
         public string Content { get; set; }
         public int EndBySchoolHour { get; set; }
         public int BeginBySchoolHour { get; set; }
@@ -35,6 +39,17 @@ namespace MataSharp
         public int State { get; set; }
         public string ClassName { get; set; }
         public string ClassAbbreviation { get; set; }
+
+        internal readonly static Dictionary<HomeworkType, int> HomeworkType_ID = new Dictionary<HomeworkType, int>()
+        {
+            {HomeworkType.Unknown, 0},
+            {HomeworkType.Normal, 1},
+            {HomeworkType.Test, 2},
+            {HomeworkType.Exam, 3},
+            {HomeworkType.Quiz, 4},
+            {HomeworkType.OralTest, 5},
+            {HomeworkType.Information, 6}
+        };
 
         internal string URL() { return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/huiswerk/huiswerk/" + this.ID; }
 
@@ -58,6 +73,17 @@ namespace MataSharp
                 Status = this.State
             };
         }
+    }
+
+    public enum HomeworkType
+    {
+        Unknown,
+        Normal,
+        Test,
+        Exam,
+        Quiz,
+        OralTest,
+        Information
     }
 
     internal partial struct HuiswerkLijst
