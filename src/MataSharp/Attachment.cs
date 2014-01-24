@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web;
 using Newtonsoft.Json;
 
@@ -62,4 +63,14 @@ namespace MataSharp
         Assignment_pupil,
         StudyGuide
     };
+
+    static class ArrayExtension
+    {
+        public static List<Attachment> ToList(this Attachment[] currentArray, AttachmentType AttachmentType)
+        {
+            var tmpList = new List<Attachment>(currentArray);
+            tmpList.ForEach(a => a.Type = AttachmentType);
+            return tmpList;
+        }
+    }
 }

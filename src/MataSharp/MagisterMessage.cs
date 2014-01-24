@@ -383,9 +383,6 @@ namespace MataSharp
 
             var tmpCopiedReceivers = this.KopieOntvangers.OrderBy(p => p.Achternaam).ToList().ConvertAll(p => p.ToPerson(true));
 
-            var tmpAttachments = this.Bijlagen.ToList();
-            tmpAttachments.ForEach(a => a.Type = AttachmentType.Message);
-
             var tmpFolderType = MagisterMessage.FolderType_ID.Where(x => x.Value == this.BerichtMapId).ElementAt(0).Key;
 
             return new MagisterMessage()
@@ -403,7 +400,7 @@ namespace MataSharp
                 IsFlagged = this.HeeftPrioriteit,
                 IDOriginal = this.IdOorspronkelijkeBericht,
                 IDOrginalReceiver = this.IdOntvangerOorspronkelijkeBericht,
-                Attachments = tmpAttachments,
+                Attachments = this.Bijlagen.ToList(AttachmentType.Message),
                 _FolderType = tmpFolderType,
                 Deleted = this.IsDefinitiefVerwijderd,
                 IDKey = this.IdKey,

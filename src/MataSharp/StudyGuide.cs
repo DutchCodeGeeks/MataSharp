@@ -132,8 +132,7 @@ namespace MataSharp
             var expireDate = (!string.IsNullOrWhiteSpace(this.TotEnMet)) ? DateTime.Parse(this.TotEnMet, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime();
             var beginDate = (!string.IsNullOrWhiteSpace(this.Van)) ? DateTime.Parse(this.Van, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime();
 
-            var tmpAttachments = new List<Attachment>(this.Bronnen);
-            tmpAttachments.ForEach(a => a.Type = AttachmentType.StudyGuide);
+            var tmpAttachments = this.Bronnen.ToList(AttachmentType.StudyGuide);
             tmpAttachments.ForEach(a => a.StudyGuideID = ParentID);
             tmpAttachments.ForEach(a => a.StudyGuidePartID = thisID);
 

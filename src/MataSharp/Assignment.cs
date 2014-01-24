@@ -81,20 +81,14 @@ namespace MataSharp
 
         public AssignmentVersion ToVersion()
         {
-            var tmpHandedInAttachments = this.LeerlingBijlagen.ToList();
-            tmpHandedInAttachments.ForEach(a => a.Type = AttachmentType.Assignment_pupil);
-
-            var tmpFeedbackAttachments = this.FeedbackBijlagen.ToList();
-            tmpFeedbackAttachments.ForEach(a => a.Type = AttachmentType.Assignment_teacher);
-
             return new AssignmentVersion()
             {
                 Grade = this.Beoordeling,
                 TeacherNotice = this.DocentOpmerking,
-                FeedbackAttachments = tmpFeedbackAttachments,
+                FeedbackAttachments = this.FeedbackBijlagen.ToList(AttachmentType.Assignment_teacher),
                 HandInTime = (this.IngeleverdOp != null) ? DateTime.Parse(this.IngeleverdOp, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime(),
                 DeadLine = (this.IngeleverdOp != null) ? DateTime.Parse(this.IngeleverdOp, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime(),
-                HandedInAttachments = tmpHandedInAttachments,
+                HandedInAttachments = this.LeerlingBijlagen.ToList(AttachmentType.Assignment_pupil),
                 HandedInFooter = this.LeerlingOpmerking,
                 Name = this.Titel
             };
@@ -130,13 +124,10 @@ namespace MataSharp
                 tmpVersions.Add(versionClean.ToVersion());
             }
 
-            var tmpAttachments = this.Bijlagen.ToList();
-            tmpAttachments.ForEach(a => a.Type = AttachmentType.Assignment_teacher);
-
             return new Assignment()
             {
                 Grade = this.Beoordeling,
-                Attachments = tmpAttachments,
+                Attachments = this.Bijlagen.ToList(AttachmentType.Assignment_teacher),
                 Teachers = this.Docenten.ToList().ConvertAll(p => p.ToPerson(true)),
                 ID = this.Id,
                 HandInTime = (this.IngeleverdOp != null) ? DateTime.Parse(this.IngeleverdOp, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime(),
