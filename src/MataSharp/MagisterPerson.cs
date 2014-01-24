@@ -80,7 +80,7 @@ namespace MataSharp
 
         private static List<MagisterStylePerson> GetPersons(string SearchFilter)
         {
-            if (!_Session.checkedPersons.ContainsKey(SearchFilter))
+            if (SearchFilter == null || !_Session.checkedPersons.ContainsKey(SearchFilter))
             {
                 if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterStylePerson>();
 

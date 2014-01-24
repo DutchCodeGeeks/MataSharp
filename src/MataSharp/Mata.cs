@@ -106,7 +106,7 @@ namespace MataSharp
         /// <returns>List containing MagisterPerson instances</returns>
         public List<MagisterPerson> GetPersons(string SearchFilter)
         {
-            if (!_Session.checkedPersons.ContainsKey(SearchFilter))
+            if (SearchFilter == null || !_Session.checkedPersons.ContainsKey(SearchFilter))
             {
                 if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterPerson>();
 
