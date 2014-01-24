@@ -303,7 +303,7 @@ namespace MataSharp
         }
 
         /// <summary>
-        /// Sends current message instance. Except for throwing expections (MagsiterMessage.Send()), this method returns a boolean value.
+        /// Sends current message instance. Instead for throwing expections (MagisterMessage.Send()), this method returns a boolean value.
         /// </summary>
         /// <returns>Boolean value that shows if sending the current instance succeded.</returns>
         public bool TrySend()

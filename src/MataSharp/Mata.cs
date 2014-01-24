@@ -69,6 +69,38 @@ namespace MataSharp
         }
 
         /// <summary>
+        /// Quickly composes new MagisterMessage and sends it.
+        /// </summary>
+        /// <param name="Subject">Subject to use</param>
+        /// <param name="Body">Body to use</param>
+        /// <param name="Recipients">MagisterPersons to send to</param>
+        public void ComposeAndSendMessage(string Subject, string Body, IEnumerable<MagisterPerson> Recipients)
+        {
+            new MagisterMessage(this)
+            {
+                Subject = Subject,
+                Body = Body,
+                Recipients = Recipients.ToList()
+            }.Send();
+        }
+
+        /// <summary>
+        /// Quickly composes new MagisterMessage and sends it. Instead of throwing exceptions (ComposeAndSendMessage()) this gives back a boolean value.
+        /// </summary>
+        /// <param name="Subject">Subject to use</param>
+        /// <param name="Body">Body to use</param>
+        /// <param name="Recipients">MagisterPersons to send to</param>
+        public bool ComposeAndTrySendMessage(string Subject, string Body, IEnumerable<MagisterPerson> Recipients)
+        {
+            return new MagisterMessage(this)
+            {
+                Subject = Subject,
+                Body = Body,
+                Recipients = Recipients.ToList()
+            }.TrySend();
+        }
+
+        /// <summary>
         /// <para>Get all messagefolders linked with the current Mata instance.</para>
         /// </summary>
         public List<MagisterMessageFolder> GetMessageFolders()
