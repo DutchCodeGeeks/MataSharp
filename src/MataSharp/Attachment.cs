@@ -36,10 +36,13 @@ namespace MataSharp
         {
             if (this.Type == AttachmentType.Message)
                 return "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/berichten/bijlagen/" + this.ID;
+
             else if (this.Type == AttachmentType.Assignment_pupil)
                 return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/opdrachten/bijlagen/Ingeleverd/" + this.ID;
+
             else if (this.Type == AttachmentType.Assignment_teacher)
                 return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/opdrachten/bijlagen/" + this.ID;
+
             else
                 return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/studiewijzers/" + this.StudyGuideID + "/onderdelen/" + this.StudyGuidePartID + "/bijlagen/" + this.ID;
         }
@@ -66,6 +69,11 @@ namespace MataSharp
 
     static class ArrayExtension
     {
+        /// <summary>
+        /// Convert the current Attachment[] to a List
+        /// </summary>
+        /// <param name="AttachmentType">AttachmentType to give every attachment in the array.</param>
+        /// <returns>The array as list</returns>
         public static List<Attachment> ToList(this Attachment[] currentArray, AttachmentType AttachmentType)
         {
             var tmpList = new List<Attachment>(currentArray);

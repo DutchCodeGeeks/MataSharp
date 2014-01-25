@@ -22,12 +22,12 @@ namespace MataSharp
         /// <returns>List containing MagisterSchool instances</returns>
         public static List<MagisterSchool> GetSchools(string SearchFilter)
         {
-            if (string.IsNullOrWhiteSpace(SearchFilter)) return new List<MagisterSchool>();
+            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterSchool>();
 
             string URL = "https://schoolkiezer.magister.net/home/query?filter=" + SearchFilter;
 
             string schoolsRAW = _Session.HttpClient.DownloadString(URL);
-            return (JsonConvert.DeserializeObject<MagisterSchool[]>(schoolsRAW) ?? new MagisterSchool[0]).ToList();
+            return JsonConvert.DeserializeObject<MagisterSchool[]>(schoolsRAW).ToList();
         }
 
         public bool IsEqual(MagisterSchool School)

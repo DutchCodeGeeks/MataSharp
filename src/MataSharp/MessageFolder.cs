@@ -22,12 +22,13 @@ namespace MataSharp
         /// Checks for messages on the parent's mata server.
         /// </summary>
         /// <param name="Ammount">Ammount of messages to return.</param>
+        /// <param name="Skip">Ammount of messages to skip | Default = 0</param>
         /// <returns>List of MagisterMessages.</returns>
-        public List<MagisterMessage> GetMessages(uint Ammount)
+        public List<MagisterMessage> GetMessages(uint Ammount, uint Skip = 0)
         {
             if (Ammount == 0) return new List<MagisterMessage>();
 
-            string URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten?$skip=0&$top=" + Ammount;
+            string URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten?$skip=" + Skip + "&$top=" + Ammount;
 
             string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
             var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
@@ -47,12 +48,13 @@ namespace MataSharp
         /// Checks for new messages on the parent's mata server.
         /// </summary>
         /// <param name="Ammount">Ammount to ask for on the server.</param>
+        /// <param name="Skip">Ammount of messages to skip | Default = 0</param>
         /// <returns>List of unread MagisterMessages.</returns>
-        public List<MagisterMessage> GetUnreadMessages(uint Ammount)
+        public List<MagisterMessage> GetUnreadMessages(uint Ammount, uint Skip = 0)
         {
             if (Ammount == 0) return new List<MagisterMessage>();
 
-            string URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten?$skip=0&$top=" + Ammount;
+            string URL = "https://" + School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.ID + "/berichten?$skip=" + Skip + "&$top=" + Ammount;
 
             string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
             var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);

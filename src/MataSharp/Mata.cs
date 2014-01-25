@@ -13,11 +13,11 @@ namespace MataSharp
     internal static class _Session 
     { //This still feels dirty..
         public static Mata Mata;
-        public static MagisterSchool School;
+        public static MagisterSchool School { get { return Mata.School; } }
         public readonly static MataHTTPClient HttpClient = new MataHTTPClient();
         public static Dictionary<string, List<MagisterStylePerson>> checkedPersons = new Dictionary<string, List<MagisterStylePerson>>();
 
-        internal static void Dispose()
+        internal static void Clean()
         {
             HttpClient.Dispose();
             checkedPersons.Clear();
@@ -60,9 +60,8 @@ namespace MataSharp
             this.SessionID = cleanResponse.SessieId;
 
             _Session.Mata = this;
-            _Session.School = this.School;
 
-            _Session.HttpClient.client.Headers[HttpRequestHeader.Cookie] = "SESSION_ID=" + this.SessionID + "&fileDownload=true"; //yummy! cookies!
+            _Session.HttpClient.Cookie = "SESSION_ID=" + this.SessionID + "&fileDownload=true"; //yummy! cookies!
 
             this.Person = this.GetPersons(this.Name)[0]; //Get itself as MagisterPerson from the servers.
             _Session.Mata = this;
@@ -300,8 +299,20 @@ namespace MataSharp
             get { return this.GetMessageFolders().FirstOrDefault(mf => mf.FolderType == MessageFolderType.Bin) ?? new MagisterMessageFolder(); }
         }
 
+        /// <summary>
+        /// Clones the current Mata instance.
+        /// </summary>
+        /// <returns>A new Mata instance that is identical to the current one.</returns>
+        public Mata Clone()
+        {
+            return (Mata)this.MemberwiseClone();
+        }
+
         ~Mata() { this.Dispose(); }
-        public void Dispose() { _Session.Dispose(); GC.Collect(); }
+        /// <summary>
+        /// Disposes the current Mata instance.
+        /// </summary>
+        public void Dispose() { _Session.Clean(); GC.Collect(); }
     }
 
     internal partial struct MagisterStyleMata

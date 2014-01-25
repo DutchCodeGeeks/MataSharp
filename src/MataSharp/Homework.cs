@@ -113,7 +113,7 @@ namespace MataSharp
         public string VakOmschrijvingen { get; set; }
     }
 
-    internal partial struct Huiswerk
+    internal partial class Huiswerk
     {
         public string AantekeningLeerling { get; set; }
         public bool Afgerond { get; set; }

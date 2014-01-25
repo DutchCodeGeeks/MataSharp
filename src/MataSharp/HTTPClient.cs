@@ -2,15 +2,20 @@
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 
 namespace MataSharp
 {
-    public class MataHTTPClient
+    internal class MataHTTPClient : IDisposable
     {
-        internal WebClient client = new WebClient();
+        private WebClient client = new WebClient();
+
+        internal string Cookie
+        {
+            get { return this.client.Headers[HttpRequestHeader.Cookie]; }
+            set { this.client.Headers[HttpRequestHeader.Cookie] = value; }
+        }
 
         private static string stripString(string original)
         {
@@ -69,6 +74,7 @@ namespace MataSharp
             return fullPath;
         }
 
+        ~MataHTTPClient() { this.Dispose(); }
         public void Dispose() { this.client.Dispose(); }
     }
 }

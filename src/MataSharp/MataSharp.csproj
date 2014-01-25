@@ -49,7 +49,6 @@
     <Compile Include="Assignment.cs" />
     <Compile Include="Attachment.cs" />
     <Compile Include="DigitalSchoolUtilities.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Homework.cs" />
     <Compile Include="MessageFolder.cs" />
     <Compile Include="MagisterPerson.cs" />
