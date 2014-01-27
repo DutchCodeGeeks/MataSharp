@@ -9,12 +9,12 @@ namespace MataSharp
 {
     internal class MataHTTPClient : IDisposable
     {
-        private WebClient client = new WebClient();
+        private WebClient Client = new WebClient();
 
         internal string Cookie
         {
-            get { return this.client.Headers[HttpRequestHeader.Cookie]; }
-            set { this.client.Headers[HttpRequestHeader.Cookie] = value; }
+            get { return this.Client.Headers[HttpRequestHeader.Cookie]; }
+            set { this.Client.Headers[HttpRequestHeader.Cookie] = value; }
         }
 
         private static string stripString(string original)
@@ -27,25 +27,25 @@ namespace MataSharp
 
         public string DownloadString(string URL)
         {
-            return stripString(this.client.DownloadString(URL));
+            return stripString(this.Client.DownloadString(URL));
         }
 
         public void Put(string URL, string Data)
         {
-            this.client.Headers[HttpRequestHeader.ContentType] = "application/json;charset=UTF-8";
-            this.client.UploadData(URL, "PUT", System.Text.Encoding.ASCII.GetBytes(Data));
+            this.Client.Headers[HttpRequestHeader.ContentType] = "application/json;charset=UTF-8";
+            this.Client.UploadData(URL, "PUT", System.Text.Encoding.ASCII.GetBytes(Data));
         }
 
         public string Post(string URL, NameValueCollection Values)
         {
-            byte[] tmpArr = this.client.UploadValues(URL, Values);
+            byte[] tmpArr = this.Client.UploadValues(URL, Values);
             return stripString(Encoding.ASCII.GetString(tmpArr));
         }
 
         public void Post(string URL, string Content)
         {
-            this.client.Headers[HttpRequestHeader.ContentType] = "application/json;charset=UTF-8";
-            this.client.UploadData(URL, System.Text.Encoding.ASCII.GetBytes(Content));
+            this.Client.Headers[HttpRequestHeader.ContentType] = "application/json;charset=UTF-8";
+            this.Client.UploadData(URL, System.Text.Encoding.ASCII.GetBytes(Content));
         }
 
         public void Delete(string URL)
@@ -66,15 +66,15 @@ namespace MataSharp
             if (!string.IsNullOrWhiteSpace(DIR))
             {
                 if (!Directory.Exists(DIR)) Directory.CreateDirectory(DIR);
-                this.client.DownloadFile(URL, fullPath);
+                this.Client.DownloadFile(URL, fullPath);
             }
 
-            else this.client.DownloadFile(URL, Filename);
+            else this.Client.DownloadFile(URL, Filename);
 
             return fullPath;
         }
 
         ~MataHTTPClient() { this.Dispose(); }
-        public void Dispose() { this.client.Dispose(); }
+        public void Dispose() { this.Client.Dispose(); }
     }
 }

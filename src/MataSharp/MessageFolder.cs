@@ -15,8 +15,8 @@ namespace MataSharp
         public string MessagesURI { get; set; }
         public object Ref { get; set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.
 
-        internal MagisterSchool School { get; set; }
         internal Mata Mata { get; set; }
+        internal MagisterSchool School { get { return this.Mata.School; } }
 
         /// <summary>
         /// Checks for messages on the parent's mata server.

@@ -57,12 +57,16 @@ namespace MataSharp
         public int IDKey { get; set; }
         public int SenderGroupID { get; set; }
 
-        public bool CanSend { get; internal set; }
-        internal MagisterSchool School { get; set; }
-        internal Mata Mata { get; set; }
+        internal bool _CanSend { get; set; }
+        public bool CanSend
+        {
+            get { return (this._CanSend == true && this.Sender != null && this.Recipients != null && !string.IsNullOrEmpty(this.Body) && !string.IsNullOrEmpty(this.Subject)); }
+        }
+
+        private Mata Mata { get; set; }
         #endregion
 
-        private string URL() { return "https://" + this.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.FolderTypeAsInt() + "/berichten/" + this.ID; }
+        private string URL() { return "https://" + this.Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.FolderTypeAsInt() + "/berichten/" + this.ID; }
 
         /// <summary>
         /// Returns new MagisterMessage.
@@ -74,8 +78,7 @@ namespace MataSharp
 
             //Auto Fill-In some magic things >:D
             this.Mata = _Session.Mata;
-            this.School = _Session.School;
-            this.CanSend = true;
+            this._CanSend = true;
 
             this.ID = 0;
             this._IsRead = false;
@@ -101,8 +104,7 @@ namespace MataSharp
                 throw new NullReferenceException("All usable Mata instances are null!");
 
             this.Mata = Mata ?? _Session.Mata;
-            this.School = this.Mata.School;
-            this.CanSend = true;
+            this._CanSend = true;
 
             this.ID = 0;
             this._IsRead = false;
@@ -141,7 +143,7 @@ namespace MataSharp
                 case DayOfWeek.Friday: return "vrijdag";
                 case DayOfWeek.Saturday:return "zaterdag";
                 case DayOfWeek.Sunday: return "zondag";
-                default: return "maandag";
+                default: return "";
             }
         }
 
@@ -173,7 +175,7 @@ namespace MataSharp
                 Ref = null,
                 State = 0,
                 SentDate = DateTime.UtcNow,
-                CanSend = true
+                _CanSend = true
             };
         }
 
@@ -205,7 +207,7 @@ namespace MataSharp
                 Ref = null,
                 State = 0,
                 SentDate = DateTime.UtcNow,
-                CanSend = true
+                _CanSend = true
             };
         }
 
@@ -242,7 +244,7 @@ namespace MataSharp
                 Ref = null,
                 State = 0,
                 SentDate = DateTime.UtcNow,
-                CanSend = true
+                _CanSend = true
             };
         }
 
@@ -275,7 +277,7 @@ namespace MataSharp
                 Ref = null,
                 State = 0,
                 SentDate = DateTime.UtcNow,
-                CanSend = true
+                _CanSend = true
             };
         }
 
@@ -295,7 +297,7 @@ namespace MataSharp
         /// </summary>
         public void Send()
         {
-            if (this.CanSend == false) throw new System.Security.Authentication.AuthenticationException("This message is marked as not sendable!");
+            if (this._CanSend == false) throw new System.Security.Authentication.AuthenticationException("This message is marked as not sendable!");
             if (this.Sender == null || this.Recipients == null) throw new Exception("Sender and/or Recipients cannot be null!");
             if (string.IsNullOrEmpty(this.Body) || string.IsNullOrEmpty(this.Subject)) throw new Exception("Body and/or Subject cannot be null or empty!");
 
@@ -323,8 +325,8 @@ namespace MataSharp
         internal MagisterStyleMessage ToMagisterStyle()
         {
             //Get the sendable from the server and add that instead of the given MagisterPerson instances, so that we will be asured that it will be sendable.
-            var tmpReceivers = (this.CanSend == true) ? this.Recipients.ConvertAll(p => p.ToMagisterStyle()).ToArray() : this.Recipients.ConvertAll(p => p.ToMagisterStyle()).ToArray();
-            var tmpCC = (this.CC != null && this.CanSend == true) ? this.CC.ConvertAll(p => p.ToMagisterStyle()).ToArray() : (this.CC == null && this.CanSend == true) ? new MagisterStylePerson[0] : this.CC.ConvertAll(p => p.ToMagisterStyle()).ToArray();
+            var tmpReceivers = this.Recipients.ConvertAll(p => p.ToMagisterStyle()).ToArray();
+            var tmpCC = (this.CC != null) ? this.CC.ConvertAll(p => p.ToMagisterStyle()).ToArray() : new MagisterStylePerson[0];
 
             var tmpSentDate = (this.SentDate != null) ? this.SentDate.Value.ToString("yyyy-MM-ddTHH:mm:ss.0000000Z") : DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.0000000Z"); //2013-12-30T00:08:16.0000000Z
 
@@ -379,11 +381,11 @@ namespace MataSharp
 
         public MagisterMessage ToMagisterMessage()
         {
-            var tmpReceivers = this.Ontvangers.OrderBy(p => p.Achternaam).ToList().ConvertAll(p => p.ToPerson(true));
+            var tmpReceivers = this.Ontvangers.ToList().ConvertAll(p => p.ToPerson(true)).OrderBy(p => p.SurName);
 
-            var tmpCopiedReceivers = this.KopieOntvangers.OrderBy(p => p.Achternaam).ToList().ConvertAll(p => p.ToPerson(true));
+            var tmpCopiedReceivers = this.KopieOntvangers.ToList().ConvertAll(p => p.ToPerson(true)).OrderBy(p => p.SurName);
 
-            var tmpFolderType = MagisterMessage.FolderType_ID.Where(x => x.Value == this.BerichtMapId).ElementAt(0).Key;
+            var tmpFolderType = MagisterMessage.FolderType_ID.First(x => x.Value == this.BerichtMapId).Key;
 
             return new MagisterMessage()
             {
@@ -392,9 +394,9 @@ namespace MataSharp
                 Subject = this.Onderwerp,
                 Sender = this.Afzender.ToPerson(true),
                 Body = this.Inhoud,
-                Recipients = tmpReceivers,
-                CC = tmpCopiedReceivers,
-                SentDate = DateTime.Parse(this.VerstuurdOp, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
+                Recipients = tmpReceivers.ToList(),
+                CC = tmpCopiedReceivers.ToList(),
+                SentDate = this.VerstuurdOp.ToDateTime(),
                 _IsRead = this.IsGelezen,
                 State = this.Status,
                 IsFlagged = this.HeeftPrioriteit,
@@ -405,7 +407,7 @@ namespace MataSharp
                 Deleted = this.IsDefinitiefVerwijderd,
                 IDKey = this.IdKey,
                 SenderGroupID = this.IdDeelNameSoort,
-                CanSend = false
+                _CanSend = false
             };
         }
 

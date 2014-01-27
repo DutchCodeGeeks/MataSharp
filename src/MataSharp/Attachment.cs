@@ -66,19 +66,4 @@ namespace MataSharp
         Assignment_pupil,
         StudyGuide
     };
-
-    static class ArrayExtension
-    {
-        /// <summary>
-        /// Convert the current Attachment[] to a List
-        /// </summary>
-        /// <param name="AttachmentType">AttachmentType to give every attachment in the array.</param>
-        /// <returns>The array as list</returns>
-        public static List<Attachment> ToList(this Attachment[] currentArray, AttachmentType AttachmentType)
-        {
-            var tmpList = new List<Attachment>(currentArray);
-            tmpList.ForEach(a => a.Type = AttachmentType);
-            return tmpList;
-        }
-    }
 }

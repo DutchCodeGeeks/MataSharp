@@ -137,7 +137,7 @@ namespace MataSharp
                 Notes = this.AantekeningLeerling,
                 _Done = this.Afgerond,
                 Teachers = this.Docenten.ToList().ConvertAll(p => p.ToPerson(true)),
-                End = DateTime.Parse(this.Einde, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
+                End = this.Einde.ToDateTime(),
                 ID = this.Id,
                 InfoType = this.InfoType,
                 Content = this.Inhoud,
@@ -145,7 +145,7 @@ namespace MataSharp
                 BeginBySchoolHour = this.LesuurVan,
                 Location = this.Lokatie,
                 ClassDescription = this.Omschrijving,
-                Start = DateTime.Parse(this.Start, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
+                Start = this.Start.ToDateTime(),
                 State = this.Status,
                 ClassName = this.VakOmschrijvingen
             };

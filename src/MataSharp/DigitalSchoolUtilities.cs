@@ -61,8 +61,8 @@ namespace MataSharp
                 Publisher = this.Uitgeverij,
                 URL = this.Url,
                 Ref = this.Ref,
-                End = DateTime.Parse(this.Eind, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
-                Start = DateTime.Parse(this.Start, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
+                End = this.Eind.ToDateTime(),
+                Start = this.Start.ToDateTime(),
                 Name = this.Titel,
                 State = this.Status
             };

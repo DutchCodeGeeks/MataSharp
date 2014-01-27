@@ -1,5 +1,5 @@
-﻿//(c) 2014 Lieuwe Rooijakkers
-//MataSharp; Public C# implementation of the non public 'Mata' API.
+﻿/*(c) 2014 Lieuwe Rooijakkers
+MataSharp; Public C# implementation of the non public 'Mata' API. */
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -122,7 +122,6 @@ namespace MataSharp
                     ParentID = MessageFolder.ParentId,
                     Ref = MessageFolder.Ref,
                     MessagesURI = MessageFolder.BerichtenUri,
-                    School = this.School,
                     Mata = this,
                     FolderType = tmpType
                 });
@@ -308,11 +307,31 @@ namespace MataSharp
             return (Mata)this.MemberwiseClone();
         }
 
+        /// <summary>
+        /// Checks if the current Mata instance is equal to the given target.
+        /// </summary>
+        /// <param name="Target">The other Mata instance to check if equal.</param>
+        public bool Equals(Mata Target)
+        {
+            return (this.UserName == Target.UserName && this.UserID == Target.UserID && this.SessionID == Target.SessionID && this.Name == Target.Name);
+        }
+
         ~Mata() { this.Dispose(); }
         /// <summary>
         /// Disposes the current Mata instance.
         /// </summary>
         public void Dispose() { _Session.Clean(); GC.Collect(); }
+
+
+        /// <summary>
+        /// Checks if the given Mata instances are equal to each other.
+        /// </summary>
+        /// <param name="TargetA">First Mata instance</param>
+        /// <param name="TargetB">Second Mata instance</param>
+        public static bool Equals(Mata TargetA, Mata TargetB)
+        {
+            return (TargetA.UserName == TargetB.UserName && TargetA.UserID == TargetB.UserID && TargetA.SessionID == TargetB.SessionID && TargetA.Name == TargetB.Name);
+        }
     }
 
     internal partial struct MagisterStyleMata

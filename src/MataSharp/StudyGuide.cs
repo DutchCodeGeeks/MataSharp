@@ -129,9 +129,6 @@ namespace MataSharp
         {
             var thisID = this.Id;
 
-            var expireDate = (!string.IsNullOrWhiteSpace(this.TotEnMet)) ? DateTime.Parse(this.TotEnMet, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime();
-            var beginDate = (!string.IsNullOrWhiteSpace(this.Van)) ? DateTime.Parse(this.Van, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime();
-
             var tmpAttachments = this.Bronnen.ToList(AttachmentType.StudyGuide);
             tmpAttachments.ForEach(a => a.StudyGuideID = ParentID);
             tmpAttachments.ForEach(a => a.StudyGuidePartID = thisID);
@@ -144,8 +141,8 @@ namespace MataSharp
                 Description = this.Omschrijving,
                 Ref = this.Ref,
                 Name = this.Titel,
-                ExpireDate = expireDate,
-                BeginDate = beginDate,
+                ExpireDate = this.TotEnMet.ToDateTime(),
+                BeginDate = this.Van.ToDateTime(),
                 SerialNumber = this.Volgnummer
             };
         }

@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Assignment.cs" />
     <Compile Include="Attachment.cs" />
+    <Compile Include="Conversions.cs" />
     <Compile Include="DigitalSchoolUtilities.cs" />
     <Compile Include="Homework.cs" />
     <Compile Include="MessageFolder.cs" />
