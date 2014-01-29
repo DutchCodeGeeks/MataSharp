@@ -17,6 +17,7 @@ namespace MataSharp
         public string Name { get; set; }
         public string Publisher { get; set; }
         public string URL { get; set; }
+
         public DigitalSchoolUtilityClass Class { get; set; }
     }
 
@@ -40,7 +41,7 @@ namespace MataSharp
     {
         public long EAN { get; set; }
         public string Eind { get; set; }
-        public int Id { get; set; } //Shouldn't be zero?
+        public int Id { get; set; }
         public string PreviewImageUrl { get; set; }
         public object Ref { get; set; }
         public string Start { get; set; }

@@ -29,13 +29,13 @@ namespace MataSharp
     /// </summary>
     public partial class Mata : IDisposable
     {
-        public string Name { get; internal set; }
-        public uint UserID { get; internal set; }
-        public string SessionID { get; internal set; }
+        public string Name { get; private set; }
+        public uint UserID { get; private set; }
+        public string SessionID { get; private set; }
 
-        public string UserName { get; internal set; }
+        public string UserName { get; private set; }
         internal MagisterSchool School { get; private set; }
-        public MagisterPerson Person { get; internal set; }
+        public MagisterPerson Person { get; private set; }
 
         /// <summary>
         /// <para>Creates 'Mata' instance to communicate with the Mata server of the specified school.</para>

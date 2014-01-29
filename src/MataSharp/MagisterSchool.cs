@@ -30,7 +30,12 @@ namespace MataSharp
             return JsonConvert.DeserializeObject<MagisterSchool[]>(schoolsRAW).ToList();
         }
 
-        public bool IsEqual(MagisterSchool School)
+        public MagisterSchool Clone()
+        {
+            return (MagisterSchool)this.MemberwiseClone();
+        }
+
+        public bool Equals(MagisterSchool School)
         {
             return (School != null && this.Name == School.Name && this.URL == School.URL);
         }

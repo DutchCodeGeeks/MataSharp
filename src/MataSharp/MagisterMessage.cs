@@ -282,7 +282,7 @@ namespace MataSharp
         }
 
         /// <summary>
-        /// Permanently deletes the current message on the server.
+        /// CAUTION: Permanently deletes the current message on the server.
         /// </summary>
         public void Delete()
         {
@@ -393,7 +393,7 @@ namespace MataSharp
                 Ref = this.Ref,
                 Subject = this.Onderwerp,
                 Sender = this.Afzender.ToPerson(true),
-                Body = this.Inhoud,
+                Body = this.Inhoud.Trim(),
                 Recipients = tmpReceivers.ToList(),
                 CC = tmpCopiedReceivers.ToList(),
                 SentDate = this.VerstuurdOp.ToDateTime(),
