@@ -222,7 +222,7 @@ namespace MataSharp
 
             var tmpCC = this.Recipients.ToList().Where(p => p.ID != this.Mata.Person.ID).ToList(); //Should get the current receivers and pull itself out. :)
             if (this.CC != null) tmpCC.AddRange(this.CC.ToList().Where(p => p.ID != this.Mata.Person.ID).ToList());
-            tmpCC.OrderBy(p => p.SurName);
+            tmpCC.Sort();
 
             return new MagisterMessage()
             {

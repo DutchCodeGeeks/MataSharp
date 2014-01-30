@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MataSharp
 {
-    public partial class MagisterPerson
+    public partial class MagisterPerson : IComparable<MagisterPerson>
     {
         public uint ID { get; set; }
         public object Ref { get; set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.
@@ -61,6 +61,11 @@ namespace MataSharp
         public MagisterPerson Clone()
         {
             return (MagisterPerson)this.MemberwiseClone();
+        }
+
+        public int CompareTo(MagisterPerson PersonB)
+        {
+            return this.SurName.CompareTo(PersonB.SurName);
         }
     }
     internal partial struct MagisterStylePerson

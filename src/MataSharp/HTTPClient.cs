@@ -21,7 +21,7 @@ namespace MataSharp
         {
             string stripped = Regex.Replace(original, "<br />|<p />|<p>|[\r\n]", "\n");
             stripped = stripped.Replace("&nbsp;", " ");
-            stripped = Regex.Replace(stripped, "<[^>]*>|&quot;|&#x200b;|&[^&;]+;", "").Replace("ā,¬", "€").Replace("Ć«", "ë").Replace("Ć©", "é");
+            stripped = Regex.Replace(stripped, "<[^>]*>|&[^&;]+;", "").Replace("ā,¬", "€").Replace("Ć«", "ë").Replace("Ć©", "é");
             return stripped;
         }
 
