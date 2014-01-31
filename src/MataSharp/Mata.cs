@@ -112,7 +112,7 @@ namespace MataSharp
             List<MagisterMessageFolder> tmplst = new List<MagisterMessageFolder>();
             foreach (var MessageFolder in MessageFolders)
             {
-                var tmpType = MagisterMessage.FolderType_ID.First(x => x.Value == MessageFolder.Id).Key;
+                var tmpType = (MessageFolder)MessageFolder.Id;
 
                 tmplst.Add(new MagisterMessageFolder()
                 {
@@ -285,17 +285,17 @@ namespace MataSharp
 
         public MagisterMessageFolder Inbox
         {
-            get { return this.GetMessageFolders().FirstOrDefault(mf => mf.FolderType == MessageFolderType.Inbox) ?? new MagisterMessageFolder(); }
+            get { return this.GetMessageFolders().FirstOrDefault(mf => mf.FolderType == MessageFolder.Inbox) ?? new MagisterMessageFolder(); }
         }
 
         public MagisterMessageFolder SentMessages
         {
-            get { return this.GetMessageFolders().FirstOrDefault(mf => mf.FolderType == MessageFolderType.SentMessages) ?? new MagisterMessageFolder(); }
+            get { return this.GetMessageFolders().FirstOrDefault(mf => mf.FolderType == MessageFolder.SentMessages) ?? new MagisterMessageFolder(); }
         }
 
         public MagisterMessageFolder Bin
         {
-            get { return this.GetMessageFolders().FirstOrDefault(mf => mf.FolderType == MessageFolderType.Bin) ?? new MagisterMessageFolder(); }
+            get { return this.GetMessageFolders().FirstOrDefault(mf => mf.FolderType == MessageFolder.Bin) ?? new MagisterMessageFolder(); }
         }
 
         /// <summary>

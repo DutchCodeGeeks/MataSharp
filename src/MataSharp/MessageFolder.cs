@@ -10,7 +10,7 @@ namespace MataSharp
         public string Name { get; set; }
         public uint UnreadMessagesCount { get; set; }
         public int ID { get; set; }
-        public MessageFolderType FolderType { get; set; }
+        public MessageFolder FolderType { get; set; }
         public int ParentID { get; set; }
         public string MessagesURI { get; set; }
         public object Ref { get; set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.
@@ -97,11 +97,11 @@ namespace MataSharp
         }
     }
 
-    public enum MessageFolderType
+    public enum MessageFolder : int
     { //Defines the folders where messages can be in, server handles it as ID's. We? We handle it as an enum :D
-        Inbox,
-        SentMessages,
-        Bin
+        Inbox = -101,
+        SentMessages = -103,
+        Bin = -102
     }
 
     internal partial struct MagisterStyleMessageFolderListItem

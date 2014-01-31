@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace MataSharp
 {
-    public partial class Assignment
+    public partial class Assignment : IComparable<Assignment>
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -23,6 +23,11 @@ namespace MataSharp
 
         public List<AssignmentVersion> Versions { get; set; }
 
+
+        public int CompareTo(Assignment other)
+        {
+            return this.Name.CompareTo(other.Name);
+        }
     }
 
     public partial class AssignmentVersion

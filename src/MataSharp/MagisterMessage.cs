@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace MataSharp
 {
-    public partial class MagisterMessage
+    public partial class MagisterMessage : IComparable<MagisterMessage>
     {
         #region Contents
         public int ID { get; set; }
@@ -38,18 +38,21 @@ namespace MataSharp
         public int? IDOriginal { get; set; }
         public int? IDOrginalReceiver { get; set; }
         public List<Attachment> Attachments { get; internal set; }
-        internal MessageFolderType _FolderType { get; set; }
+        internal int _Folder { get; set; }
 
-        public MessageFolderType FolderType
+        public MessageFolder Folder
         {
-            get { return this._FolderType; }
+            get { return (MessageFolder)this._Folder; }
             set
             {
-                if (this._FolderType == value) return;
+                if (this._Folder == (int)value) return;
 
-                this._FolderType = value;
+                var thisCopied = (MagisterMessage)this.MemberwiseClone();
+
+                this._Folder = (int)value;
 
                 _Session.HttpClient.Put(this.URL(), JsonConvert.SerializeObject(this.ToMagisterStyle()));
+                thisCopied.Delete();
             }
         }
 
@@ -66,7 +69,7 @@ namespace MataSharp
         private Mata Mata { get; set; }
         #endregion
 
-        private string URL() { return "https://" + this.Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this.FolderTypeAsInt() + "/berichten/" + this.ID; }
+        private string URL() { return "https://" + this.Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this._Folder + "/berichten/" + this.ID; }
 
         /// <summary>
         /// Returns new MagisterMessage.
@@ -85,7 +88,7 @@ namespace MataSharp
             this.State = 0;
             this.IDOriginal = 0;
             this.IDOrginalReceiver = 0;
-            this._FolderType = 0;
+            this._Folder = 0;
             this.Deleted = false;
             this.IDKey = 0;
             this.SenderGroupID = this.Mata.Person.GroupID;
@@ -111,25 +114,13 @@ namespace MataSharp
             this.State = 0;
             this.IDOriginal = 0;
             this.IDOrginalReceiver = 0;
-            this._FolderType = 0;
+            this._Folder = 0;
             this.Deleted = false;
             this.IDKey = 0;
             this.SenderGroupID = this.Mata.Person.GroupID;
             this.Sender = this.Mata.Person;
             this.Recipients = new List<MagisterPerson>();
             this.CC = new List<MagisterPerson>();
-        }
-
-        internal readonly static Dictionary<MessageFolderType, int> FolderType_ID = new Dictionary<MessageFolderType, int>()
-        {
-            {MessageFolderType.Inbox, -101},
-            {MessageFolderType.Bin, -102},
-            {MessageFolderType.SentMessages,-103}
-        };
-
-        private int FolderTypeAsInt()
-        {
-            return FolderType_ID.First(x => x.Key == this._FolderType).Value;
         }
 
         internal static string DayOfWeekToString(DayOfWeek dayOfWeek)
@@ -158,7 +149,7 @@ namespace MataSharp
             return new MagisterMessage()
             {
                 Sender = this.Sender,//Magister's logic
-                _FolderType = this._FolderType,
+                _Folder = this._Folder,
                 Attachments = new List<Attachment>(),
                 CC = null,
                 IsFlagged = this.IsFlagged,
@@ -191,7 +182,7 @@ namespace MataSharp
             return new MagisterMessage()
             {
                 Sender = this.Sender,//Magister's logic
-                _FolderType = this._FolderType,
+                _Folder = this._Folder,
                 Attachments = new List<Attachment>(),
                 IsFlagged = this.IsFlagged,
                 ID = this.ID,
@@ -227,7 +218,7 @@ namespace MataSharp
             return new MagisterMessage()
             {
                 Sender = this.Sender,
-                _FolderType = this._FolderType,
+                _Folder = this._Folder,
                 Attachments = new List<Attachment>(),
                 CC = tmpCC,
                 IsFlagged = this.IsFlagged,
@@ -260,7 +251,7 @@ namespace MataSharp
             return new MagisterMessage()
             {
                 Sender = this.Sender,//Magister's logic
-                _FolderType = this._FolderType,
+                _Folder = this._Folder,
                 Attachments = new List<Attachment>(),
                 CC = null,
                 IsFlagged = this.IsFlagged,
@@ -347,11 +338,16 @@ namespace MataSharp
                 IdOorspronkelijkeBericht = this.IDOriginal,
                 IdOntvangerOorspronkelijkeBericht = this.IDOrginalReceiver,
                 Bijlagen = new Attachment[0],
-                BerichtMapId = this.FolderTypeAsInt(),
+                BerichtMapId = this._Folder,
                 IsDefinitiefVerwijderd = this.Deleted,
                 IdKey = this.IDKey,
                 IdDeelNameSoort = this.SenderGroupID,
             };
+        }
+
+        public int CompareTo(MagisterMessage other)
+        {
+            return this.ID.CompareTo(other.ID);
         }
     }
 
@@ -385,8 +381,6 @@ namespace MataSharp
 
             var tmpCopiedReceivers = this.KopieOntvangers.ToList().ConvertAll(p => p.ToPerson(true)).OrderBy(p => p.SurName);
 
-            var tmpFolderType = MagisterMessage.FolderType_ID.First(x => x.Value == this.BerichtMapId).Key;
-
             return new MagisterMessage()
             {
                 ID = this.Id,
@@ -403,7 +397,7 @@ namespace MataSharp
                 IDOriginal = this.IdOorspronkelijkeBericht,
                 IDOrginalReceiver = this.IdOntvangerOorspronkelijkeBericht,
                 Attachments = this.Bijlagen.ToList(AttachmentType.Message),
-                _FolderType = tmpFolderType,
+                _Folder = this.BerichtMapId,
                 Deleted = this.IsDefinitiefVerwijderd,
                 IDKey = this.IdKey,
                 SenderGroupID = this.IdDeelNameSoort,

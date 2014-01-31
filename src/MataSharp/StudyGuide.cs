@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace MataSharp
 {
-    public partial class StudyGuide
+    public partial class StudyGuide : IComparable<StudyGuide>
     {
         public string Name { get; set; }
         public int ID { get; set; }
@@ -15,6 +15,11 @@ namespace MataSharp
         public DateTime ExpireDate { get; set; }
         public List<string> ClassCodes { get; set; }
         public DateTime BeginDate { get; set; }
+
+        public int CompareTo(StudyGuide other)
+        {
+            return this.Name.CompareTo(other.Name);
+        }
     }
 
     public partial class StudyGuidePart

@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace MataSharp
 {
-    public partial class DigitalSchoolUtility
+    public partial class DigitalSchoolUtility : IComparable<DigitalSchoolUtility>
     {
         public long EAN { get; set; }
         public DateTime End { get; set; }
@@ -19,6 +19,11 @@ namespace MataSharp
         public string URL { get; set; }
 
         public DigitalSchoolUtilityClass Class { get; set; }
+
+        public int CompareTo(DigitalSchoolUtility other)
+        {
+            return this.Name.CompareTo(other.Name);
+        }
     }
 
     public partial class DigitalSchoolUtilityClass

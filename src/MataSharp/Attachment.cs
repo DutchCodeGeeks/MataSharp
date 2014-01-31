@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace MataSharp
 {
-    public partial class Attachment
+    public partial class Attachment : IComparable<Attachment>
     {
         [JsonProperty("Id")]
         public int ID { get; internal set; }
@@ -56,6 +56,11 @@ namespace MataSharp
         {
             string fileName = (AddUserID) ? ("(" + _Session.Mata.UserID + ") " + this.Name) : (this.Name);
             return _Session.HttpClient.DownloadFile(URL(), fileName, Directory);
+        }
+
+        public int CompareTo(Attachment other)
+        {
+            return this.Name.CompareTo(other.Name);
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -8,7 +9,7 @@ namespace MataSharp
     /// <summary>
     /// Type to represent a magister school.
     /// </summary>
-    public class MagisterSchool
+    public class MagisterSchool : IComparable<MagisterSchool>
     {
         [JsonProperty("Licentie")]
         public string Name { get; set; }
@@ -38,6 +39,11 @@ namespace MataSharp
         public bool Equals(MagisterSchool School)
         {
             return (School != null && this.Name == School.Name && this.URL == School.URL);
+        }
+
+        public int CompareTo(MagisterSchool other)
+        {
+            return this.Name.CompareTo(other.Name);
         }
     }
 }
