@@ -97,10 +97,7 @@ namespace MataSharp
                 _Session.checkedPersons.Add(SearchFilter, persons);
                 return persons;
             }
-            else
-            {
-                return _Session.checkedPersons.First(x => x.Key == SearchFilter).Value;
-            }
+            else return _Session.checkedPersons.First(x => x.Key == SearchFilter).Value;
         }
 
         public MagisterPerson ToPerson(bool download)

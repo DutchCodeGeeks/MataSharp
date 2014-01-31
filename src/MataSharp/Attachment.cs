@@ -51,6 +51,7 @@ namespace MataSharp
         /// Downloads the current attachment.
         /// </summary>
         /// <param name="AddUserID">Boolean value whether to add the UserID in front of the filename or not.</param>
+        /// <param name="Directory">The directory to save the file to.</param>
         /// <returns>A string containting the path to the location of the downloaded attachment.</returns>
         public string Download(bool AddUserID, string Directory = "")
         {

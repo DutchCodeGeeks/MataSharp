@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MataSharp</name>
+    </assembly>
+    <members>
+        <member name="M:MataSharp.Attachment.Download(System.Boolean,System.String)">
+            <summary>
+            Downloads the current attachment.
+            </summary>
+            <param name="AddUserID">Boolean value whether to add the UserID in front of the filename or not.</param>
+            <param name="Directory">The directory to save the file to.</param>
+            <returns>A string containting the path to the location of the downloaded attachment.</returns>
+        </member>
+        <member name="M:MataSharp.Conversions.ToDateTime(System.String)">
+            <summary>
+            Converts the current string to a DateTime.
+            </summary>
+            <returns>The string parsed as DateTime</returns>
+        </member>
+        <member name="M:MataSharp.Conversions.ToList(MataSharp.Attachment[],MataSharp.AttachmentType)">
+            <summary>
+            Convert the current Attachment[] to a List
+            </summary>
+            <param name="AttachmentType">AttachmentType to give every attachment in the array.</param>
+            <returns>The array as list</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.GetMessages(System.UInt32,System.UInt32)">
+            <summary>
+            Checks for messages on the parent's mata server.
+            </summary>
+            <param name="Ammount">Ammount of messages to return.</param>
+            <param name="Skip">Ammount of messages to skip | Default = 0</param>
+            <returns>List of MagisterMessages.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.GetUnreadMessages(System.UInt32,System.UInt32)">
+            <summary>
+            Checks for new messages on the parent's mata server.
+            </summary>
+            <param name="Ammount">Ammount to ask for on the server.</param>
+            <param name="Skip">Ammount of messages to skip | Default = 0</param>
+            <returns>List of unread MagisterMessages.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.GetUnreadMessages">
+            <summary>
+            Gets ALL the new messages on the parent's mata server.
+            </summary>
+            <returns>List of unread MagisterMessages.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterPerson.ToMagisterStyle">
+            <summary>
+            Converts the current MagisterPerson instance to a MagisterStylePerson
+            </summary>
+            <returns>A MagisterStylePerson instance.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterPerson.Clone">
+            <summary>
+            Clones the current MagisterPerson instance.
+            </summary>
+            <returns>A new MagisterPerson instance that's identical to the current one.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessage.#ctor">
+            <summary>
+            Returns new MagisterMessage.
+            </summary>
+        </member>
+        <member name="M:MataSharp.MagisterMessage.#ctor(MataSharp.Mata)">
+            <summary>
+            Returns new MagisterMessage
+            </summary>
+            <param name="Mata">The mata instance to use.</param>
+        </member>
+        <member name="M:MataSharp.MagisterMessage.CreateForwardMessage">
+            <summary>
+            Creates new MagisterMessage that forwards the current message.
+            </summary>
+            <returns>A new MagisterMessage instance ready to be send.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessage.CreateForwardMessage(System.String)">
+            <summary>
+            Creates new MagisterMessage that forwards the current message.
+            </summary>
+            <param name="ContentAdd">The content to add infront of the original message.</param>
+            <returns>A new MagisterMessage instance ready to be send.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessage.CreateReplyToAllMessage(System.String)">
+            <summary>
+            Creates Message that replies to the sender and all the receiptents of the current message.
+            </summary>
+            <param name="ContentAdd">The content to add infront of the original message.</param>
+            <returns>A new MagisterMessage instance ready to be send.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessage.CreateReplyMessage(System.String)">
+            <summary>
+            Creates Message that replies to the sender of the current message.
+            </summary>
+            <param name="ContentAdd">The content to add infront of the original message.</param>
+            <returns>A new MagisterMessage instance ready to be send.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessage.Delete">
+            <summary>
+            CAUTION: Permanently deletes the current message on the server.
+            </summary>
+        </member>
+        <member name="M:MataSharp.MagisterMessage.Send">
+            <summary>
+            <para>Sends current message instance.</para>
+            </summary>
+        </member>
+        <member name="M:MataSharp.MagisterMessage.TrySend">
+            <summary>
+            Sends current message instance. Instead for throwing expections (MagisterMessage.Send()), this method returns a boolean value.
+            </summary>
+            <returns>Boolean value that shows if sending the current instance succeded.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessage.ToMagisterStyle">
+            <summary>
+            Converts the current MagisterMessage instance to a sendable one.
+            </summary>
+            <returns>A MagisterSendableMessage instance.</returns>
+        </member>
+        <member name="T:MataSharp.Mata">
+            <summary>
+            Type to communicate with a Magister School's server.
+            </summary>
+        </member>
+        <member name="M:MataSharp.Mata.#ctor(MataSharp.MagisterSchool,System.String,System.String)">
+            <summary>
+            <para>Creates 'Mata' instance to communicate with the Mata server of the specified school.</para>
+            </summary>
+            <param name="School">School which to log in to.</param>
+            <param name="UserName">Name to log in with.</param>
+            <param name="UserPassword">Password to log in with.</param>
+        </member>
+        <member name="M:MataSharp.Mata.ComposeAndSendMessage(System.String,System.String,System.Collections.Generic.IEnumerable{MataSharp.MagisterPerson})">
+            <summary>
+            Quickly composes new MagisterMessage and sends it.
+            </summary>
+            <param name="Subject">Subject to use</param>
+            <param name="Body">Body to use</param>
+            <param name="Recipients">MagisterPersons to send to</param>
+        </member>
+        <member name="M:MataSharp.Mata.ComposeAndTrySendMessage(System.String,System.String,System.Collections.Generic.IEnumerable{MataSharp.MagisterPerson})">
+            <summary>
+            Quickly composes new MagisterMessage and sends it. Instead of throwing exceptions (ComposeAndSendMessage()) this gives back a boolean value.
+            </summary>
+            <param name="Subject">Subject to use</param>
+            <param name="Body">Body to use</param>
+            <param name="Recipients">MagisterPersons to send to</param>
+        </member>
+        <member name="M:MataSharp.Mata.GetMessageFolders">
+            <summary>
+            <para>Get all messagefolders linked with the current Mata instance.</para>
+            </summary>
+        </member>
+        <member name="M:MataSharp.Mata.GetPersons(System.String)">
+            <summary>
+            Returns all Magisterpersons filtered by the given search filter as a list.
+            </summary>
+            <param name="SearchFilter">The search filter to use as string.</param>
+            <returns>List containing MagisterPerson instances</returns>
+        </member>
+        <member name="M:MataSharp.Mata.Clone">
+            <summary>
+            Clones the current Mata instance.
+            </summary>
+            <returns>A new Mata instance that is identical to the current one.</returns>
+        </member>
+        <member name="M:MataSharp.Mata.Equals(MataSharp.Mata)">
+            <summary>
+            Checks if the current Mata instance is equal to the given target.
+            </summary>
+            <param name="Target">The other Mata instance to check if equal.</param>
+        </member>
+        <member name="M:MataSharp.Mata.Dispose">
+            <summary>
+            Disposes the current Mata instance.
+            </summary>
+        </member>
+        <member name="M:MataSharp.Mata.Equals(MataSharp.Mata,MataSharp.Mata)">
+            <summary>
+            Checks if the given Mata instances are equal to each other.
+            </summary>
+            <param name="TargetA">First Mata instance</param>
+            <param name="TargetB">Second Mata instance</param>
+        </member>
+        <member name="T:MataSharp.MagisterSchool">
+            <summary>
+            Type to represent a magister school.
+            </summary>
+        </member>
+        <member name="M:MataSharp.MagisterSchool.GetSchools(System.String)">
+            <summary>
+            Returns all Magister/Mata schools filterd by the given search filter as a list.
+            </summary>
+            <param name="SearchFilter">The search filter to use as string.</param>
+            <returns>List containing MagisterSchool instances</returns>
+        </member>
+    </members>
+</doc>

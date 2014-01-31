@@ -148,10 +148,7 @@ namespace MataSharp
                 _Session.checkedPersons.Add(SearchFilter, personRaw);
                 return personRaw.ConvertAll(p => p.ToPerson(false));
             }
-            else
-            {
-                return _Session.checkedPersons.First(x => x.Key == SearchFilter).Value.ConvertAll(p => p.ToPerson(false));
-            }
+            else return _Session.checkedPersons.First(x => x.Key == SearchFilter).Value.ConvertAll(p => p.ToPerson(false));
         }
 
         public List<Homework> GetHomework()

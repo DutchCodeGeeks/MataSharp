@@ -17,7 +17,7 @@ namespace MataSharp
         public string Body { get; set; }
         public List<MagisterPerson> Recipients { get; set; }
         public List<MagisterPerson> CC { get; set; }
-        public DateTime? SentDate { get; set; }
+        public DateTime SentDate { get; set; }
         internal bool _IsRead;
 
         public bool IsRead
@@ -190,7 +190,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.Value.DayOfWeek) + " " + this.SentDate.Value.ToString() + "<br>Aan: " + String.Join(", ",this.Recipients.Select(x=>x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.DayOfWeek) + " " + this.SentDate.ToString() + "<br>Aan: " + String.Join(", ",this.Recipients.Select(x=>x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -227,7 +227,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.Value.DayOfWeek) + " " + this.SentDate.Value.ToString() + "<br>Aan: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.DayOfWeek) + " " + this.SentDate.ToString() + "<br>Aan: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -260,7 +260,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.Value.DayOfWeek) + " " + this.SentDate.Value.ToString() + "<br>Aan: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.DayOfWeek) + " " + this.SentDate.ToString() + "<br>Aan: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -319,8 +319,6 @@ namespace MataSharp
             var tmpReceivers = this.Recipients.ConvertAll(p => p.ToMagisterStyle()).ToArray();
             var tmpCC = (this.CC != null) ? this.CC.ConvertAll(p => p.ToMagisterStyle()).ToArray() : new MagisterStylePerson[0];
 
-            var tmpSentDate = (this.SentDate != null) ? this.SentDate.Value.ToString("yyyy-MM-ddTHH:mm:ss.0000000Z") : DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.0000000Z"); //2013-12-30T00:08:16.0000000Z
-
             return new MagisterStyleMessage()
             {
                 Id = this.ID,
@@ -331,7 +329,7 @@ namespace MataSharp
                 Ontvangers = tmpReceivers,
                 KopieOntvangers = tmpCC,
                 CC = tmpCC,
-                VerstuurdOp = tmpSentDate,
+                VerstuurdOp = this.SentDate.ToString("yyyy-MM-ddTHH:mm:ss.0000000Z"),
                 IsGelezen = this._IsRead,
                 Status = this.State,
                 HeeftPrioriteit = this.IsFlagged,
@@ -347,7 +345,7 @@ namespace MataSharp
 
         public int CompareTo(MagisterMessage other)
         {
-            return this.ID.CompareTo(other.ID);
+            return this.SentDate.CompareTo(other.SentDate);
         }
     }
 

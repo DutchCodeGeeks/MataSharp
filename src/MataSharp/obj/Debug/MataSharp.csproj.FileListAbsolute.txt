@@ -1,0 +1,8 @@
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\bin\Debug\MataSharp.dll
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\bin\Debug\MataSharp.pdb
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\bin\Debug\MataSharp.dll.CodeAnalysisLog.xml
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\bin\Debug\MataSharp.dll.lastcodeanalysissucceeded
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\obj\Debug\MataSharp.dll
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataSharp\obj\Debug\MataSharp.pdb
