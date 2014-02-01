@@ -277,10 +277,10 @@ namespace MataSharp
         /// </summary>
         public void Delete()
         {
-            if (this.Deleted == true) return;
+            if (this.Deleted) return;
 
             this.Deleted = true;
-            _Session.HttpClient.Delete(this.URL());
+            _Session.HttpClient.Delete(this.URL(), this.Mata.SessionID);
         }
 
         /// <summary>

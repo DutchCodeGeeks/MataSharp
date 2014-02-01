@@ -48,11 +48,11 @@ namespace MataSharp
             this.Client.UploadData(URL, System.Text.Encoding.ASCII.GetBytes(Content));
         }
 
-        public void Delete(string URL)
+        public void Delete(string URL, string SessionID)
         {
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(URL);
             req.Method = "DELETE";
-            req.Headers[HttpRequestHeader.Cookie] = "SESSION_ID=" + _Session.Mata.SessionID + "&fileDownload=true";
+            req.Headers[HttpRequestHeader.Cookie] = "SESSION_ID=" + SessionID + "&fileDownload=true";
             req.Timeout = 15000;
             req.GetResponse();
         }

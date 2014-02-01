@@ -22,7 +22,8 @@ namespace MataSharp
 
         public int CompareTo(DigitalSchoolUtility other)
         {
-            return this.Class.CompareTo(other.Class);
+            var classCompared = this.Class.CompareTo(other.Class);
+            return (classCompared != 0) ? classCompared : this.Name.CompareTo(other.Name);
         }
     }
 

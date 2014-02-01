@@ -25,28 +25,6 @@
             <param name="AttachmentType">AttachmentType to give every attachment in the array.</param>
             <returns>The array as list</returns>
         </member>
-        <member name="M:MataSharp.MagisterMessageFolder.GetMessages(System.UInt32,System.UInt32)">
-            <summary>
-            Checks for messages on the parent's mata server.
-            </summary>
-            <param name="Ammount">Ammount of messages to return.</param>
-            <param name="Skip">Ammount of messages to skip | Default = 0</param>
-            <returns>List of MagisterMessages.</returns>
-        </member>
-        <member name="M:MataSharp.MagisterMessageFolder.GetUnreadMessages(System.UInt32,System.UInt32)">
-            <summary>
-            Checks for new messages on the parent's mata server.
-            </summary>
-            <param name="Ammount">Ammount to ask for on the server.</param>
-            <param name="Skip">Ammount of messages to skip | Default = 0</param>
-            <returns>List of unread MagisterMessages.</returns>
-        </member>
-        <member name="M:MataSharp.MagisterMessageFolder.GetUnreadMessages">
-            <summary>
-            Gets ALL the new messages on the parent's mata server.
-            </summary>
-            <returns>List of unread MagisterMessages.</returns>
-        </member>
         <member name="M:MataSharp.MagisterPerson.ToMagisterStyle">
             <summary>
             Converts the current MagisterPerson instance to a MagisterStylePerson
@@ -195,6 +173,33 @@
             </summary>
             <param name="SearchFilter">The search filter to use as string.</param>
             <returns>List containing MagisterSchool instances</returns>
+        </member>
+        <member name="M:MataSharp.MessageList`1.WhereUnread(System.UInt32,System.UInt32)">
+            <summary>
+            Checks for new messages on the parent's mata server.
+            </summary>
+            <param name="Ammount">Ammount to ask for on the server.</param>
+            <param name="Skip">Ammount of messages to skip | Default = 0</param>
+            <returns>List of unread MagisterMessages.</returns>
+        </member>
+        <member name="M:MataSharp.MessageList`1.WhereUnread">
+            <summary>
+            Gets ALL the new messages on the parent's mata server.
+            </summary>
+            <returns>List of unread MagisterMessages.</returns>
+        </member>
+        <member name="M:MataSharp.MessageList`1.RemoveAt(System.Int32)">
+            <summary>
+            CAUTION: Permanently deletes the given message from the server.
+            </summary>
+            <param name="index">The zero-based index of the element to remove.</param>
+        </member>
+        <member name="M:MataSharp.MessageList`1.RemoveRange(System.Int32,System.Int32)">
+            <summary>
+            CAUTION: Permanently deletes the given messages from the server.
+            </summary>
+            <param name="index">The zero-based starting index of the range of elements to remove.</param>
+            <param name="count">The number of elements to remove.</param>
         </member>
     </members>
 </doc>
