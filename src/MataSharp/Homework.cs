@@ -26,10 +26,7 @@ namespace MataSharp
         public DateTime End { get; set; }
         public int ID { get; set; }
         internal int InfoType;
-        public HomeworkType Type
-        {
-            get { return (HomeworkType)this.InfoType; }
-        }
+        public HomeworkType Type { get { return (HomeworkType)this.InfoType; } }
         public string Content { get; set; }
         public int EndBySchoolHour { get; set; }
         public int BeginBySchoolHour { get; set; }

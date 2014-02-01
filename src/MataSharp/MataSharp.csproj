@@ -31,7 +31,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\MataSharp.XML</DocumentationFile>
     <RegisterForComInterop>false</RegisterForComInterop>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
     <NoWarn>1591;1573</NoWarn>
   </PropertyGroup>
   <ItemGroup>

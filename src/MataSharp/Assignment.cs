@@ -23,10 +23,10 @@ namespace MataSharp
 
         public List<AssignmentVersion> Versions { get; set; }
 
-
         public int CompareTo(Assignment other)
         {
-            return this.Name.CompareTo(other.Name);
+            var dateCompared = this.DeadLine.CompareTo(other.DeadLine);
+            return (dateCompared != 0) ? dateCompared : this.Class.CompareTo(other.Class);
         }
     }
 

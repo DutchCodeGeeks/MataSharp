@@ -65,7 +65,8 @@ namespace MataSharp
 
         public int CompareTo(MagisterPerson PersonB)
         {
-            return this.SurName.CompareTo(PersonB.SurName);
+            var surNameCompared = this.SurName.CompareTo(PersonB.SurName);
+            return (surNameCompared != 0) ? surNameCompared : this.FirstName.CompareTo(PersonB.FirstName);
         }
     }
     internal partial struct MagisterStylePerson
@@ -108,7 +109,7 @@ namespace MataSharp
                 try { tmpPerson = (MagisterStylePerson.GetPersons(this.Naam).Count == 1) ? MagisterStylePerson.GetPersons(this.Naam)[0] : this; } //Main building ground.
                 catch { tmpPerson = this; }
             }
-            else { tmpPerson = this; }
+            else tmpPerson = this;
 
             List<string> splitted = (tmpPerson.Naam != null) ? tmpPerson.Naam.Split(' ').ToList() : null;
 

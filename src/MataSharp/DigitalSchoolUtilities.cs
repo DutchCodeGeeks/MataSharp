@@ -22,15 +22,20 @@ namespace MataSharp
 
         public int CompareTo(DigitalSchoolUtility other)
         {
-            return this.Name.CompareTo(other.Name);
+            return this.Class.CompareTo(other.Class);
         }
     }
 
-    public partial class DigitalSchoolUtilityClass
+    public partial class DigitalSchoolUtilityClass : IComparable<DigitalSchoolUtilityClass>
     {
         public string ClassAbbreviation { get; set; }
         public int ID { get; set; }
         public string Description { get; set; }
+
+        public int CompareTo(DigitalSchoolUtilityClass other)
+        {
+            return this.ClassAbbreviation.CompareTo(other.ClassAbbreviation);
+        }
     }
 
     internal partial struct DigitaalLesMatriaalLijstItem

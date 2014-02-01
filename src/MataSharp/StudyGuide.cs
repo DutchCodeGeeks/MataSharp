@@ -18,11 +18,12 @@ namespace MataSharp
 
         public int CompareTo(StudyGuide other)
         {
-            return this.Name.CompareTo(other.Name);
+            var dateCompared = this.ExpireDate.CompareTo(other.ExpireDate);
+            return (dateCompared != 0) ? dateCompared : this.ClassCodes[0].CompareTo(other.ClassCodes[0]);
         }
     }
 
-    public partial class StudyGuidePart
+    public partial class StudyGuidePart : IComparable<StudyGuidePart>
     {
         public List<Attachment> Attachments { get; set; }
         public int ID { get; set; }
@@ -33,6 +34,11 @@ namespace MataSharp
         public DateTime ExpireDate { get; set; }
         public DateTime BeginDate { get; set; }
         public int SerialNumber { get; set; }
+
+        public int CompareTo(StudyGuidePart other)
+        {
+            return this.ExpireDate.CompareTo(other.ExpireDate);
+        }
     }
 
     internal partial struct StudieWijzerLijst
@@ -69,7 +75,7 @@ namespace MataSharp
         public StudyGuide ToStudyGuide()
         {
             var tmpStudyGuideParts = new List<StudyGuidePart>();
-            foreach(var StudyGuidePartsListItem in this.Onderdelen.Items)
+            foreach (var StudyGuidePartsListItem in this.Onderdelen.Items)
             {
                 string URL = "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/studiewijzers/" + this.Id + "/onderdelen/" + StudyGuidePartsListItem.Id;
 
@@ -79,9 +85,6 @@ namespace MataSharp
                 tmpStudyGuideParts.Add(partClean.ToReadableStyle(this.Id));
             }
 
-            var expireDate = (!string.IsNullOrWhiteSpace(this.TotEnMet)) ? DateTime.Parse(this.TotEnMet, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime();
-            var beginDate = (!string.IsNullOrWhiteSpace(this.Van)) ? DateTime.Parse(this.Van, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal) : new DateTime();
-
             return new StudyGuide()
             {
                 ID = this.Id,
@@ -89,9 +92,9 @@ namespace MataSharp
                 Visible = this.IsZichtbaar,
                 StudyGuideParts = tmpStudyGuideParts,
                 Name = this.Titel,
-                BeginDate= beginDate,
+                BeginDate= this.Van.ToDateTime(),
                 ClassCodes = new List<string>(VakCodes),
-                ExpireDate = expireDate
+                ExpireDate = this.TotEnMet.ToDateTime()
             };
         }
     }
