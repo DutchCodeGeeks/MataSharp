@@ -16,6 +16,13 @@ namespace MataSharp
             this.Sender = Sender;
         }
 
+        /// <summary>
+        /// Gets the item on the given index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the item to get.</param>
+        /// <returns>The item on the given index.</returns>
+        public Message this[int index] { get { return this.GetSpecificEnumerator().GetAt(index); } }
+
         public IEnumerator<Message> GetEnumerator()
         {
             return new Enumerator<Message>(this.Mata, this.Sender);
@@ -109,6 +116,11 @@ namespace MataSharp
             return pos;
         }
 
+        /// <summary>
+        /// CAUTION: Permanently deletes the given messages from the server.
+        /// </summary>
+        /// <param name="max">The ammount of messages to check for on the server.</param>
+        /// <param name="predicate">The predicate the messages must match to.</param>
         public void RemoveAll(int max, Predicate<Message> predicate)
         {
             var enumerator = this.GetSpecificEnumerator();
@@ -141,7 +153,7 @@ namespace MataSharp
         /// Gets the first message that matches the given predicate. Throws exception when nothing is found.
         /// </summary>
         /// <param name="max">The max value to check for on the server.</param>
-        /// <param name="predicate">The predicate the messages must match></param>
+        /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>The first message on the server that matches the predicate.</returns>
         public Message First(int max, Func<Message,bool> predicate)
         {
@@ -155,10 +167,29 @@ namespace MataSharp
         }
 
         /// <summary>
+        /// Gets the last message that matches the given predicate. Throws exception when nothing is found.
+        /// </summary>
+        /// <param name="max">The max value to check for on the server.</param>
+        /// <param name="predicate">The predicate the message must match.</param>
+        /// <returns>The last message on the server that matches the predicate.</returns>
+        public Message Last(int max, Func<Message,bool> predicate)
+        {
+            var enumerator = this.GetSpecificEnumerator();
+            Message msg = null;
+            for(int i = 0; i < max; i++)
+            {
+                var tmpMsg = enumerator.GetAt(i);
+                if (predicate(tmpMsg)) msg = tmpMsg;
+            }
+            if (msg != null) return msg;
+            else throw new Exception("No messages found."); 
+        }
+
+        /// <summary>
         /// Gets the first message that matches the given predicate. Gives back the default of the object if nothing is found.
         /// </summary>
         /// <param name="max">The max value to check for on the server.</param>
-        /// <param name="predicate">The predicate the messages must match></param>
+        /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>The first message on the server that matches the predicate.</returns>
         public Message FirstOrDefault(int max, Func<Message, bool> predicate)
         {
@@ -169,6 +200,87 @@ namespace MataSharp
                 if (predicate(msg)) return msg;
             } 
             return default(Message);
+        }
+
+        /// <summary>
+        /// Gets the last message that matches the given predicate. Gives back the default of the object if nothing is found.
+        /// </summary>
+        /// <param name="max">The max value to check for on the server.</param>
+        /// <param name="predicate">The predicate the message must match.</param>
+        /// <returns>The last message on the server that matches the predicate.</returns>
+        public Message LastOrDefault(int max, Func<Message, bool> predicate)
+        {
+            var enumerator = this.GetSpecificEnumerator();
+            Message msg = null;
+            for(int i = 0; i < max; i++)
+            {
+                var tmpMsg = enumerator.GetAt(i);
+                if (predicate(tmpMsg)) msg = tmpMsg;
+            }
+            if (msg != null) return msg;
+            else return default(Message);
+        }
+
+        /// <summary>
+        /// Checks if there is a message on the server that matches the given predicate.
+        /// </summary>
+        /// <param name="max">The max value to check for on the server.</param>
+        /// <param name="predicate">The predicate the message must match.</param>
+        /// <returns>A boolean value that tells if there is a message matching the given predicate.</returns>
+        public bool Any(int max, Func<Message,bool> predicate)
+        {
+            var enumerator = this.GetSpecificEnumerator();
+            for(int i = 0; i < max; i++)
+            {
+                var msg = enumerator.GetAt(i);
+                if (predicate(msg)) return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns the single message on the server that matches the given predicate. Throws expception when more matching messages or none are found.
+        /// </summary>
+        /// <param name="predicate">The predicate that the message must match to.</param>
+        /// <returns>A single MagisterMessage matching the given predicate.</returns>
+        public Message Single(Func<Message, bool> predicate)
+        {
+            var enumerator = this.GetSpecificEnumerator();
+            Message msg = null;
+            for(int i = 0; i <= 5; i++)
+            {
+                var tmpMsg = enumerator.GetAt(i);
+                if (predicate(tmpMsg))
+                {
+                    if (msg != null) msg = tmpMsg;
+                    else throw new Exception("More than 1 message matches the predicate.");
+                }
+            }
+            if (msg != null) return msg;
+            else throw new Exception("No messages found that matches the predicate.");
+        }
+
+        /// <summary>
+        /// Returns the single message on the server that matches the given predicate. Throws expception when more matching messages are found.
+        /// When no matching messages are found, returns the default value.
+        /// </summary>
+        /// <param name="predicate">The predicate that the message must match to.</param>
+        /// <returns>A single MagisterMessage matching the given predicate.</returns>
+        public Message SingleOrDefault(Func<Message, bool> predicate)
+        {
+            var enumerator = this.GetSpecificEnumerator();
+            Message msg = null;
+            for (int i = 0; i <= 5; i++)
+            {
+                var tmpMsg = enumerator.GetAt(i);
+                if (predicate(tmpMsg))
+                {
+                    if (msg != null) msg = tmpMsg;
+                    else throw new Exception("More than 1 message matches the predicate.");
+                }
+            }
+            if (msg != null) return msg;
+            else return default(Message);
         }
 
         private class Enumerator<T> : IEnumerator<T> where T : MagisterMessage
@@ -272,7 +384,12 @@ namespace MataSharp
                 Skip = -1;
             }
 
-            public void Dispose() { }
+            public void Dispose()
+            {
+                this.Mata = null;
+                this.Sender = null;
+                GC.Collect();
+            }
         }
     }
 }

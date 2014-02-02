@@ -231,7 +231,7 @@ namespace MataSharp
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
-                Recipients = new List<MagisterPerson>(){ this.Sender },
+                Recipients = new List<MagisterPerson>() { this.Sender },
                 Ref = null,
                 State = 0,
                 SentDate = DateTime.UtcNow,

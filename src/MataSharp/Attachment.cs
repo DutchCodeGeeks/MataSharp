@@ -14,7 +14,9 @@ namespace MataSharp
         [JsonProperty("Naam")]
         public string Name { get; internal set; }
         [JsonProperty("Datum")]
-        public DateTime Date { get; internal set; }
+        internal DateTime _Date { get; set; }
+        [JsonIgnore]
+        public DateTime Date { get { return this._Date.Date; } }
         [JsonProperty("Grootte")]
         public int Size { get; internal set; }
 
