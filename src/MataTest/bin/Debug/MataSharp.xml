@@ -201,5 +201,44 @@
             <param name="index">The zero-based starting index of the range of elements to remove.</param>
             <param name="count">The number of elements to remove.</param>
         </member>
+        <member name="M:MataSharp.MessageList`1.GetRange(System.Int32,System.Int32)">
+            <summary>
+            Gets the given range of MagisterMessages.
+            </summary>
+            <param name="index">The zero-based index at which the range starts.</param>
+            <param name="count">The number of elements in the range.</param>
+            <returns>The given range of MagisterMessages as a List</returns>
+        </member>
+        <member name="M:MataSharp.MessageList`1.IndexOf(`0)">
+            <summary>
+            Get's the zero-based position of the given item on the server.
+            </summary>
+            <param name="item">The item to get its position from.</param>
+            <returns>A zero-based index of the position of the given item.</returns>
+        </member>
+        <member name="M:MataSharp.MessageList`1.Where(System.Int32,System.Func{`0,System.Boolean})">
+            <summary>
+            Gets the messages that matches the given predicate.
+            </summary>
+            <param name="max">The max value to check for on the server.</param>
+            <param name="predicate">The predicate the messages must match</param>
+            <returns>A List containing the messages that matched the predicate.</returns>
+        </member>
+        <member name="M:MataSharp.MessageList`1.First(System.Int32,System.Func{`0,System.Boolean})">
+            <summary>
+            Gets the first message that matches the given predicate. Throws exception when nothing is found.
+            </summary>
+            <param name="max">The max value to check for on the server.</param>
+            <param name="predicate">The predicate the messages must match></param>
+            <returns>The first message on the server that matches the predicate.</returns>
+        </member>
+        <member name="M:MataSharp.MessageList`1.FirstOrDefault(System.Int32,System.Func{`0,System.Boolean})">
+            <summary>
+            Gets the first message that matches the given predicate. Gives back the default of the object if nothing is found.
+            </summary>
+            <param name="max">The max value to check for on the server.</param>
+            <param name="predicate">The predicate the messages must match></param>
+            <returns>The first message on the server that matches the predicate.</returns>
+        </member>
     </members>
 </doc>

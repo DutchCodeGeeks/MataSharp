@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -70,6 +71,104 @@ namespace MataSharp
 
             for (int i = 0; i < count; i++)
                 enumerator.GetAt(index + i).Delete();
+        }
+
+        /// <summary>
+        /// Gets the given range of MagisterMessages.
+        /// </summary>
+        /// <param name="index">The zero-based index at which the range starts.</param>
+        /// <param name="count">The number of elements in the range.</param>
+        /// <returns>The given range of MagisterMessages as a List</returns>
+        public List<Message> GetRange(int index, int count)
+        {
+            var tmpList = new List<Message>();
+            var enumerator = this.GetSpecificEnumerator();
+
+            for (int i = 0; i < count; i++)
+                tmpList.Add(enumerator.GetAt(index + i));
+
+            return tmpList;
+        }
+
+        /// <summary>
+        /// Get's the zero-based position of the given item on the server.
+        /// </summary>
+        /// <param name="item">The item to get its position from.</param>
+        /// <returns>A zero-based index of the position of the given item.</returns>
+        public int IndexOf(Message item)
+        {
+            var enumerator = this.GetSpecificEnumerator();
+            Message currentItem = null;
+            int pos = -1;
+            do
+            {
+                enumerator.MoveNext();
+                currentItem = enumerator.Current;
+                pos++;
+            } while (currentItem.ID != item.ID);
+            return pos;
+        }
+
+        public void RemoveAll(int max, Predicate<Message> predicate)
+        {
+            var enumerator = this.GetSpecificEnumerator();
+            for(int i = 0; i < max; i++)
+            {
+                var message = enumerator.GetAt(i);
+                if (predicate(message)) message.Delete();
+            }
+        }
+
+        /// <summary>
+        /// Gets the messages that matches the given predicate.
+        /// </summary>
+        /// <param name="max">The max value to check for on the server.</param>
+        /// <param name="predicate">The predicate the messages must match</param>
+        /// <returns>A List containing the messages that matched the predicate.</returns>
+        public List<Message> Where(int max, Func<Message,bool> predicate)
+        {
+            var enumerator = this.GetSpecificEnumerator();
+            var tmpList = new List<Message>();
+            for(int i = 0; i < max; i++)
+            {
+                var msg = enumerator.GetAt(i);
+                if (predicate(msg)) tmpList.Add((Message)msg);
+            }
+            return tmpList;
+        }
+
+        /// <summary>
+        /// Gets the first message that matches the given predicate. Throws exception when nothing is found.
+        /// </summary>
+        /// <param name="max">The max value to check for on the server.</param>
+        /// <param name="predicate">The predicate the messages must match></param>
+        /// <returns>The first message on the server that matches the predicate.</returns>
+        public Message First(int max, Func<Message,bool> predicate)
+        {
+            var enumerator = this.GetSpecificEnumerator();
+            for (int i = 0; i < max; i++)
+            {
+                var msg = enumerator.GetAt(i);
+                if (predicate(msg)) return msg;
+            }
+            throw new Exception("No messages found.");
+        }
+
+        /// <summary>
+        /// Gets the first message that matches the given predicate. Gives back the default of the object if nothing is found.
+        /// </summary>
+        /// <param name="max">The max value to check for on the server.</param>
+        /// <param name="predicate">The predicate the messages must match></param>
+        /// <returns>The first message on the server that matches the predicate.</returns>
+        public Message FirstOrDefault(int max, Func<Message, bool> predicate)
+        {
+            var enumerator = this.GetSpecificEnumerator();
+            for (int i = 0; i < max; i++)
+            {
+                var msg = enumerator.GetAt(i);
+                if (predicate(msg)) return msg;
+            } 
+            return default(Message);
         }
 
         private class Enumerator<T> : IEnumerator<T> where T : MagisterMessage
