@@ -252,7 +252,7 @@ namespace MataSharp
                 var tmpMsg = enumerator.GetAt(i);
                 if (predicate(tmpMsg))
                 {
-                    if (msg != null) msg = tmpMsg;
+                    if (msg == null) msg = tmpMsg;
                     else throw new Exception("More than 1 message matches the predicate.");
                 }
             }
@@ -275,7 +275,7 @@ namespace MataSharp
                 var tmpMsg = enumerator.GetAt(i);
                 if (predicate(tmpMsg))
                 {
-                    if (msg != null) msg = tmpMsg;
+                    if (msg == null) msg = tmpMsg;
                     else throw new Exception("More than 1 message matches the predicate.");
                 }
             }

@@ -61,7 +61,7 @@
     <Compile Include="HTTPClient.cs" />
     <Compile Include="Mata.cs" />
     <Compile Include="MagisterSchool.cs" />
-    <Compile Include="MessageListing.cs" />
+    <Compile Include="MessageList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StudyGuide.cs" />
   </ItemGroup>
