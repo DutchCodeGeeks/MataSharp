@@ -18,7 +18,7 @@ namespace MataSharp
         internal Mata Mata { get; set; }
         internal MagisterSchool School { get { return this.Mata.School; } }
 
-        public MessageList<MagisterMessage> Messages { get { return new MessageList<MagisterMessage>(Mata, this); } }
+        public MessageList<MagisterMessage> Messages { get { return new MessageList<MagisterMessage>(this); } }
     }
 
     public enum MessageFolder : int

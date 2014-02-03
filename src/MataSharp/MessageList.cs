@@ -7,12 +7,12 @@ namespace MataSharp
 {
     public class MessageList<Message> : IEnumerable<Message> where Message : MagisterMessage
     {
-        private Mata Mata { get; set; }
         private MagisterMessageFolder Sender { get; set; }
 
-        public MessageList(Mata Mata, MagisterMessageFolder Sender)
+        public MessageList() { throw new Exception("MessageLists are only able to be internally created."); }
+
+        internal MessageList(MagisterMessageFolder Sender)
         {
-            this.Mata = Mata;
             this.Sender = Sender;
         }
 
@@ -25,7 +25,7 @@ namespace MataSharp
 
         public IEnumerator<Message> GetEnumerator()
         {
-            return new Enumerator<Message>(this.Mata, this.Sender);
+            return new Enumerator<Message>(this.Sender.Mata, this.Sender);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -35,7 +35,7 @@ namespace MataSharp
 
         private Enumerator<Message> GetSpecificEnumerator()
         {
-            return new Enumerator<Message>(this.Mata, this.Sender);
+            return new Enumerator<Message>(this.Sender.Mata, this.Sender);
         }
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>A boolean value that tells if there is a message matching the given predicate.</returns>
-        public bool Any(int max, Func<Message,bool> predicate)
+        public bool Any(int max, Func<Message, bool> predicate)
         {
             var enumerator = this.GetSpecificEnumerator();
             for(int i = 0; i < max; i++)

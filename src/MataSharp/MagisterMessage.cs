@@ -316,8 +316,8 @@ namespace MataSharp
         internal MagisterStyleMessage ToMagisterStyle()
         {
             //Get the sendable from the server and add that instead of the given MagisterPerson instances, so that we will be asured that it will be sendable.
-            var tmpReceivers = this.Recipients.ConvertAll(p => p.ToMagisterStyle()).ToArray();
-            var tmpCC = (this.CC != null) ? this.CC.ConvertAll(p => p.ToMagisterStyle()).ToArray() : new MagisterStylePerson[0];
+            var tmpReceivers = this.Recipients.ConvertAll(p => p.ToMagisterStyle());
+            var tmpCC = (this.CC != null) ? this.CC.ConvertAll(p => p.ToMagisterStyle()) : new List<MagisterStylePerson>();
 
             return new MagisterStyleMessage()
             {
@@ -357,9 +357,9 @@ namespace MataSharp
         public string Onderwerp { get; set; }
         public MagisterStylePerson Afzender { get; set; }
         public string Inhoud { get; set; }
-        public MagisterStylePerson[] Ontvangers { get; set; }
-        public MagisterStylePerson[] KopieOntvangers { get; set; }
-        public MagisterStylePerson[] CC { get; set; }
+        public List<MagisterStylePerson> Ontvangers { get; set; }
+        public List<MagisterStylePerson> KopieOntvangers { get; set; }
+        public List<MagisterStylePerson> CC { get; set; }
         public string VerstuurdOp { get; set; }
         public bool IsGelezen { get; set; }
         public int Status { get; set; }
@@ -375,9 +375,11 @@ namespace MataSharp
 
         public MagisterMessage ToMagisterMessage()
         {
-            var tmpReceivers = this.Ontvangers.ToList().ConvertAll(p => p.ToPerson(true)).OrderBy(p => p.SurName);
+            var tmpReceivers = this.Ontvangers.ConvertAll(p => p.ToPerson(true));
+            tmpReceivers.Sort();
 
-            var tmpCopiedReceivers = this.KopieOntvangers.ToList().ConvertAll(p => p.ToPerson(true)).OrderBy(p => p.SurName);
+            var tmpCopiedReceivers = this.KopieOntvangers.ConvertAll(p => p.ToPerson(true));
+            tmpCopiedReceivers.Sort();
 
             return new MagisterMessage()
             {
@@ -386,8 +388,8 @@ namespace MataSharp
                 Subject = this.Onderwerp,
                 Sender = this.Afzender.ToPerson(true),
                 Body = this.Inhoud.Trim(),
-                Recipients = tmpReceivers.ToList(),
-                CC = tmpCopiedReceivers.ToList(),
+                Recipients = tmpReceivers,
+                CC = tmpCopiedReceivers,
                 SentDate = this.VerstuurdOp.ToDateTime(),
                 _IsRead = this.IsGelezen,
                 State = this.Status,
