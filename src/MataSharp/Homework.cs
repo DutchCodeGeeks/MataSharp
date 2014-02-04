@@ -46,9 +46,9 @@ namespace MataSharp
                 AantekeningLeerling = this.Notes,
                 Afgerond  = this.Done,
                 Id = this.ID,
-                Docenten = this.Teachers.ConvertAll(p => p.ToMagisterStyle()).ToArray(),
-                Einde = this.End.ToString("yyyy-MM-ddTHH:mm:ss.0000000Z"),
-                Start = this.Start.ToString("yyyy-MM-ddTHH:mm:ss.0000000Z"),
+                Docenten = this.Teachers.ConvertAll(p => p.ToMagisterStyle()),
+                Einde = this.End.ToUTCString(),
+                Start = this.Start.ToUTCString(),
                 InfoType = this.InfoType,
                 Inhoud = this.Content,
                 LesuurTM = this.EndBySchoolHour,
@@ -58,6 +58,11 @@ namespace MataSharp
                 VakOmschrijvingen = this.ClassDescription,
                 Status = this.State
             };
+        }
+
+        public override string ToString()
+        {
+            return "Class: " + this.ClassAbbreviation + "\nStart: " + this.Start.ToString() + "\nEnd: " + this.End.ToString() + "\nDone: " + this.Done + "\nContent: " + this.Content;
         }
 
         public int CompareTo(Homework other)
@@ -108,7 +113,7 @@ namespace MataSharp
     {
         public string AantekeningLeerling { get; set; }
         public bool Afgerond { get; set; }
-        public MagisterStylePerson[] Docenten { get; set; }
+        public List<MagisterStylePerson> Docenten { get; set; }
         public string Einde { get; set; }
         public int Id { get; set; }
         public int InfoType { get; set; }
@@ -127,7 +132,7 @@ namespace MataSharp
             {
                 Notes = this.AantekeningLeerling,
                 _Done = this.Afgerond,
-                Teachers = this.Docenten.ToList().ConvertAll(p => p.ToPerson(true)),
+                Teachers = this.Docenten.ConvertAll(p => p.ToPerson(true)),
                 End = this.Einde.ToDateTime(),
                 ID = this.Id,
                 InfoType = this.InfoType,

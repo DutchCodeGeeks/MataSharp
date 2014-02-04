@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace MataSharp
 {
-    public partial class MagisterMessage : IComparable<MagisterMessage>
+    public partial class MagisterMessage : IComparable<MagisterMessage>, ICloneable
     {
         #region Contents
         public int ID { get; set; }
@@ -123,21 +123,6 @@ namespace MataSharp
             this.CC = new List<MagisterPerson>();
         }
 
-        internal static string DayOfWeekToString(DayOfWeek dayOfWeek)
-        {
-            switch(dayOfWeek)
-            {
-                case DayOfWeek.Monday: return "maandag";
-                case DayOfWeek.Tuesday: return "dinsdag";
-                case DayOfWeek.Wednesday: return "woensdag";
-                case DayOfWeek.Thursday: return "donderdag";
-                case DayOfWeek.Friday: return "vrijdag";
-                case DayOfWeek.Saturday:return "zaterdag";
-                case DayOfWeek.Sunday: return "zondag";
-                default: return "";
-            }
-        }
-
         /// <summary>
         /// Creates new MagisterMessage that forwards the current message.
         /// </summary>
@@ -158,7 +143,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = this.Body,
+                Body = "<b>Van:</b> " + this.Sender.Name + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -190,7 +175,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.DayOfWeek) + " " + this.SentDate.ToString() + "<br>Aan: " + String.Join(", ",this.Recipients.Select(x=>x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Name + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ",this.Recipients.Select(x=>x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -227,7 +212,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.DayOfWeek) + " " + this.SentDate.ToString() + "<br>Aan: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Name + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -260,7 +245,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br>Van: " + this.Sender.Name + "<br>Verzonden: " + DayOfWeekToString(this.SentDate.DayOfWeek) + " " + this.SentDate.ToString() + "<br>Aan: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br>Onderwerp: " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Name + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -329,7 +314,7 @@ namespace MataSharp
                 Ontvangers = tmpReceivers,
                 KopieOntvangers = tmpCC,
                 CC = tmpCC,
-                VerstuurdOp = this.SentDate.ToString("yyyy-MM-ddTHH:mm:ss.0000000Z"),
+                VerstuurdOp = this.SentDate.ToUTCString(),
                 IsGelezen = this._IsRead,
                 Status = this.State,
                 HeeftPrioriteit = this.IsFlagged,
@@ -343,9 +328,24 @@ namespace MataSharp
             };
         }
 
+        public override string ToString()
+        {
+            return "From: " + this.Sender.Name + "\nSent: " + this.SentDate.DayOfWeek + " " + this.SentDate.ToString() + "\nTo: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "\nSubject: " + this.Subject + "\n\n\"" + this.Body + "\"";
+        }
+
         public int CompareTo(MagisterMessage other)
         {
             return this.SentDate.CompareTo(other.SentDate);
+        }
+
+        public MagisterMessage Clone()
+        {
+            return (MagisterMessage)this.MemberwiseClone();
+        }
+
+        object ICloneable.Clone()
+        {
+            return this.Clone();
         }
     }
 

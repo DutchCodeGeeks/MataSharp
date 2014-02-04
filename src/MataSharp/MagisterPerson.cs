@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MataSharp
 {
-    public partial class MagisterPerson : IComparable<MagisterPerson>
+    public partial class MagisterPerson : IComparable<MagisterPerson>, ICloneable
     {
         public uint ID { get; set; }
         public object Ref { get; set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.
@@ -22,6 +22,11 @@ namespace MataSharp
 
         internal MagisterPerson Original { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            return this.Equals((MagisterPerson)obj);
+        }
+
         public bool Equals(MagisterPerson Person)
         {
             return (this.ID == Person.ID && this.Initials == Person.Initials && this.SurName == Person.SurName &&
@@ -36,9 +41,8 @@ namespace MataSharp
         /// <returns>A MagisterStylePerson instance.</returns>
         internal MagisterStylePerson ToMagisterStyle()
         {
-            var tmpPerson = (!this.Original.Equals(this)) ?
-                (_Session.Mata.GetPersons(this.Name).Count == 1) ? _Session.Mata.GetPersons(this.Name)[0] : this
-                : this;
+            var tmpPerson = (!this.Original.Equals(this)) ? this.Original : this;
+
             return new MagisterStylePerson()
                 {
                     Id = tmpPerson.ID,
@@ -63,12 +67,20 @@ namespace MataSharp
             return (MagisterPerson)this.MemberwiseClone();
         }
 
+        public override string ToString() { return this.Description; }
+
         public int CompareTo(MagisterPerson PersonB)
         {
             var surNameCompared = this.SurName.CompareTo(PersonB.SurName);
             return (surNameCompared != 0) ? surNameCompared : this.FirstName.CompareTo(PersonB.FirstName);
         }
+
+        object ICloneable.Clone()
+        {
+            return this.Clone();
+        }
     }
+
     internal partial struct MagisterStylePerson
     {
         public uint Id { get; set; }

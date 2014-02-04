@@ -63,7 +63,8 @@ namespace MataSharp
 
         public int CompareTo(Attachment other)
         {
-            return this.Name.CompareTo(other.Name);
+            var nameCompared = this.Name.CompareTo(other.Name);
+            return (nameCompared != 0) ? nameCompared : this.Date.CompareTo(other.Date);
         }
     }
 

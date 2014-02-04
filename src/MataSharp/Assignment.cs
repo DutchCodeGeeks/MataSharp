@@ -104,7 +104,7 @@ namespace MataSharp
     {
         public uint? Beoordeling { get; set; }
         public Attachment[] Bijlagen { get; set; }
-        public MagisterStylePerson[] Docenten { get; set; }
+        public List<MagisterStylePerson> Docenten { get; set; }
         public int Id { get; set; }
         public string IngeleverdOp { get; set; }
         public string InleverenVoor { get; set; }
@@ -133,7 +133,7 @@ namespace MataSharp
             {
                 Grade = this.Beoordeling,
                 Attachments = this.Bijlagen.ToList(AttachmentType.Assignment_teacher),
-                Teachers = this.Docenten.ToList().ConvertAll(p => p.ToPerson(true)),
+                Teachers = this.Docenten.ConvertAll(p => p.ToPerson(true)),
                 ID = this.Id,
                 HandInTime = this.IngeleverdOp.ToDateTime(),
                 DeadLine = this.InleverenVoor.ToDateTime(),

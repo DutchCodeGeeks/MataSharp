@@ -27,7 +27,7 @@ namespace MataSharp
     /// <summary>
     /// Type to communicate with a Magister School's server.
     /// </summary>
-    public partial class Mata : IDisposable
+    public partial class Mata : IDisposable, ICloneable
     {
         public string Name { get; private set; }
         public uint UserID { get; private set; }
@@ -136,10 +136,10 @@ namespace MataSharp
         /// <returns>List containing MagisterPerson instances</returns>
         public List<MagisterPerson> GetPersons(string SearchFilter)
         {
-            if (SearchFilter == null || !_Session.checkedPersons.ContainsKey(SearchFilter))
-            {
-                if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterPerson>();
+            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterPerson>();
 
+            if (!_Session.checkedPersons.ContainsKey(SearchFilter))
+            {
                 string URL = "https://" + this.School.URL + "/api/personen/" + this.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
 
                 string personsRAW = _Session.HttpClient.DownloadString(URL);
@@ -328,6 +328,16 @@ namespace MataSharp
         public static bool Equals(Mata TargetA, Mata TargetB)
         {
             return (TargetA.UserName == TargetB.UserName && TargetA.UserID == TargetB.UserID && TargetA.SessionID == TargetB.SessionID && TargetA.Name == TargetB.Name);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(this, (Mata)obj);
+        }
+
+        object ICloneable.Clone()
+        {
+            return this.Clone();
         }
     }
 

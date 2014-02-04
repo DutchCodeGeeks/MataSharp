@@ -26,5 +26,33 @@ namespace MataSharp
             tmpList.ForEach(a => a.Type = AttachmentType);
             return tmpList;
         }
+
+        /// <summary>
+        /// Converts the current DateTime instance to a string.
+        /// </summary>
+        /// <returns>The current DateTime instance as string.</returns>
+        public static string ToUTCString(this DateTime original) 
+        { 
+            return original.ToString("yyyy-MM-ddTHH:mm:ss.0000000Z");
+        }
+
+        /// <summary>
+        /// Gets the DayOfWeek from the current DateTime instance in Dutch.
+        /// </summary>
+        /// <returns>Dutch day of week that represents the day of the current DateTime instance.</returns>
+        public static string DayOfWeekDutch(this DateTime Date)
+        {
+            switch(Date.DayOfWeek)
+            {
+                case DayOfWeek.Monday: return "maandag";
+                case DayOfWeek.Tuesday: return "dinsdag";
+                case DayOfWeek.Wednesday: return "woensdag";
+                case DayOfWeek.Thursday: return "donderdag";
+                case DayOfWeek.Friday: return "vrijdag";
+                case DayOfWeek.Saturday: return "zaterdag";
+                case DayOfWeek.Sunday: return "zondag";
+                default: return "";
+            }
+        }
     }
 }

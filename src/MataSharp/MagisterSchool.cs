@@ -9,7 +9,7 @@ namespace MataSharp
     /// <summary>
     /// Type to represent a magister school.
     /// </summary>
-    public class MagisterSchool : IComparable<MagisterSchool>
+    public class MagisterSchool : IComparable<MagisterSchool>, ICloneable
     {
         [JsonProperty("Licentie")]
         public string Name { get; set; }
@@ -36,6 +36,11 @@ namespace MataSharp
             return (MagisterSchool)this.MemberwiseClone();
         }
 
+        public override bool Equals(object obj)
+        {
+            return this.Equals((MagisterSchool)obj);
+        }
+
         public bool Equals(MagisterSchool School)
         {
             return (School != null && this.Name == School.Name && this.URL == School.URL);
@@ -44,6 +49,16 @@ namespace MataSharp
         public int CompareTo(MagisterSchool other)
         {
             return this.Name.CompareTo(other.Name);
+        }
+
+        public override string ToString()
+        {
+            return this.Name + " - " + this.URL;
+        }
+
+        object ICloneable.Clone()
+        {
+            return this.Clone();
         }
     }
 }

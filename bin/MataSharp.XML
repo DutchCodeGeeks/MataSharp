@@ -25,6 +25,18 @@
             <param name="AttachmentType">AttachmentType to give every attachment in the array.</param>
             <returns>The array as list</returns>
         </member>
+        <member name="M:MataSharp.Conversions.ToUTCString(System.DateTime)">
+            <summary>
+            Converts the current DateTime instance to a string.
+            </summary>
+            <returns>The current DateTime instance as string.</returns>
+        </member>
+        <member name="M:MataSharp.Conversions.DayOfWeekDutch(System.DateTime)">
+            <summary>
+            Gets the DayOfWeek from the current DateTime instance in Dutch.
+            </summary>
+            <returns>Dutch day of week that represents the day of the current DateTime instance.</returns>
+        </member>
         <member name="M:MataSharp.MagisterPerson.ToMagisterStyle">
             <summary>
             Converts the current MagisterPerson instance to a MagisterStylePerson
