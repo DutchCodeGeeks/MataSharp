@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MataSharp
 {
-    public partial class MagisterPerson : IComparable<MagisterPerson>, ICloneable
+    public partial class MagisterPerson : IComparable<MagisterPerson>, ICloneable, IEqualityComparer<MagisterPerson>
     {
         public uint ID { get; set; }
         public object Ref { get; set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.
@@ -78,6 +78,16 @@ namespace MataSharp
         object ICloneable.Clone()
         {
             return this.Clone();
+        }
+
+        public bool Equals(MagisterPerson x, MagisterPerson y)
+        {
+            return x.Equals(y);
+        }
+
+        public int GetHashCode(MagisterPerson obj)
+        {
+            return obj.Original.GetHashCode();
         }
     }
 
@@ -155,7 +165,7 @@ namespace MataSharp
                 FirstName = tmpFirstName,
                 NamePrefix = tmpPrefix,
                 Name = tmpName,
-                Description = tmpPerson.Omschrijving,
+                Description = tmpPerson.Omschrijving ?? tmpName,
                 Group = tmpPerson.Groep,
                 TeacherCode = tmpPerson.DocentCode,
                 GroupID = tmpPerson.Type,

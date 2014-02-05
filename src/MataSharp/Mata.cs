@@ -112,8 +112,6 @@ namespace MataSharp
             List<MagisterMessageFolder> tmplst = new List<MagisterMessageFolder>();
             foreach (var MessageFolder in MessageFolders)
             {
-                var tmpType = (MessageFolder)MessageFolder.Id;
-
                 tmplst.Add(new MagisterMessageFolder()
                 {
                     Name = MessageFolder.Naam,
@@ -123,7 +121,7 @@ namespace MataSharp
                     Ref = MessageFolder.Ref,
                     MessagesURI = MessageFolder.BerichtenUri,
                     Mata = this,
-                    FolderType = tmpType
+                    FolderType = (MessageFolder)MessageFolder.Id
                 });
             }
             return tmplst;
@@ -136,7 +134,7 @@ namespace MataSharp
         /// <returns>List containing MagisterPerson instances</returns>
         public List<MagisterPerson> GetPersons(string SearchFilter)
         {
-            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterPerson>();
+            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Length < 3) return new List<MagisterPerson>();
 
             if (!_Session.checkedPersons.ContainsKey(SearchFilter))
             {

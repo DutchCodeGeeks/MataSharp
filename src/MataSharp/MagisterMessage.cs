@@ -143,7 +143,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = "<b>Van:</b> " + this.Sender.Name + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = "<b>Van:</b> " + this.Sender.Description + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -175,7 +175,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Name + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ",this.Recipients.Select(x=>x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Description + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -212,7 +212,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Name + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Description + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -245,7 +245,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Name + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Description + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -330,7 +330,7 @@ namespace MataSharp
 
         public override string ToString()
         {
-            return "From: " + this.Sender.Name + "\nSent: " + this.SentDate.DayOfWeek + " " + this.SentDate.ToString() + "\nTo: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "\nSubject: " + this.Subject + "\n\n\"" + this.Body + "\"";
+            return "From: " + this.Sender.Description + "\nSent: " + this.SentDate.DayOfWeek + " " + this.SentDate.ToString() + "\nTo: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "\nSubject: " + this.Subject + "\n\n\"" + this.Body + "\"";
         }
 
         public int CompareTo(MagisterMessage other)
