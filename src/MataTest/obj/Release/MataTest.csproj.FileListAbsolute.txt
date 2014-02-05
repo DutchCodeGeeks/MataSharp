@@ -1,0 +1,10 @@
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataTest\bin\Release\MataTest.exe.config
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataTest\bin\Release\MataTest.exe
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataTest\bin\Release\MataTest.pdb
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataTest\bin\Release\MataSharp.dll
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataTest\bin\Release\Newtonsoft.Json.dll
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataTest\bin\Release\MataSharp.pdb
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataTest\bin\Release\Newtonsoft.Json.xml
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataTest\obj\Release\MataTest.csprojResolveAssemblyReference.cache
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataTest\obj\Release\MataTest.exe
+C:\Users\Lieuwe\Documents\Visual Studio 2013\Projects\MataSharp\MataTest\obj\Release\MataTest.pdb
