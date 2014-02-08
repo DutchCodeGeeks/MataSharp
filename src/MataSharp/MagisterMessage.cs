@@ -332,7 +332,7 @@ namespace MataSharp
 
         public override string ToString()
         {
-            return "From: " + this.Sender.Description + "\nSent: " + this.SentDate.DayOfWeek + " " + this.SentDate.ToString() + "\nTo: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "\nSubject: " + this.Subject + "\n\n\"" + this.Body + "\"";
+            return "From: " + this.Sender.Description + "\nSent: " + this.SentDate.DayOfWeek + " " + this.SentDate.ToString() + "\nTo: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + ((this.Attachments.Count > 0) ? ("\nAttachments (" + this.Attachments.Count + "): " + String.Join(", ", this.Attachments)) : "") + "\nSubject: " + this.Subject + "\n\n\"" + this.Body + "\"";
         }
 
         public int CompareTo(MagisterMessage other)

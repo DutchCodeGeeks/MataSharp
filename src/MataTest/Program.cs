@@ -31,6 +31,9 @@ namespace MataTest
                 Console.WriteLine("User's ID: " + mata.UserID);
                 #endregion
 
+                //Let's open the site linked to the first DigitalSchoolUtility
+                System.Diagnostics.Process.Start(mata.GetDigitalSchoolUtilities().First(d => !string.IsNullOrWhiteSpace(d.URL)).URL);
+
                 //Let's pull 20 messages already!
                 //WARNING ALWAYS USE .Take(int). OR ELSE YOU WILL PICK UP 750 MESSAGES!
                 var twentyMessages = mata.Inbox.Messages.Take(20);

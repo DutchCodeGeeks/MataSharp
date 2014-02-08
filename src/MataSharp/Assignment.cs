@@ -23,6 +23,8 @@ namespace MataSharp
 
         public List<AssignmentVersion> Versions { get; set; }
 
+        public override string ToString() { return this.Name; }
+
         public int CompareTo(Assignment other)
         {
             var dateCompared = this.DeadLine.CompareTo(other.DeadLine);
@@ -40,6 +42,8 @@ namespace MataSharp
         public DateTime HandInTime { get; set; }
         public List<Attachment> HandedInAttachments { get; set; }
         public string HandedInFooter { get; set; }
+
+        public override string ToString() { return this.Name; }
     }
 
     internal partial struct AssignmentFolder

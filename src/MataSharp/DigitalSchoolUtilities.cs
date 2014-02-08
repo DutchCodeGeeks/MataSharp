@@ -20,6 +20,8 @@ namespace MataSharp
 
         public DigitalSchoolUtilityClass Class { get; set; }
 
+        public override string ToString() { return this.Name; }
+
         public int CompareTo(DigitalSchoolUtility other)
         {
             var classCompared = this.Class.CompareTo(other.Class);
@@ -32,6 +34,8 @@ namespace MataSharp
         public string ClassAbbreviation { get; set; }
         public int ID { get; set; }
         public string Description { get; set; }
+
+        public override string ToString() { return this.Description; }
 
         public int CompareTo(DigitalSchoolUtilityClass other)
         {

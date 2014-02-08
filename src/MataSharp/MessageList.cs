@@ -38,6 +38,11 @@ namespace MataSharp
             return new Enumerator<Message>(this.Sender.Mata, this.Sender);
         }
 
+        public List<Message> Take(int count)
+        {
+            return this.GetRange(0, count);
+        }
+
         /// <summary>
         /// Checks for new messages on the parent's mata server.
         /// </summary>
@@ -266,7 +271,7 @@ namespace MataSharp
             return (!item.Deleted && this.Sender.FolderType == item.Folder);
         }
 
-        private class Enumerator<T> : IEnumerator<T>, IDisposable where T : MagisterMessage
+        private class Enumerator<T> : IEnumerator<T>, IDisposable where T : Message
         {
             private int Next = 0;
             private int Skip = -1;
