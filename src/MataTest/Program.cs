@@ -35,6 +35,16 @@ namespace MataTest
                 //WARNING ALWAYS USE .Take(int). OR ELSE YOU WILL PICK UP 750 MESSAGES!
                 var twentyMessages = mata.Inbox.Messages.Take(20);
 
+                var clonedMata = mata.Clone();
+                Console.WriteLine("Equal?: " + clonedMata.Equals(mata));
+
+                new MagisterMessage()
+                {
+                    Body = "test",
+                    Subject = "test",
+                    Recipients = new List<MagisterPerson>() { mata.Person }
+                }.Send();
+
                 twentyMessages.First(m => m.Attachments.Count != 0).Attachments[0].Download(true);
 
                 var utilitiesTest = mata.GetDigitalSchoolUtilities();
@@ -72,7 +82,7 @@ namespace MataTest
                 MagisterMessage msg = Inbox.Messages.First(m => m.Attachments.Count() != 0); //Take first message with at least 1 attachment. :)
                 Console.WriteLine("First message in inbox with at least 1 attachment: " + msg.Body);
                 Console.WriteLine("It's attachment count: " + msg.Attachments.Count());
-                Console.WriteLine("");
+                Console.WriteLine(string.Empty);
 
                 #region Attachments
                 foreach (Attachment attachment in msg.Attachments)

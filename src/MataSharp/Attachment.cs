@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web;
 using Newtonsoft.Json;
 
@@ -66,6 +65,8 @@ namespace MataSharp
             var nameCompared = this.Name.CompareTo(other.Name);
             return (nameCompared != 0) ? nameCompared : this.Date.CompareTo(other.Date);
         }
+
+        public override string ToString() { return this.Name; }
     }
 
     internal enum AttachmentType

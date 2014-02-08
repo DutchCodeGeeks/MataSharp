@@ -20,7 +20,7 @@ namespace MataSharp
         /// </summary>
         /// <param name="AttachmentType">AttachmentType to give every attachment in the array.</param>
         /// <returns>The array as list</returns>
-        public static List<Attachment> ToList(this Attachment[] currentArray, AttachmentType AttachmentType)
+        internal static List<Attachment> ToList(this Attachment[] currentArray, AttachmentType AttachmentType)
         {
             var tmpList = new List<Attachment>(currentArray);
             tmpList.ForEach(a => a.Type = AttachmentType);
@@ -53,6 +53,16 @@ namespace MataSharp
                 case DayOfWeek.Sunday: return "zondag";
                 default: return "";
             }
+        }
+
+        /// <summary>
+        /// Converts the current DateTime instance to a string.
+        /// </summary>
+        /// <param name="dutch">If the day should be in Dutch or in English</param>
+        /// <returns>The current DateTime instance as a string.</returns>
+        public static string ToString(this DateTime Date, bool dutch)
+        {
+            return (dutch) ? (Date.DayOfWeekDutch() + " " + Date.ToString()) : (Date.DayOfWeek + " " + Date.ToString());
         }
     }
 }

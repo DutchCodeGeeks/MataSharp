@@ -256,6 +256,16 @@ namespace MataSharp
             else return default(Message);
         }
 
+        /// <summary>
+        /// Checks if the given messages exist on the servers.
+        /// </summary>
+        /// <param name="item">The item to check if it exists.</param>
+        /// <returns>A boolean value telling if the given message exists.</returns>
+        public bool Contains(Message item)
+        {
+            return (!item.Deleted && this.Sender.FolderType == item.Folder);
+        }
+
         private class Enumerator<T> : IEnumerator<T>, IDisposable where T : MagisterMessage
         {
             private int Next = 0;
@@ -282,7 +292,7 @@ namespace MataSharp
                     URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                     string MessageRAW = _Session.HttpClient.DownloadString(URL);
                     var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                    return (T)MessageClean.ToMagisterMessage();
+                    return (T)MessageClean.ToMagisterMessage(this.Skip);
                 }
             }
 
@@ -296,7 +306,7 @@ namespace MataSharp
                 URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                 string MessageRAW = _Session.HttpClient.DownloadString(URL);
                 var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                return (T)MessageClean.ToMagisterMessage();
+                return (T)MessageClean.ToMagisterMessage(index);
             }
 
             public List<T> GetRange(int Ammount, int Skip)
@@ -306,13 +316,14 @@ namespace MataSharp
                 string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
                 var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
 
-                var list = new List<T>();
+                var list = new List<T>(); int i = 0;
                 foreach (var CompactMessage in CompactMessages.Items)
                 {
                     URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                     string MessageRAW = _Session.HttpClient.DownloadString(URL);
                     var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                    list.Add((T)MessageClean.ToMagisterMessage());
+                    list.Add((T)MessageClean.ToMagisterMessage(i));
+                    i++;
                 }
                 return list;
             }
@@ -324,20 +335,21 @@ namespace MataSharp
                 string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
                 var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
 
-                var list = new List<T>();
+                var list = new List<T>(); int i = 0;
                 foreach (var CompactMessage in CompactMessages.Items.Where(m => !m.IsGelezen))
                 {
                     URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                     string MessageRAW = _Session.HttpClient.DownloadString(URL);
                     var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                    list.Add((T)MessageClean.ToMagisterMessage());
+                    list.Add((T)MessageClean.ToMagisterMessage(i));
+                    i++;
                 }
                 return list;
             }
 
             public List<T> GetUnread()
             {
-                var list = new List<T>();
+                var list = new List<T>(); int index = 0;
 
                 for (uint i = 0; (list.Count != this.Sender.UnreadMessagesCount - 1); i++)
                 {
@@ -345,13 +357,13 @@ namespace MataSharp
 
                     string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
                     var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
-
                     foreach (var CompactMessage in CompactMessages.Items.Where(m => !m.IsGelezen))
                     {
                         URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                         string MessageRAW = _Session.HttpClient.DownloadString(URL);
                         var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                        list.Add((T)MessageClean.ToMagisterMessage());
+                        list.Add((T)MessageClean.ToMagisterMessage(index));
+                        i++;
                     }
                 }
                 return list;

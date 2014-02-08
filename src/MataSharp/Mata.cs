@@ -110,18 +110,19 @@ namespace MataSharp
             var MessageFolders = JsonConvert.DeserializeObject<MagisterStyleMessageFolderListItem[]>(MessageFoldersRAW);
 
             List<MagisterMessageFolder> tmplst = new List<MagisterMessageFolder>();
-            foreach (var MessageFolder in MessageFolders)
+            foreach (var messageFolder in MessageFolders)
             {
+                var tmpFolderType = (Enum.IsDefined(typeof(MessageFolder), messageFolder.Id)) ? (MessageFolder)messageFolder.Id : MessageFolder.Unknown;
                 tmplst.Add(new MagisterMessageFolder()
                 {
-                    Name = MessageFolder.Naam,
-                    UnreadMessagesCount = MessageFolder.OngelezenBerichten,
-                    ID = MessageFolder.Id,
-                    ParentID = MessageFolder.ParentId,
-                    Ref = MessageFolder.Ref,
-                    MessagesURI = MessageFolder.BerichtenUri,
+                    Name = messageFolder.Naam,
+                    UnreadMessagesCount = messageFolder.OngelezenBerichten,
+                    ID = messageFolder.Id,
+                    ParentID = messageFolder.ParentId,
+                    Ref = messageFolder.Ref,
+                    MessagesURI = messageFolder.BerichtenUri,
                     Mata = this,
-                    FolderType = (MessageFolder)MessageFolder.Id
+                    FolderType = tmpFolderType
                 });
             }
             return tmplst;
@@ -146,7 +147,7 @@ namespace MataSharp
                 _Session.checkedPersons.Add(SearchFilter, personRaw);
                 return personRaw.ConvertAll(p => p.ToPerson(false));
             }
-            else return _Session.checkedPersons.First(x => x.Key == SearchFilter).Value.ConvertAll(p => p.ToPerson(false));
+            else return _Session.checkedPersons.First(x => x.Key.ToUpper() == SearchFilter.ToUpper()).Value.ConvertAll(p => p.ToPerson(false));
         }
 
         public List<Homework> GetHomework()

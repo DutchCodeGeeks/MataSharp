@@ -66,6 +66,8 @@ namespace MataSharp
             get { return (this._CanSend == true && this.Sender != null && this.Recipients != null && !string.IsNullOrEmpty(this.Body) && !string.IsNullOrEmpty(this.Subject)); }
         }
 
+        public int Index { get; internal set; }
+
         private Mata Mata { get; set; }
         #endregion
 
@@ -143,7 +145,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = "<b>Van:</b> " + this.Sender.Description + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = "<b>Van:</b> " + this.Sender.Description + "<br><b>Verzonden:</b> " + this.SentDate.ToString(true) + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -175,7 +177,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Description + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Description + "<br><b>Verzonden:</b> " + this.SentDate.ToString(true) + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -197,7 +199,7 @@ namespace MataSharp
             var tmpSubject = (this.Subject[0] != 'R' || this.Subject[1] != 'E' || this.Subject[2] != ':' || this.Subject[3] != ' ') ? "RE: " + this.Subject : this.Subject;
 
             var tmpCC = this.Recipients.ToList().Where(p => p.ID != this.Mata.Person.ID).ToList(); //Should get the current receivers and pull itself out. :)
-            if (this.CC != null) tmpCC.AddRange(this.CC.ToList().Where(p => p.ID != this.Mata.Person.ID).ToList());
+            if (this.CC != null) tmpCC.AddRange(this.CC.ToList().Where(p => p.ID != this.Mata.Person.ID));
             tmpCC.Sort();
 
             return new MagisterMessage()
@@ -212,7 +214,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Description + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Description + "<br><b>Verzonden:</b> " + this.SentDate.ToString(true) + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -245,7 +247,7 @@ namespace MataSharp
                 IDKey = this.IDKey,
                 IDOrginalReceiver = null,
                 IDOriginal = null,
-                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Description + "<br><b>Verzonden:</b> " + this.SentDate.DayOfWeekDutch() + " " + this.SentDate.ToString() + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
+                Body = ContentAdd + "<br><br>---------------<br><b>Van:</b> " + this.Sender.Description + "<br><b>Verzonden:</b> " + this.SentDate.ToString(true) + "<br><b>Aan:</b> " + String.Join(", ", this.Recipients.Select(x => x.Name)) + "<br><b>Onderwerp:</b> " + this.Subject + "<br><br>\"" + this.Body + "\"<br><br>",
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
@@ -265,7 +267,7 @@ namespace MataSharp
             if (this.Deleted) return;
 
             this.Deleted = true;
-            _Session.HttpClient.Delete(this.URL(), this.Mata.SessionID);
+            _Session.HttpClient.Delete(this.URL(), "SESSION_ID=" + this.Mata.SessionID + "&fileDownload=true");
         }
 
         /// <summary>
@@ -373,7 +375,7 @@ namespace MataSharp
         public int IdDeelNameSoort { get; set; }
         #endregion
 
-        public MagisterMessage ToMagisterMessage()
+        public MagisterMessage ToMagisterMessage(int index)
         {
             var tmpReceivers = this.Ontvangers.ConvertAll(p => p.ToPerson(true));
             tmpReceivers.Sort();
@@ -401,7 +403,8 @@ namespace MataSharp
                 Deleted = this.IsDefinitiefVerwijderd,
                 IDKey = this.IdKey,
                 SenderGroupID = this.IdDeelNameSoort,
-                _CanSend = false
+                _CanSend = false,
+                Index = index
             };
         }
 

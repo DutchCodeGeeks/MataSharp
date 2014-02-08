@@ -108,10 +108,10 @@ namespace MataSharp
 
         private static List<MagisterStylePerson> GetPersons(string SearchFilter)
         {
-            if (SearchFilter == null || !_Session.checkedPersons.ContainsKey(SearchFilter))
-            {
-                if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Count() < 3) return new List<MagisterStylePerson>();
+            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Length < 3) return new List<MagisterStylePerson>();
 
+            if (!_Session.checkedPersons.ContainsKey(SearchFilter))
+            {
                 string URL = "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
 
                 string personsRAW = _Session.HttpClient.DownloadString(URL);
@@ -120,7 +120,7 @@ namespace MataSharp
                 _Session.checkedPersons.Add(SearchFilter, persons);
                 return persons;
             }
-            else return _Session.checkedPersons.First(x => x.Key == SearchFilter).Value;
+            else return _Session.checkedPersons.First(x => x.Key.ToUpper() == SearchFilter.ToUpper()).Value;
         }
 
         public MagisterPerson ToPerson(bool download)
@@ -167,7 +167,7 @@ namespace MataSharp
                 Name = tmpName,
                 Description = tmpPerson.Omschrijving ?? tmpName,
                 Group = tmpPerson.Groep,
-                TeacherCode = tmpPerson.DocentCode,
+                TeacherCode = (!string.IsNullOrWhiteSpace(tmpPerson.DocentCode)) ? tmpPerson.DocentCode : null,
                 GroupID = tmpPerson.Type,
                 Initials = tmpPerson.Voorletters,
             };

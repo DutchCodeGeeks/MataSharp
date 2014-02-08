@@ -37,6 +37,13 @@
             </summary>
             <returns>Dutch day of week that represents the day of the current DateTime instance.</returns>
         </member>
+        <member name="M:MataSharp.Conversions.ToString(System.DateTime,System.Boolean)">
+            <summary>
+            Converts the current DateTime instance to a string.
+            </summary>
+            <param name="dutch">If the day should be in Dutch or in English</param>
+            <returns>The current DateTime instance as a string.</returns>
+        </member>
         <member name="M:MataSharp.MagisterPerson.ToMagisterStyle">
             <summary>
             Converts the current MagisterPerson instance to a MagisterStylePerson
@@ -299,6 +306,13 @@
             <param name="max">The max ammount of messages to get from the server.</param>
             <param name="predicate">The predicate that the message must match to.</param>
             <returns>A single MagisterMessage matching the given predicate.</returns>
+        </member>
+        <member name="M:MataSharp.MessageList`1.Contains(`0)">
+            <summary>
+            Checks if the given messages exist on the servers.
+            </summary>
+            <param name="item">The item to check if it exists.</param>
+            <returns>A boolean value telling if the given message exists.</returns>
         </member>
         <member name="P:MataSharp.MessageList`1.Item(System.Int32)">
             <summary>
