@@ -38,7 +38,14 @@ namespace MataSharp
 
         public string Post(string URL, NameValueCollection Values)
         {
-            byte[] tmpArr = this.Client.UploadValues(URL, Values);
+            byte[] tmpArr = null;
+            try { tmpArr = this.Client.UploadValues(URL, Values); }
+            catch(WebException e)
+            {
+                if (((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.Unauthorized)
+                    throw new System.Security.Authentication.AuthenticationException("Wrong username and/or password.");
+                else throw e;
+            }
             return stripString(Encoding.ASCII.GetString(tmpArr));
         }
 

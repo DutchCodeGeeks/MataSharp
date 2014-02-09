@@ -15,7 +15,7 @@ namespace MataTest
             var schools = MagisterSchool.GetSchools(Console.ReadLine());
 
             for (int i = 0; i < schools.Count; i++)
-                Console.WriteLine(i + ": " + schools[i].Name + "   " + schools[i].URL);
+                Console.WriteLine(i + ": " + schools[i].ToString());
 
             MagisterSchool school = schools[Convert.ToInt32(Console.ReadLine())];
             #endregion
