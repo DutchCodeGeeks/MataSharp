@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Globalization;
 using Newtonsoft.Json;
@@ -12,7 +13,7 @@ namespace MataSharp
         public string Description { get; set; }
         public uint? Grade { get; set; }
         public string Class { get; set; }
-        public List<Attachment> Attachments { get; set; }
+        public ReadOnlyCollection<Attachment> Attachments { get; set; }
         public List<MagisterPerson> Teachers { get; set; }
         public int ID { get; set; }
         public DateTime HandInTime { get; set; }
@@ -37,10 +38,10 @@ namespace MataSharp
         public string Name { get; set; }
         public uint? Grade { get; set; }
         public string TeacherNotice { get; set; }
-        public List<Attachment> FeedbackAttachments { get; set; }
+        public ReadOnlyCollection<Attachment> FeedbackAttachments { get; set; }
         public DateTime DeadLine { get; set; }
         public DateTime HandInTime { get; set; }
-        public List<Attachment> HandedInAttachments { get; set; }
+        public ReadOnlyCollection<Attachment> HandedInAttachments { get; set; }
         public string HandedInFooter { get; set; }
 
         public override string ToString() { return this.Name; }

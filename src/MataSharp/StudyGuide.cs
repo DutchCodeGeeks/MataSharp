@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Globalization;
+using System.Collections.ObjectModel;
 
 namespace MataSharp
 {
@@ -25,7 +26,7 @@ namespace MataSharp
 
     public partial class StudyGuidePart : IComparable<StudyGuidePart>
     {
-        public List<Attachment> Attachments { get; set; }
+        public ReadOnlyCollection<Attachment> Attachments { get; set; }
         public int ID { get; set; }
         public bool Visible { get; set; }
         public string Description { get; set; }

@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Collections.ObjectModel;
 
 namespace MataSharp
 {
@@ -37,7 +38,7 @@ namespace MataSharp
         public bool IsFlagged { get; set; }
         public int? IDOriginal { get; set; }
         public int? IDOrginalReceiver { get; set; }
-        public List<Attachment> Attachments { get; internal set; }
+        public ReadOnlyCollection<Attachment> Attachments { get; internal set; }
         internal int _Folder { get; set; }
 
         public MessageFolder Folder 
@@ -127,7 +128,7 @@ namespace MataSharp
             {
                 Sender = this.Sender,//Magister's logic
                 _Folder = this._Folder,
-                Attachments = new List<Attachment>(),
+                Attachments = new ReadOnlyCollection<Attachment>(new List<Attachment>()),
                 CC = null,
                 IsFlagged = this.IsFlagged,
                 ID = this.ID,
@@ -160,7 +161,7 @@ namespace MataSharp
             {
                 Sender = this.Sender,//Magister's logic
                 _Folder = this._Folder,
-                Attachments = new List<Attachment>(),
+                Attachments = new ReadOnlyCollection<Attachment>(new List<Attachment>()),
                 IsFlagged = this.IsFlagged,
                 ID = this.ID,
                 SenderGroupID = 4,
@@ -188,15 +189,15 @@ namespace MataSharp
         {
             var tmpSubject = (this.Subject[0] != 'R' || this.Subject[1] != 'E' || this.Subject[2] != ':' || this.Subject[3] != ' ') ? "RE: " + this.Subject : this.Subject;
 
-            var tmpCC = this.Recipients.ToList().Where(p => p.ID != this.Mata.Person.ID).ToList(); //Should get the current receivers and pull itself out. :)
-            if (this.CC != null) tmpCC.AddRange(this.CC.ToList().Where(p => p.ID != this.Mata.Person.ID));
+            var tmpCC = this.Recipients.Where(p => p.ID != this.Mata.Person.ID).ToList(); //Should get the current receivers and pull itself out. :)
+            if (this.CC != null) tmpCC.AddRange(this.CC.Where(p => p.ID != this.Mata.Person.ID));
             tmpCC.Sort();
 
             return new MagisterMessage()
             {
                 Sender = this.Sender,
                 _Folder = this._Folder,
-                Attachments = new List<Attachment>(),
+                Attachments = new ReadOnlyCollection<Attachment>(new List<Attachment>()),
                 CC = tmpCC,
                 IsFlagged = this.IsFlagged,
                 ID = this.ID,
@@ -229,7 +230,7 @@ namespace MataSharp
             {
                 Sender = this.Sender,//Magister's logic
                 _Folder = this._Folder,
-                Attachments = new List<Attachment>(),
+                Attachments = new ReadOnlyCollection<Attachment>(new List<Attachment>()),
                 CC = null,
                 IsFlagged = this.IsFlagged,
                 ID = this.ID,
