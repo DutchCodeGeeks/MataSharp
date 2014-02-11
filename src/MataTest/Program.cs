@@ -41,13 +41,6 @@ namespace MataTest
                 var clonedMata = mata.Clone();
                 Console.WriteLine("Equal?: " + clonedMata.Equals(mata));
 
-                new MagisterMessage()
-                {
-                    Body = "test",
-                    Subject = "test",
-                    Recipients = new List<MagisterPerson>() { mata.Person }
-                }.Send();
-
                 twentyMessages.First(m => m.Attachments.Count != 0).Attachments[0].Download(true);
 
                 var utilitiesTest = mata.GetDigitalSchoolUtilities();
@@ -64,7 +57,7 @@ namespace MataTest
                     Console.WriteLine(assignment.Description);
                     assignment.Attachments.ForEach(a => a.Download(true));
                 }
-                assignmentTest.ElementAt(0).Attachments.ForEach(a => a.Download(true));
+                assignmentTest.First().Attachments.ForEach(a => a.Download(true));
 
                 new MagisterMessage()
                 {
@@ -73,6 +66,8 @@ namespace MataTest
                     Recipients = new List<MagisterPerson>() { mata.Person },
                     CC = new List<MagisterPerson>() { mata.Person },
                 }.Send();
+                mata.ComposeAndSendMessage("Hallotjees :D", "TESSST D:", new List<MagisterPerson>() { mata.Person });
+                //Both do the same thing, except the first method is more customizable and, in this example, adds a person to the CC field.
 
                 #region Message
                 var Inbox = mata.Inbox;

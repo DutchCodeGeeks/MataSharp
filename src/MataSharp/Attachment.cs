@@ -75,5 +75,5 @@ namespace MataSharp
         Assignment_teacher,
         Assignment_pupil,
         StudyGuide
-    };
+    }
 }

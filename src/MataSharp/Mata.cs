@@ -112,7 +112,6 @@ namespace MataSharp
             List<MagisterMessageFolder> tmplst = new List<MagisterMessageFolder>();
             foreach (var messageFolder in MessageFolders)
             {
-                var tmpFolderType = (Enum.IsDefined(typeof(MessageFolder), messageFolder.Id)) ? (MessageFolder)messageFolder.Id : MessageFolder.Unknown;
                 tmplst.Add(new MagisterMessageFolder()
                 {
                     Name = messageFolder.Naam,
@@ -122,7 +121,7 @@ namespace MataSharp
                     Ref = messageFolder.Ref,
                     MessagesURI = messageFolder.BerichtenUri,
                     Mata = this,
-                    FolderType = tmpFolderType
+                    FolderType = (MessageFolder)messageFolder.Id
                 });
             }
             return tmplst;

@@ -13,7 +13,7 @@ namespace MataSharp
         public int ID { get; set; }
         public object Ref { get; set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.
         public string Subject { get; set; }
-        public MagisterPerson Sender { get; set; }
+        public MagisterPerson Sender { get; internal set; }
         public string Body { get; set; }
         public List<MagisterPerson> Recipients { get; set; }
         public List<MagisterPerson> CC { get; set; }
@@ -40,20 +40,10 @@ namespace MataSharp
         public List<Attachment> Attachments { get; internal set; }
         internal int _Folder { get; set; }
 
-        public MessageFolder Folder
-        {
+        public MessageFolder Folder 
+        { 
             get { return (MessageFolder)this._Folder; }
-            set
-            {
-                if (this._Folder == (int)value) return;
-
-                var thisCopied = (MagisterMessage)this.MemberwiseClone();
-
-                this._Folder = (int)value;
-
-                _Session.HttpClient.Put(this.URL(), JsonConvert.SerializeObject(this.ToMagisterStyle()));
-                thisCopied.Delete();
-            }
+            set { this.Move(value); }
         }
 
         public bool Deleted { get; internal set; }
@@ -260,6 +250,34 @@ namespace MataSharp
         }
 
         /// <summary>
+        /// Moves the current Message to the given folder.
+        /// </summary>
+        /// <param name="Folder">The folder to move the current message to.</param>
+        public void Move(MessageFolder Folder) { this.Move((int)Folder); }
+
+        /// <summary>
+        /// Moves the current Message to the given folder.
+        /// </summary>
+        /// <param name="Folder">The folder to move the current message to.</param>
+        public void Move(MagisterMessageFolder Folder) { this.Move(Folder.ID); }
+
+        /// <summary>
+        /// Moves the current Message to the given folder.
+        /// </summary>
+        /// <param name="FolderID">The folder to move the current message to.</param>
+        public void Move(int FolderID)
+        {
+            if (this._Folder == FolderID) return;
+
+            var thisCopied = (MagisterMessage)this.MemberwiseClone();
+
+            this._Folder = FolderID;
+
+            _Session.HttpClient.Put(this.URL(), JsonConvert.SerializeObject(this.ToMagisterStyle()));
+            thisCopied.Delete();
+        }
+
+        /// <summary>
         /// CAUTION: Permanently deletes the current message on the server.
         /// </summary>
         public void Delete()
@@ -332,7 +350,7 @@ namespace MataSharp
 
         public override string ToString()
         {
-            return "From: " + this.Sender.Description + "\nSent: " + this.SentDate.DayOfWeek + " " + this.SentDate.ToString() + "\nTo: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + ((this.Attachments.Count > 0) ? ("\nAttachments (" + this.Attachments.Count + "): " + String.Join(", ", this.Attachments)) : "") + "\nSubject: " + this.Subject + "\n\n\"" + this.Body + "\"";
+            return "From: " + this.Sender.Description + "\nSent: " + this.SentDate.ToString(false) + "\nTo: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + ((this.Attachments.Count > 0) ? ("\nAttachments (" + this.Attachments.Count + "): " + String.Join(", ", this.Attachments)) : "") + "\nSubject: " + this.Subject + "\n\n\"" + this.Body + "\"";
         }
 
         public int CompareTo(MagisterMessage other)

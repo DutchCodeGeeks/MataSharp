@@ -25,8 +25,7 @@ namespace MataSharp
     { //Defines the folders where messages can be in, server handles it as ID's. We? We handle it as an enum :D
         Inbox = -101,
         SentMessages = -103,
-        Bin = -102,
-        Unknown = 0
+        Bin = -102
     }
 
     internal partial struct MagisterStyleMessageFolderListItem

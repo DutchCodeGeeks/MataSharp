@@ -94,6 +94,24 @@
             <param name="ContentAdd">The content to add infront of the original message.</param>
             <returns>A new MagisterMessage instance ready to be send.</returns>
         </member>
+        <member name="M:MataSharp.MagisterMessage.Move(MataSharp.MessageFolder)">
+            <summary>
+            Moves the current Message to the given folder.
+            </summary>
+            <param name="Folder">The folder to move the current message to.</param>
+        </member>
+        <member name="M:MataSharp.MagisterMessage.Move(MataSharp.MagisterMessageFolder)">
+            <summary>
+            Moves the current Message to the given folder.
+            </summary>
+            <param name="Folder">The folder to move the current message to.</param>
+        </member>
+        <member name="M:MataSharp.MagisterMessage.Move(System.Int32)">
+            <summary>
+            Moves the current Message to the given folder.
+            </summary>
+            <param name="FolderID">The folder to move the current message to.</param>
+        </member>
         <member name="M:MataSharp.MagisterMessage.Delete">
             <summary>
             CAUTION: Permanently deletes the current message on the server.
