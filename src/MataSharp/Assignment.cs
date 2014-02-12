@@ -14,7 +14,7 @@ namespace MataSharp
         public uint? Grade { get; set; }
         public string Class { get; set; }
         public ReadOnlyCollection<Attachment> Attachments { get; set; }
-        public List<MagisterPerson> Teachers { get; set; }
+        public PersonList<MagisterPerson> Teachers { get; set; }
         public int ID { get; set; }
         public DateTime HandInTime { get; set; }
         public DateTime DeadLine { get; set; }
@@ -138,7 +138,7 @@ namespace MataSharp
             {
                 Grade = this.Beoordeling,
                 Attachments = this.Bijlagen.ToList(AttachmentType.Assignment_teacher),
-                Teachers = this.Docenten.ConvertAll(p => p.ToPerson(true)),
+                Teachers = this.Docenten.ToList(true),
                 ID = this.Id,
                 HandInTime = this.IngeleverdOp.ToDateTime(),
                 DeadLine = this.InleverenVoor.ToDateTime(),

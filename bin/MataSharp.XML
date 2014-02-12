@@ -12,19 +12,6 @@
             <param name="Directory">The directory to save the file to.</param>
             <returns>A string containting the path to the location of the downloaded attachment.</returns>
         </member>
-        <member name="M:MataSharp.Extensions.ToDateTime(System.String)">
-            <summary>
-            Converts the current string to a DateTime.
-            </summary>
-            <returns>The string parsed as DateTime</returns>
-        </member>
-        <member name="M:MataSharp.Extensions.ToList(MataSharp.Attachment[],MataSharp.AttachmentType)">
-            <summary>
-            Convert the current Attachment[] to a List
-            </summary>
-            <param name="AttachmentType">AttachmentType to give every attachment in the array.</param>
-            <returns>The array as list</returns>
-        </member>
         <member name="M:MataSharp.Extensions.ToUTCString(System.DateTime)">
             <summary>
             Converts the current DateTime instance to a string.
@@ -43,6 +30,19 @@
             </summary>
             <param name="dutch">If the day should be in Dutch or in English</param>
             <returns>The current DateTime instance as a string.</returns>
+        </member>
+        <member name="M:MataSharp.Extensions.ToDateTime(System.String)">
+            <summary>
+            Converts the current string to a DateTime.
+            </summary>
+            <returns>The string parsed as DateTime</returns>
+        </member>
+        <member name="M:MataSharp.Extensions.ToList(MataSharp.Attachment[],MataSharp.AttachmentType)">
+            <summary>
+            Convert the current Attachment[] to a List
+            </summary>
+            <param name="AttachmentType">AttachmentType to give every attachment in the array.</param>
+            <returns>The array as list</returns>
         </member>
         <member name="M:MataSharp.MagisterPerson.ToMagisterStyle">
             <summary>

@@ -22,7 +22,7 @@ namespace MataSharp
                 _Session.HttpClient.Put(this.URL(), JsonConvert.SerializeObject(this.ToMagisterStyle()));
             }
         }
-        public List<MagisterPerson> Teachers { get; set; }
+        public PersonList<MagisterPerson> Teachers { get; set; }
         public DateTime End { get; set; }
         public int ID { get; set; }
         internal int InfoType;
@@ -132,7 +132,7 @@ namespace MataSharp
             {
                 Notes = this.AantekeningLeerling,
                 _Done = this.Afgerond,
-                Teachers = this.Docenten.ConvertAll(p => p.ToPerson(true)),
+                Teachers = this.Docenten.ToList(true),
                 End = this.Einde.ToDateTime(),
                 ID = this.Id,
                 InfoType = this.InfoType,
