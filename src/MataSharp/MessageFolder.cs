@@ -19,6 +19,15 @@ namespace MataSharp
         internal MagisterSchool School { get { return this.Mata.School; } }
 
         public MessageList<MagisterMessage> Messages { get { return new MessageList<MagisterMessage>(this); } }
+        /// <summary>
+        /// Gets the MagisterMessage on the given index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the MagisterMessage to get.</param>
+        /// <returns>The MagisterMessage on the given index.</returns>
+        public MagisterMessage this[int index]
+        {
+            get { return this.Messages[index]; }
+        }
     }
 
     public enum MessageFolder : int

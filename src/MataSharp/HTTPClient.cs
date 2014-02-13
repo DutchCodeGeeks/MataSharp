@@ -22,7 +22,7 @@ namespace MataSharp
             string stripped = Regex.Replace(original, "<br />|<p />|<p>|[\r\n]", "\n");
             stripped = stripped.Replace("&nbsp;", " ");
             stripped = Regex.Replace(stripped, "<[^>]*>|&[^&;]+;", "");
-            return stripped.Replace("ā,¬", "€").Replace("Ć«", "ë").Replace("Ć©", "é");
+            return stripped.Replace("ā,¬", "€").Replace("Ć«", "ë").Replace("Ć©", "é").Replace("Ã©", "é");
         }
 
         public string DownloadString(string URL)

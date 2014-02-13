@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Linq;
+using System.Collections.Generic;
 
 namespace MataSharp
 {
@@ -33,14 +34,14 @@ namespace MataSharp
 
         public PersonList(Mata mata, IEnumerable<string> collection)
         {
-            this.List = new List<T>();
+            this.List = new List<T>(collection.Count());
             this.Mata = mata;
             this.AddRange(collection);
         }
 
         internal PersonList(Mata mata, IEnumerable<MagisterStylePerson> collection, bool download)
         {
-            this.List = new List<T>();
+            this.List = new List<T>(collection.Count());
             this.Mata = mata;
             this.AddRange(collection, download);
         }
@@ -70,6 +71,11 @@ namespace MataSharp
             this.List.AddRange(collection.ConvertAll(x => (T)this.Mata.GetPersons(x)[0]));
         }
 
+        public void AddRange(string name)
+        {
+            this.List.AddRange((IEnumerable<T>)this.Mata.GetPersons(name));
+        }
+
         internal void AddRange(IEnumerable<MagisterStylePerson> collection, bool download)
         {
             this.List.AddRange(collection.ConvertAll(p => (T)p.ToPerson(download)));
@@ -95,6 +101,26 @@ namespace MataSharp
             get { return this.List.Count; }
         }
 
+        public void InsertRange(int index, IEnumerable<T> collection)
+        {
+            this.List.InsertRange(index, collection);
+        }
+
+        public void InsertRange(int index, IEnumerable<string> collection)
+        {
+            this.List.InsertRange(index, collection.ConvertAll(x => (T)this.Mata.GetPersons(x)[0]));
+        }
+
+        public void InsertRange(int index, string name)
+        {
+            this.List.InsertRange(index, (IEnumerable<T>)this.Mata.GetPersons(name));
+        }
+
+        internal void InsertRange(int index, IEnumerable<MagisterStylePerson> collection, bool download)
+        {
+            this.List.InsertRange(index, collection.ConvertAll(p => (T)p.ToPerson(download)));
+        }
+
         public bool IsReadOnly
         {
             get { return false; }
@@ -103,6 +129,31 @@ namespace MataSharp
         public bool Remove(T item)
         {
             return this.List.Remove(item);
+        }
+
+        public void RemoveRange(int index, int count)
+        {
+            this.List.RemoveRange(index, count);
+        }
+
+        public void RemoveAt(int index)
+        {
+            this.List.RemoveAt(index);
+        }
+
+        public int RemoveAll(System.Predicate<T> predicate)
+        {
+            return this.List.RemoveAll(predicate);
+        }
+
+        public void TrimExcess()
+        {
+            this.List.TrimExcess();
+        }
+
+        public bool TrueForAll(System.Predicate<T> predicate)
+        {
+            return this.List.TrueForAll(predicate);
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -123,11 +174,6 @@ namespace MataSharp
         public void Insert(int index, T item)
         {
             this.List.Insert(index, item);
-        }
-
-        public void RemoveAt(int index)
-        {
-            this.List.RemoveAt(index);
         }
 
         public T this[int index]

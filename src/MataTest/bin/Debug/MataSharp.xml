@@ -44,6 +44,13 @@
             <param name="AttachmentType">AttachmentType to give every attachment in the array.</param>
             <returns>The array as list</returns>
         </member>
+        <member name="P:MataSharp.MagisterMessageFolder.Item(System.Int32)">
+            <summary>
+            Gets the MagisterMessage on the given index.
+            </summary>
+            <param name="index">The zero-based index of the MagisterMessage to get.</param>
+            <returns>The MagisterMessage on the given index.</returns>
+        </member>
         <member name="M:MataSharp.MagisterPerson.ToMagisterStyle">
             <summary>
             Converts the current MagisterPerson instance to a MagisterStylePerson
@@ -155,7 +162,23 @@
             <param name="Body">Body to use</param>
             <param name="Recipients">MagisterPersons to send to</param>
         </member>
+        <member name="M:MataSharp.Mata.ComposeAndSendMessage(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Quickly composes new MagisterMessage and sends it.
+            </summary>
+            <param name="Subject">Subject to use</param>
+            <param name="Body">Body to use</param>
+            <param name="Recipients">Name of the persons to send to</param>
+        </member>
         <member name="M:MataSharp.Mata.ComposeAndTrySendMessage(System.String,System.String,System.Collections.Generic.IEnumerable{MataSharp.MagisterPerson})">
+            <summary>
+            Quickly composes new MagisterMessage and sends it. Instead of throwing exceptions (ComposeAndSendMessage()) this gives back a boolean value.
+            </summary>
+            <param name="Subject">Subject to use</param>
+            <param name="Body">Body to use</param>
+            <param name="Recipients">MagisterPersons to send to</param>
+        </member>
+        <member name="M:MataSharp.Mata.ComposeAndTrySendMessage(System.String,System.String,System.Collections.Generic.IEnumerable{System.String})">
             <summary>
             Quickly composes new MagisterMessage and sends it. Instead of throwing exceptions (ComposeAndSendMessage()) this gives back a boolean value.
             </summary>

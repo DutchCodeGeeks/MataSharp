@@ -143,7 +143,7 @@ namespace MataSharp
             {
                 try
                 {
-                    splitted.RemoveAt(0); splitted.RemoveAt(splitted.Count - 1);
+                    splitted.RemoveAt(0); splitted.Remove(splitted.Last());
 
                     if (splitted != null && splitted.Count != 0 && splitted[0] != "")
                         tmpPrefix = string.Join(" ", splitted);

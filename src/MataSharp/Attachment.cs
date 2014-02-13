@@ -33,19 +33,22 @@ namespace MataSharp
             get { return (!string.IsNullOrWhiteSpace(this.Name)) ? MimeMapping.GetMimeMapping(this.Name) : "application/octet-stream"; }
         }
 
-        private string URL()
+        private string URL
         {
-            if (this.Type == AttachmentType.Message)
-                return "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/berichten/bijlagen/" + this.ID;
+            get
+            {
+                if (this.Type == AttachmentType.Message)
+                    return "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/berichten/bijlagen/" + this.ID;
 
-            else if (this.Type == AttachmentType.Assignment_pupil)
-                return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/opdrachten/bijlagen/Ingeleverd/" + this.ID;
+                else if (this.Type == AttachmentType.Assignment_pupil)
+                    return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/opdrachten/bijlagen/Ingeleverd/" + this.ID;
 
-            else if (this.Type == AttachmentType.Assignment_teacher)
-                return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/opdrachten/bijlagen/" + this.ID;
+                else if (this.Type == AttachmentType.Assignment_teacher)
+                    return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/opdrachten/bijlagen/" + this.ID;
 
-            else
-                return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/studiewijzers/" + this.StudyGuideID + "/onderdelen/" + this.StudyGuidePartID + "/bijlagen/" + this.ID;
+                else
+                    return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/studiewijzers/" + this.StudyGuideID + "/onderdelen/" + this.StudyGuidePartID + "/bijlagen/" + this.ID;
+            }
         }
 
         /// <summary>
@@ -57,7 +60,7 @@ namespace MataSharp
         public string Download(bool AddUserID, string Directory = "")
         {
             string fileName = (AddUserID) ? ("(" + _Session.Mata.UserID + ") " + this.Name) : (this.Name);
-            return _Session.HttpClient.DownloadFile(URL(), fileName, Directory);
+            return _Session.HttpClient.DownloadFile(this.URL, fileName, Directory);
         }
 
         public int CompareTo(Attachment other)
