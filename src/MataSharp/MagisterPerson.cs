@@ -18,7 +18,8 @@ namespace MataSharp
         public string Description { get; set; }
         public string Group { get; set; }
         public string TeacherCode { get; set; }
-        public int GroupID { get; internal set; }
+        internal int GroupID;
+        public PersonType Type { get { return (PersonType)this.GroupID; } }
 
         internal MagisterPerson Original { get; set; }
 
@@ -89,6 +90,14 @@ namespace MataSharp
         {
             return obj.Original.GetHashCode();
         }
+    }
+
+    public enum PersonType : int
+    {
+        Pupil = 4,
+        Teacher = 3,
+        Group = 1,
+        Project = 8
     }
 
     internal partial struct MagisterStylePerson

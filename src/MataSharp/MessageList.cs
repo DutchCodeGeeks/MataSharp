@@ -38,6 +38,11 @@ namespace MataSharp
             return new Enumerator<Message>(this.Sender.Mata, this.Sender);
         }
 
+        public Message ElementAt(int index)
+        {
+            return this[index];
+        }
+
         public List<Message> Take(int count)
         {
             return this.GetRange(0, count);
