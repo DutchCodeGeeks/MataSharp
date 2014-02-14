@@ -79,7 +79,7 @@ namespace MataSharp
             {
                 Subject = Subject,
                 Body = Body,
-                Recipients = Recipients.ToList()
+                Recipients = Recipients.ToList(this)
             }.Send();
         }
 
@@ -111,7 +111,7 @@ namespace MataSharp
             {
                 Subject = Subject,
                 Body = Body,
-                Recipients = Recipients.ToList()
+                Recipients = Recipients.ToList(this)
             }.TrySend();
         }
 
@@ -141,7 +141,7 @@ namespace MataSharp
             string MessageFoldersRAW = _Session.HttpClient.DownloadString(url);
             var MessageFolders = JsonConvert.DeserializeObject<MagisterStyleMessageFolderListItem[]>(MessageFoldersRAW);
 
-            List<MagisterMessageFolder> tmplst = new List<MagisterMessageFolder>();
+            var tmplst = new List<MagisterMessageFolder>();
             foreach (var messageFolder in MessageFolders)
             {
                 tmplst.Add(new MagisterMessageFolder()

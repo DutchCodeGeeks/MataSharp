@@ -44,12 +44,133 @@
             <param name="AttachmentType">AttachmentType to give every attachment in the array.</param>
             <returns>The array as list</returns>
         </member>
+        <member name="M:MataSharp.MagisterMessageFolder.WhereUnread(System.UInt32,System.UInt32)">
+            <summary>
+            Checks for new messages on the parent's mata server.
+            </summary>
+            <param name="Ammount">Ammount to ask for on the server.</param>
+            <param name="Skip">Ammount of messages to skip | Default = 0</param>
+            <returns>List of unread MagisterMessages.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.WhereUnread">
+            <summary>
+            Gets ALL the new messages on the parent's mata server.
+            </summary>
+            <returns>List of unread MagisterMessages.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.RemoveAt(System.Int32)">
+            <summary>
+            CAUTION: Permanently deletes the given message from the server.
+            </summary>
+            <param name="index">The zero-based index of the element to remove.</param>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.RemoveRange(System.Int32,System.Int32)">
+            <summary>
+            CAUTION: Permanently deletes the given messages from the server.
+            </summary>
+            <param name="index">The zero-based starting index of the range of elements to remove.</param>
+            <param name="count">The number of elements to remove.</param>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.GetRange(System.Int32,System.Int32)">
+            <summary>
+            Gets the given range of MagisterMessages.
+            </summary>
+            <param name="index">The zero-based index at which the range starts.</param>
+            <param name="count">The number of elements in the range.</param>
+            <returns>The given range of MagisterMessages as a List</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.IndexOf(MataSharp.MagisterMessage)">
+            <summary>
+            Get's the zero-based position of the given item on the server.
+            </summary>
+            <param name="item">The item to get its position from.</param>
+            <returns>A zero-based index of the position of the given item.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.RemoveAll(System.Int32,System.Predicate{MataSharp.MagisterMessage})">
+            <summary>
+            CAUTION: Permanently deletes the given messages from the server.
+            </summary>
+            <param name="max">The ammount of messages to check for on the server.</param>
+            <param name="predicate">The predicate the messages must match to.</param>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.Where(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+            <summary>
+            Gets the messages that matches the given predicate.
+            </summary>
+            <param name="max">The max value to check for on the server.</param>
+            <param name="predicate">The predicate the messages must match</param>
+            <returns>A List containing the messages that matched the predicate.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.First(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+            <summary>
+            Gets the first message that matches the given predicate. Throws exception when nothing is found.
+            </summary>
+            <param name="max">The max value to check for on the server.</param>
+            <param name="predicate">The predicate the message must match.</param>
+            <returns>The first message on the server that matches the predicate.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.Last(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+            <summary>
+            Gets the last message that matches the given predicate. Throws exception when nothing is found.
+            </summary>
+            <param name="max">The max value to check for on the server.</param>
+            <param name="predicate">The predicate the message must match.</param>
+            <returns>The last message on the server that matches the predicate.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.FirstOrDefault(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+            <summary>
+            Gets the first message that matches the given predicate. Gives back the default of the object if nothing is found.
+            </summary>
+            <param name="max">The max value to check for on the server.</param>
+            <param name="predicate">The predicate the message must match.</param>
+            <returns>The first message on the server that matches the predicate.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.LastOrDefault(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+            <summary>
+            Gets the last message that matches the given predicate. Gives back the default of the object if nothing is found.
+            </summary>
+            <param name="max">The max value to check for on the server.</param>
+            <param name="predicate">The predicate the message must match.</param>
+            <returns>The last message on the server that matches the predicate.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.Any(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+            <summary>
+            Checks if there is a message on the server that matches the given predicate.
+            </summary>
+            <param name="max">The max value to check for on the server.</param>
+            <param name="predicate">The predicate the message must match.</param>
+            <returns>A boolean value that tells if there is a message matching the given predicate.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.Single(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+            <summary>
+            Returns the single message on the server that matches the given predicate. Throws expception when more matching messages or none are found.
+            </summary>
+            <param name="predicate">The predicate that the message must match to.</param>
+            <param name="max">The max ammount of messages to get from the server.</param>
+            <returns>A single MagisterMessage matching the given predicate.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.SingleOrDefault(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+            <summary>
+            Returns the single message on the server that matches the given predicate. Throws expception when more matching messages are found.
+            When no matching messages are found, returns the default value.
+            </summary>
+            <param name="max">The max ammount of messages to get from the server.</param>
+            <param name="predicate">The predicate that the message must match to.</param>
+            <returns>A single MagisterMessage matching the given predicate.</returns>
+        </member>
+        <member name="M:MataSharp.MagisterMessageFolder.Contains(MataSharp.MagisterMessage)">
+            <summary>
+            Checks if the given messages exist on the servers.
+            </summary>
+            <param name="item">The item to check if it exists.</param>
+            <returns>A boolean value telling if the given message exists.</returns>
+        </member>
         <member name="P:MataSharp.MagisterMessageFolder.Item(System.Int32)">
             <summary>
-            Gets the MagisterMessage on the given index.
+            Gets the item on the given index.
             </summary>
-            <param name="index">The zero-based index of the MagisterMessage to get.</param>
-            <returns>The MagisterMessage on the given index.</returns>
+            <param name="index">The zero-based index of the item to get.</param>
+            <returns>The item on the given index.</returns>
         </member>
         <member name="M:MataSharp.MagisterPerson.ToMagisterStyle">
             <summary>
@@ -233,134 +354,6 @@
             </summary>
             <param name="SearchFilter">The search filter to use as string.</param>
             <returns>List containing MagisterSchool instances</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.WhereUnread(System.UInt32,System.UInt32)">
-            <summary>
-            Checks for new messages on the parent's mata server.
-            </summary>
-            <param name="Ammount">Ammount to ask for on the server.</param>
-            <param name="Skip">Ammount of messages to skip | Default = 0</param>
-            <returns>List of unread MagisterMessages.</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.WhereUnread">
-            <summary>
-            Gets ALL the new messages on the parent's mata server.
-            </summary>
-            <returns>List of unread MagisterMessages.</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.RemoveAt(System.Int32)">
-            <summary>
-            CAUTION: Permanently deletes the given message from the server.
-            </summary>
-            <param name="index">The zero-based index of the element to remove.</param>
-        </member>
-        <member name="M:MataSharp.MessageList`1.RemoveRange(System.Int32,System.Int32)">
-            <summary>
-            CAUTION: Permanently deletes the given messages from the server.
-            </summary>
-            <param name="index">The zero-based starting index of the range of elements to remove.</param>
-            <param name="count">The number of elements to remove.</param>
-        </member>
-        <member name="M:MataSharp.MessageList`1.GetRange(System.Int32,System.Int32)">
-            <summary>
-            Gets the given range of MagisterMessages.
-            </summary>
-            <param name="index">The zero-based index at which the range starts.</param>
-            <param name="count">The number of elements in the range.</param>
-            <returns>The given range of MagisterMessages as a List</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.IndexOf(`0)">
-            <summary>
-            Get's the zero-based position of the given item on the server.
-            </summary>
-            <param name="item">The item to get its position from.</param>
-            <returns>A zero-based index of the position of the given item.</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.RemoveAll(System.Int32,System.Predicate{`0})">
-            <summary>
-            CAUTION: Permanently deletes the given messages from the server.
-            </summary>
-            <param name="max">The ammount of messages to check for on the server.</param>
-            <param name="predicate">The predicate the messages must match to.</param>
-        </member>
-        <member name="M:MataSharp.MessageList`1.Where(System.Int32,System.Func{`0,System.Boolean})">
-            <summary>
-            Gets the messages that matches the given predicate.
-            </summary>
-            <param name="max">The max value to check for on the server.</param>
-            <param name="predicate">The predicate the messages must match</param>
-            <returns>A List containing the messages that matched the predicate.</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.First(System.Int32,System.Func{`0,System.Boolean})">
-            <summary>
-            Gets the first message that matches the given predicate. Throws exception when nothing is found.
-            </summary>
-            <param name="max">The max value to check for on the server.</param>
-            <param name="predicate">The predicate the message must match.</param>
-            <returns>The first message on the server that matches the predicate.</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.Last(System.Int32,System.Func{`0,System.Boolean})">
-            <summary>
-            Gets the last message that matches the given predicate. Throws exception when nothing is found.
-            </summary>
-            <param name="max">The max value to check for on the server.</param>
-            <param name="predicate">The predicate the message must match.</param>
-            <returns>The last message on the server that matches the predicate.</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.FirstOrDefault(System.Int32,System.Func{`0,System.Boolean})">
-            <summary>
-            Gets the first message that matches the given predicate. Gives back the default of the object if nothing is found.
-            </summary>
-            <param name="max">The max value to check for on the server.</param>
-            <param name="predicate">The predicate the message must match.</param>
-            <returns>The first message on the server that matches the predicate.</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.LastOrDefault(System.Int32,System.Func{`0,System.Boolean})">
-            <summary>
-            Gets the last message that matches the given predicate. Gives back the default of the object if nothing is found.
-            </summary>
-            <param name="max">The max value to check for on the server.</param>
-            <param name="predicate">The predicate the message must match.</param>
-            <returns>The last message on the server that matches the predicate.</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.Any(System.Int32,System.Func{`0,System.Boolean})">
-            <summary>
-            Checks if there is a message on the server that matches the given predicate.
-            </summary>
-            <param name="max">The max value to check for on the server.</param>
-            <param name="predicate">The predicate the message must match.</param>
-            <returns>A boolean value that tells if there is a message matching the given predicate.</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.Single(System.Int32,System.Func{`0,System.Boolean})">
-            <summary>
-            Returns the single message on the server that matches the given predicate. Throws expception when more matching messages or none are found.
-            </summary>
-            <param name="predicate">The predicate that the message must match to.</param>
-            <param name="max">The max ammount of messages to get from the server.</param>
-            <returns>A single MagisterMessage matching the given predicate.</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.SingleOrDefault(System.Int32,System.Func{`0,System.Boolean})">
-            <summary>
-            Returns the single message on the server that matches the given predicate. Throws expception when more matching messages are found.
-            When no matching messages are found, returns the default value.
-            </summary>
-            <param name="max">The max ammount of messages to get from the server.</param>
-            <param name="predicate">The predicate that the message must match to.</param>
-            <returns>A single MagisterMessage matching the given predicate.</returns>
-        </member>
-        <member name="M:MataSharp.MessageList`1.Contains(`0)">
-            <summary>
-            Checks if the given messages exist on the servers.
-            </summary>
-            <param name="item">The item to check if it exists.</param>
-            <returns>A boolean value telling if the given message exists.</returns>
-        </member>
-        <member name="P:MataSharp.MessageList`1.Item(System.Int32)">
-            <summary>
-            Gets the item on the given index.
-            </summary>
-            <param name="index">The zero-based index of the item to get.</param>
-            <returns>The item on the given index.</returns>
         </member>
     </members>
 </doc>

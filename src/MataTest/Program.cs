@@ -36,7 +36,7 @@ namespace MataTest
 
                 //Let's pull 20 messages already!
                 //WARNING ALWAYS USE .Take(int). OR ELSE YOU WILL PICK UP 750 MESSAGES!
-                var twentyMessages = mata.Inbox.Messages.Take(20);
+                var twentyMessages = mata.Inbox.Take(20);
 
                 var clonedMata = mata.Clone();
                 Console.WriteLine("Equal?: " + clonedMata.Equals(mata));
@@ -72,12 +72,11 @@ namespace MataTest
                 #region Message
                 var Inbox = mata.Inbox;
 
-                var allUnreadMessages = Inbox.Messages.WhereUnread();
+                var allUnreadMessages = Inbox.WhereUnread();
 
-                //Console.WriteLine("Last unread message in inbox: " + allUnreadMessages[0].Content);
                 Console.WriteLine("Unread Messages in inbox: " + allUnreadMessages.Count);
 
-                MagisterMessage msg = Inbox.Messages.First(m => m.Attachments.Count() != 0); //Take first message with at least 1 attachment. :)
+                MagisterMessage msg = Inbox.First(m => m.Attachments.Count() != 0); //Take first message with at least 1 attachment. :)
                 Console.WriteLine("First message in inbox with at least 1 attachment: " + msg.Body);
                 Console.WriteLine("It's attachment count: " + msg.Attachments.Count());
                 Console.WriteLine(string.Empty);

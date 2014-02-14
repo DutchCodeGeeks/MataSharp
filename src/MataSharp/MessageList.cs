@@ -5,27 +5,18 @@ using Newtonsoft.Json;
 
 namespace MataSharp
 {
-    public class MessageList<Message> : IEnumerable<Message> where Message : MagisterMessage
+    public partial class MagisterMessageFolder : IEnumerable<MagisterMessage>
     {
-        private MagisterMessageFolder Sender { get; set; }
-
-        public MessageList() { throw new Exception("MessageLists are only able to be internally created."); }
-
-        internal MessageList(MagisterMessageFolder Sender)
-        {
-            this.Sender = Sender;
-        }
-
         /// <summary>
         /// Gets the item on the given index.
         /// </summary>
         /// <param name="index">The zero-based index of the item to get.</param>
         /// <returns>The item on the given index.</returns>
-        public Message this[int index] { get { return this.GetSpecificEnumerator().GetAt(index); } }
+        public MagisterMessage this[int index] { get { return this.GetSpecificEnumerator().GetAt(index); } }
 
-        public IEnumerator<Message> GetEnumerator()
+        public IEnumerator<MagisterMessage> GetEnumerator()
         {
-            return new Enumerator<Message>(this.Sender.Mata, this.Sender);
+            return new Enumerator<MagisterMessage>(this);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -33,17 +24,17 @@ namespace MataSharp
             return GetEnumerator();
         }
 
-        private Enumerator<Message> GetSpecificEnumerator()
+        private Enumerator<MagisterMessage> GetSpecificEnumerator()
         {
-            return new Enumerator<Message>(this.Sender.Mata, this.Sender);
+            return new Enumerator<MagisterMessage>(this);
         }
 
-        public Message ElementAt(int index)
+        public MagisterMessage ElementAt(int index)
         {
             return this[index];
         }
 
-        public List<Message> Take(int count)
+        public List<MagisterMessage> Take(int count)
         {
             return this.GetRange(0, count);
         }
@@ -54,7 +45,7 @@ namespace MataSharp
         /// <param name="Ammount">Ammount to ask for on the server.</param>
         /// <param name="Skip">Ammount of messages to skip | Default = 0</param>
         /// <returns>List of unread MagisterMessages.</returns>
-        public List<Message> WhereUnread(uint Ammount, uint Skip = 0)
+        public List<MagisterMessage> WhereUnread(uint Ammount, uint Skip = 0)
         {
             return this.GetSpecificEnumerator().GetUnread(Ammount, Skip);
         }
@@ -63,7 +54,7 @@ namespace MataSharp
         /// Gets ALL the new messages on the parent's mata server.
         /// </summary>
         /// <returns>List of unread MagisterMessages.</returns>
-        public List<Message> WhereUnread()
+        public List<MagisterMessage> WhereUnread()
         {
             return this.GetSpecificEnumerator().GetUnread();
         }
@@ -93,7 +84,7 @@ namespace MataSharp
         /// <param name="index">The zero-based index at which the range starts.</param>
         /// <param name="count">The number of elements in the range.</param>
         /// <returns>The given range of MagisterMessages as a List</returns>
-        public List<Message> GetRange(int index, int count)
+        public List<MagisterMessage> GetRange(int index, int count)
         {
             return this.GetSpecificEnumerator().GetRange(count, index);
         }
@@ -103,10 +94,10 @@ namespace MataSharp
         /// </summary>
         /// <param name="item">The item to get its position from.</param>
         /// <returns>A zero-based index of the position of the given item.</returns>
-        public int IndexOf(Message item)
+        public int IndexOf(MagisterMessage item)
         {
             var enumerator = this.GetSpecificEnumerator();
-            Message currentItem = null;
+            MagisterMessage currentItem = null;
             int pos = -1;
             do
             {
@@ -122,7 +113,7 @@ namespace MataSharp
         /// </summary>
         /// <param name="max">The ammount of messages to check for on the server.</param>
         /// <param name="predicate">The predicate the messages must match to.</param>
-        public void RemoveAll(int max, Predicate<Message> predicate)
+        public void RemoveAll(int max, Predicate<MagisterMessage> predicate)
         {
             this.GetSpecificEnumerator().GetRange(max, 0).Where(m => predicate(m)).ToList().ForEach(m => m.Delete());
         }
@@ -133,7 +124,7 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the messages must match</param>
         /// <returns>A List containing the messages that matched the predicate.</returns>
-        public List<Message> Where(int max, Func<Message,bool> predicate)
+        public List<MagisterMessage> Where(int max, Func<MagisterMessage, bool> predicate)
         {
             return this.GetSpecificEnumerator().GetRange(max, 0).Where(m => predicate(m)).ToList();
         }
@@ -144,7 +135,7 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>The first message on the server that matches the predicate.</returns>
-        public Message First(int max, Func<Message,bool> predicate)
+        public MagisterMessage First(int max, Func<MagisterMessage, bool> predicate)
         {
             var enumerator = this.GetSpecificEnumerator();
             for (int i = 0; i < max; i++)
@@ -161,7 +152,7 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>The last message on the server that matches the predicate.</returns>
-        public Message Last(int max, Func<Message,bool> predicate)
+        public MagisterMessage Last(int max, Func<MagisterMessage, bool> predicate)
         {
             return this.GetSpecificEnumerator().GetRange(max, 0).Last(m => predicate(m));
         }
@@ -172,15 +163,15 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>The first message on the server that matches the predicate.</returns>
-        public Message FirstOrDefault(int max, Func<Message, bool> predicate)
+        public MagisterMessage FirstOrDefault(int max, Func<MagisterMessage, bool> predicate)
         {
             var enumerator = this.GetSpecificEnumerator();
             for (int i = 0; i < max; i++)
             {
                 var msg = enumerator.GetAt(i);
                 if (predicate(msg)) return msg;
-            } 
-            return default(Message);
+            }
+            return default(MagisterMessage);
         }
 
         /// <summary>
@@ -189,17 +180,17 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>The last message on the server that matches the predicate.</returns>
-        public Message LastOrDefault(int max, Func<Message, bool> predicate)
+        public MagisterMessage LastOrDefault(int max, Func<MagisterMessage, bool> predicate)
         {
             var enumerator = this.GetSpecificEnumerator();
-            Message msg = null;
+            MagisterMessage msg = null;
             for(int i = 0; i < max; i++)
             {
                 var tmpMsg = enumerator.GetAt(i);
                 if (predicate(tmpMsg)) msg = tmpMsg;
             }
             if (msg != null) return msg;
-            else return default(Message);
+            else return default(MagisterMessage);
         }
 
         /// <summary>
@@ -208,7 +199,7 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>A boolean value that tells if there is a message matching the given predicate.</returns>
-        public bool Any(int max, Func<Message, bool> predicate)
+        public bool Any(int max, Func<MagisterMessage, bool> predicate)
         {
             var enumerator = this.GetSpecificEnumerator();
             for(int i = 0; i < max; i++)
@@ -225,10 +216,10 @@ namespace MataSharp
         /// <param name="predicate">The predicate that the message must match to.</param>
         /// <param name="max">The max ammount of messages to get from the server.</param>
         /// <returns>A single MagisterMessage matching the given predicate.</returns>
-        public Message Single(int max, Func<Message, bool> predicate)
+        public MagisterMessage Single(int max, Func<MagisterMessage, bool> predicate)
         {
             var enumerator = this.GetSpecificEnumerator();
-            Message msg = null;
+            MagisterMessage msg = null;
             for(int i = 0; i <= max; i++)
             {
                 var tmpMsg = enumerator.GetAt(i);
@@ -249,10 +240,10 @@ namespace MataSharp
         /// <param name="max">The max ammount of messages to get from the server.</param>
         /// <param name="predicate">The predicate that the message must match to.</param>
         /// <returns>A single MagisterMessage matching the given predicate.</returns>
-        public Message SingleOrDefault(int max, Func<Message, bool> predicate)
+        public MagisterMessage SingleOrDefault(int max, Func<MagisterMessage, bool> predicate)
         {
             var enumerator = this.GetSpecificEnumerator();
-            Message msg = null;
+            MagisterMessage msg = null;
             for (int i = 0; i <= max; i++)
             {
                 var tmpMsg = enumerator.GetAt(i);
@@ -263,7 +254,7 @@ namespace MataSharp
                 }
             }
             if (msg != null) return msg;
-            else return default(Message);
+            else return default(MagisterMessage);
         }
 
         /// <summary>
@@ -271,22 +262,21 @@ namespace MataSharp
         /// </summary>
         /// <param name="item">The item to check if it exists.</param>
         /// <returns>A boolean value telling if the given message exists.</returns>
-        public bool Contains(Message item)
+        public bool Contains(MagisterMessage item)
         {
-            return (!item.Deleted && this.Sender.FolderType == item.Folder);
+            return (!item.Deleted && this.FolderType == item.Folder);
         }
 
-        private class Enumerator<T> : IEnumerator<T>, IDisposable where T : Message
+        private class Enumerator<T> : IEnumerator<T>, IDisposable where T : MagisterMessage
         {
             private int Next = 0;
             private int Skip = -1;
-            private Mata Mata { get; set; }
+            private Mata Mata { get { return this.Sender.Mata; } }
             private MagisterMessageFolder Sender { get; set; }
             private const int MaxMessages = 750;
 
-            public Enumerator(Mata Mata, MagisterMessageFolder Sender)
+            public Enumerator(MagisterMessageFolder Sender)
             {
-                this.Mata = Mata;
                 this.Sender = Sender;
             }
 
@@ -401,7 +391,6 @@ namespace MataSharp
             public void Dispose()
             {
                 this.Reset();
-                this.Mata = null;
                 this.Sender = null;
                 GC.Collect();
             }

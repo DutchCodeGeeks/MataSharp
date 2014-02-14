@@ -7,17 +7,17 @@ namespace MataSharp
     public partial class Attachment : IComparable<Attachment>
     {
         [JsonProperty("Id")]
-        public int ID { get; internal set; }
+        public int ID { get; private set; }
         [JsonProperty("Ref")]
-        public object Ref { get; internal set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.
+        public object Ref { get; private set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.
         [JsonProperty("Naam")]
-        public string Name { get; internal set; }
+        public string Name { get; private set; }
         [JsonProperty("Datum")]
         internal DateTime _Date { get; set; }
         [JsonIgnore]
         public DateTime Date { get { return this._Date.Date; } }
         [JsonProperty("Grootte")]
-        public int Size { get; internal set; }
+        public int Size { get; private set; }
 
         [JsonIgnore]
         internal AttachmentType Type { get; set; }

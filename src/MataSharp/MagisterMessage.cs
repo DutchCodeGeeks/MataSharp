@@ -30,7 +30,7 @@ namespace MataSharp
 
                 this._IsRead = value;
 
-                _Session.HttpClient.Put(this.URL(), JsonConvert.SerializeObject(this.ToMagisterStyle()));
+                _Session.HttpClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
             }
         }
 
@@ -62,7 +62,7 @@ namespace MataSharp
         private Mata Mata { get; set; }
         #endregion
 
-        private string URL() { return "https://" + this.Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this._Folder + "/berichten/" + this.ID; }
+        private string URL { get { return "https://" + this.Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this._Folder + "/berichten/" + this.ID; } }
 
         /// <summary>
         /// Returns new MagisterMessage.
@@ -274,7 +274,7 @@ namespace MataSharp
 
             this._Folder = FolderID;
 
-            _Session.HttpClient.Put(this.URL(), JsonConvert.SerializeObject(this.ToMagisterStyle()));
+            _Session.HttpClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
             thisCopied.Delete();
         }
 
@@ -286,7 +286,7 @@ namespace MataSharp
             if (this.Deleted) return;
 
             this.Deleted = true;
-            _Session.HttpClient.Delete(this.URL(), "SESSION_ID=" + this.Mata.SessionID + "&fileDownload=true");
+            _Session.HttpClient.Delete(this.URL, "SESSION_ID=" + this.Mata.SessionID + "&fileDownload=true");
         }
 
         /// <summary>
