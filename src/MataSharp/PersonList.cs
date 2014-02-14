@@ -3,82 +3,88 @@ using System.Collections.Generic;
 
 namespace MataSharp
 {
-    public class PersonList<T> : IList<T> where T : MagisterPerson
+    public class PersonList : IList<MagisterPerson>
     {
         private Mata Mata;
-        private List<T> List;
+        private List<MagisterPerson> List;
 
         public PersonList()
         {
-            this.List = new List<T>();
+            this.List = new List<MagisterPerson>();
             this.Mata = _Session.Mata;
         }
 
         public PersonList(Mata mata)
         {
-            this.List = new List<T>();
+            this.List = new List<MagisterPerson>();
             this.Mata = mata;
         }
 
-        public PersonList(Mata mata, int startSize)
+        public PersonList(int startSize, Mata mata = null)
         {
-            this.List = new List<T>(startSize);
-            this.Mata = mata;
+            this.List = new List<MagisterPerson>(startSize);
+            this.Mata = mata ?? _Session.Mata;
         }
 
-        public PersonList(Mata mata, IEnumerable<T> collection)
+        public PersonList(IEnumerable<MagisterPerson> collection, Mata mata = null)
         {
-            this.List = new List<T>(collection);
-            this.Mata = mata;
+            this.List = new List<MagisterPerson>(collection);
+            this.Mata = mata ?? _Session.Mata;
         }
 
-        public PersonList(Mata mata, IEnumerable<string> collection)
+        public PersonList(IEnumerable<string> collection, Mata mata = null)
         {
-            this.List = new List<T>(collection.Count());
-            this.Mata = mata;
+            this.List = new List<MagisterPerson>(collection.Count());
+            this.Mata = mata ?? _Session.Mata;
             this.AddRange(collection);
         }
 
-        internal PersonList(Mata mata, IEnumerable<MagisterStylePerson> collection, bool download)
+        internal PersonList(Mata mata, IEnumerable<MagisterStylePerson> collection, bool readOnly, bool download)
         {
-            this.List = new List<T>(collection.Count());
+            this.IsReadOnly = readOnly;
+            this.List = new List<MagisterPerson>(collection.Count());
             this.Mata = mata;
             this.AddRange(collection, download);
         }
 
-        public void Add(T item)
+        public void Add(MagisterPerson item)
         {
+            if (this.IsReadOnly) ThrowException();
             this.List.Add(item);
         }
 
         public void Add(string name)
         {
-            this.List.Add((T)this.Mata.GetPersons(name)[0]);
+            if (this.IsReadOnly) ThrowException();
+            this.List.Add((MagisterPerson)this.Mata.GetPersons(name)[0]);
         }
 
         internal void Add(MagisterStylePerson item, bool download)
         {
-            this.List.Add((T)item.ToPerson(download));
+            this.List.Add((MagisterPerson)item.ToPerson(download));
         }
 
-        public void AddRange(IEnumerable<T> collection)
+        public void AddRange(IEnumerable<MagisterPerson> collection)
         {
+            if (this.IsReadOnly) ThrowException();
             this.List.AddRange(collection);
         }
 
         public void AddRange(IEnumerable<string> collection)
         {
-            this.List.AddRange(collection.ConvertAll(x => (T)this.Mata.GetPersons(x)[0]));
+            if (this.IsReadOnly) ThrowException();
+            this.List.AddRange(collection.ConvertAll(x => (MagisterPerson)this.Mata.GetPersons(x)[0]));
         }
 
         public void AddRange(string name)
         {
-            this.List.AddRange((IEnumerable<T>)this.Mata.GetPersons(name));
+            if (this.IsReadOnly) ThrowException();
+            this.List.AddRange((IEnumerable<MagisterPerson>)this.Mata.GetPersons(name));
         }
 
         internal void AddRange(IEnumerable<MagisterStylePerson> collection, bool download)
         {
-            this.List.AddRange(collection.ConvertAll(p => (T)p.ToPerson(download)));
+            this.List.AddRange(collection.ConvertAll(p => (MagisterPerson)p.ToPerson(download)));
         }
 
         public void Clear()
@@ -86,12 +92,12 @@ namespace MataSharp
             this.List.Clear();
         }
 
-        public bool Contains(T item)
+        public bool Contains(MagisterPerson item)
         {
             return this.List.Contains(item);
         }
 
-        public void CopyTo(T[] array, int arrayIndex)
+        public void CopyTo(MagisterPerson[] array, int arrayIndex)
         {
             this.List.CopyTo(array, arrayIndex);
         }
@@ -101,48 +107,53 @@ namespace MataSharp
             get { return this.List.Count; }
         }
 
-        public void InsertRange(int index, IEnumerable<T> collection)
+        public void InsertRange(int index, IEnumerable<MagisterPerson> collection)
         {
+            if (this.IsReadOnly) ThrowException();
             this.List.InsertRange(index, collection);
         }
 
         public void InsertRange(int index, IEnumerable<string> collection)
         {
-            this.List.InsertRange(index, collection.ConvertAll(x => (T)this.Mata.GetPersons(x)[0]));
+            if (this.IsReadOnly) ThrowException();
+            this.List.InsertRange(index, collection.ConvertAll(x => (MagisterPerson)this.Mata.GetPersons(x)[0]));
         }
 
         public void InsertRange(int index, string name)
         {
-            this.List.InsertRange(index, (IEnumerable<T>)this.Mata.GetPersons(name));
+            if (this.IsReadOnly) ThrowException();
+            this.List.InsertRange(index, (IEnumerable<MagisterPerson>)this.Mata.GetPersons(name));
         }
 
         internal void InsertRange(int index, IEnumerable<MagisterStylePerson> collection, bool download)
         {
-            this.List.InsertRange(index, collection.ConvertAll(p => (T)p.ToPerson(download)));
+            if (this.IsReadOnly) ThrowException();
+            this.List.InsertRange(index, collection.ConvertAll(p => (MagisterPerson)p.ToPerson(download)));
         }
 
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly { get; private set; }
 
-        public bool Remove(T item)
+        public bool Remove(MagisterPerson item)
         {
+            if (this.IsReadOnly) ThrowException();
             return this.List.Remove(item);
         }
 
         public void RemoveRange(int index, int count)
         {
+            if (this.IsReadOnly) ThrowException();
             this.List.RemoveRange(index, count);
         }
 
         public void RemoveAt(int index)
         {
+            if (this.IsReadOnly) ThrowException();
             this.List.RemoveAt(index);
         }
 
-        public int RemoveAll(System.Predicate<T> predicate)
+        public int RemoveAll(System.Predicate<MagisterPerson> predicate)
         {
+            if (this.IsReadOnly) ThrowException();
             return this.List.RemoveAll(predicate);
         }
 
@@ -151,12 +162,12 @@ namespace MataSharp
             this.List.TrimExcess();
         }
 
-        public bool TrueForAll(System.Predicate<T> predicate)
+        public bool TrueForAll(System.Predicate<MagisterPerson> predicate)
         {
             return this.List.TrueForAll(predicate);
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public IEnumerator<MagisterPerson> GetEnumerator()
         {
             return this.List.GetEnumerator();
         }
@@ -166,17 +177,18 @@ namespace MataSharp
             return this.GetEnumerator();
         }
 
-        public int IndexOf(T item)
+        public int IndexOf(MagisterPerson item)
         {
             return this.List.IndexOf(item);
         }
 
-        public void Insert(int index, T item)
+        public void Insert(int index, MagisterPerson item)
         {
+            if (this.IsReadOnly) ThrowException();
             this.List.Insert(index, item);
         }
 
-        public T this[int index]
+        public MagisterPerson this[int index]
         {
             get
             {
@@ -192,5 +204,7 @@ namespace MataSharp
         {
             this.List.Sort();
         }
+
+        private static void ThrowException() { throw new System.Data.ReadOnlyException("The list is ReadOnly!"); }
     }
 }

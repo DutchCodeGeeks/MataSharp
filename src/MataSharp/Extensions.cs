@@ -85,16 +85,15 @@ namespace MataSharp
         #endregion
 
         #region PersonList
-        internal static PersonList<MagisterPerson> ToList(this IEnumerable<MagisterStylePerson> collection, bool download, Mata mata = null)
+        internal static PersonList ToList(this IEnumerable<MagisterStylePerson> collection, bool download,bool ReadOnly = false, Mata mata = null)
         {
             var tmpMata = mata ?? _Session.Mata;
-            return new PersonList<MagisterPerson>(tmpMata, collection, download);
+            return new PersonList(tmpMata, collection,ReadOnly, download);
         }
 
-        public  static PersonList<MagisterPerson> ToList(this IEnumerable<MagisterPerson> collection, Mata mata = null)
+        public  static PersonList ToList(this IEnumerable<MagisterPerson> collection, Mata mata = null)
         {
-            var tmpMata = mata ?? _Session.Mata;
-            return new PersonList<MagisterPerson>(tmpMata, collection);
+            return new PersonList(collection, mata);
         }
         #endregion
     }

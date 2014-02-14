@@ -95,7 +95,7 @@ namespace MataSharp
             {
                 Subject = Subject,
                 Body = Body,
-                Recipients = new PersonList<MagisterPerson>(this, Recipients)
+                Recipients = new PersonList(Recipients, this)
             }.Send();
         }
 
@@ -127,7 +127,7 @@ namespace MataSharp
             {
                 Subject = Subject,
                 Body = Body,
-                Recipients = new PersonList<MagisterPerson>(this, Recipients)
+                Recipients = new PersonList(Recipients, this)
             }.TrySend();
         }
 
@@ -164,21 +164,21 @@ namespace MataSharp
         /// </summary>
         /// <param name="SearchFilter">The search filter to use as string.</param>
         /// <returns>List containing MagisterPerson instances</returns>
-        public List<MagisterPerson> GetPersons(string SearchFilter)
+        public PersonList GetPersons(string SearchFilter)
         {
-            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Length < 3) return new List<MagisterPerson>();
+            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Length < 3) return new PersonList();
 
             if (!_Session.checkedPersons.ContainsKey(SearchFilter))
             {
                 string URL = "https://" + this.School.URL + "/api/personen/" + this.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
 
                 string personsRAW = _Session.HttpClient.DownloadString(URL);
-                
+
                 var personRaw = JArray.Parse(personsRAW).ToList().ConvertAll(p => p.ToObject<MagisterStylePerson>());
                 _Session.checkedPersons.Add(SearchFilter, personRaw);
-                return personRaw.ConvertAll(p => p.ToPerson(false));
+                return new PersonList(this, personRaw,false, false);
             }
-            else return _Session.checkedPersons.First(x => x.Key.ToUpper() == SearchFilter.ToUpper()).Value.ConvertAll(p => p.ToPerson(false));
+            else return new PersonList(this, _Session.checkedPersons.First(x => x.Key.ToUpper() == SearchFilter.ToUpper()).Value,false, false);
         }
 
         public List<Homework> GetHomework()

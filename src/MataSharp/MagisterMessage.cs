@@ -16,8 +16,8 @@ namespace MataSharp
         public string Subject { get; set; }
         public MagisterPerson Sender { get; internal set; }
         public string Body { get; set; }
-        public PersonList<MagisterPerson> Recipients { get; set; }
-        public PersonList<MagisterPerson> CC { get; set; }
+        public PersonList Recipients { get; set; }
+        public PersonList CC { get; set; }
         public DateTime SentDate { get; set; }
         internal bool _IsRead;
 
@@ -86,8 +86,8 @@ namespace MataSharp
             this.IDKey = 0;
             this.SenderGroupID = this.Mata.Person.GroupID;
             this.Sender = this.Mata.Person;
-            this.Recipients = new PersonList<MagisterPerson>(this.Mata);
-            this.CC = new PersonList<MagisterPerson>(this.Mata);
+            this.Recipients = new PersonList(this.Mata);
+            this.CC = new PersonList(this.Mata);
         }
 
         /// <summary>
@@ -112,8 +112,8 @@ namespace MataSharp
             this.IDKey = 0;
             this.SenderGroupID = this.Mata.Person.GroupID;
             this.Sender = this.Mata.Person;
-            this.Recipients = new PersonList<MagisterPerson>(this.Mata);
-            this.CC = new PersonList<MagisterPerson>(this.Mata);
+            this.Recipients = new PersonList(this.Mata);
+            this.CC = new PersonList(this.Mata);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace MataSharp
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
-                Recipients = new PersonList<MagisterPerson>(this.Mata),
+                Recipients = new PersonList(this.Mata),
                 Ref = null,
                 State = 0,
                 SentDate = DateTime.UtcNow,
@@ -172,7 +172,7 @@ namespace MataSharp
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
-                Recipients = new PersonList<MagisterPerson>(this.Mata),
+                Recipients = new PersonList(this.Mata),
                 Ref = null,
                 State = 0,
                 SentDate = DateTime.UtcNow,
@@ -198,7 +198,7 @@ namespace MataSharp
                 Sender = this.Sender,
                 _Folder = this._Folder,
                 Attachments = new ReadOnlyCollection<Attachment>(new List<Attachment>()),
-                CC = new PersonList<MagisterPerson>(this.Mata, tmpCC),
+                CC = new PersonList(tmpCC, this.Mata),
                 IsFlagged = this.IsFlagged,
                 ID = this.ID,
                 SenderGroupID = 4,
@@ -209,7 +209,7 @@ namespace MataSharp
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
-                Recipients = new PersonList<MagisterPerson>(this.Mata) { this.Sender },
+                Recipients = new PersonList(this.Mata) { this.Sender },
                 Ref = null,
                 State = 0,
                 SentDate = DateTime.UtcNow,
@@ -242,7 +242,7 @@ namespace MataSharp
                 Deleted = false,
                 _IsRead = true,
                 Subject = tmpSubject,
-                Recipients = new PersonList<MagisterPerson>(this.Mata) { this.Sender },
+                Recipients = new PersonList(this.Mata) { this.Sender },
                 Ref = null,
                 State = 0,
                 SentDate = DateTime.UtcNow,
@@ -396,10 +396,10 @@ namespace MataSharp
 
         public MagisterMessage ToMagisterMessage(int index)
         {
-            var tmpReceivers = this.Ontvangers.ToList(true);
+            var tmpReceivers = this.Ontvangers.ToList(true, true);
             tmpReceivers.Sort();
 
-            var tmpCopiedReceivers = this.KopieOntvangers.ToList(true);
+            var tmpCopiedReceivers = this.KopieOntvangers.ToList(true, true);
             tmpCopiedReceivers.Sort();
 
             return new MagisterMessage()

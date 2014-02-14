@@ -63,8 +63,8 @@ namespace MataTest
                 {
                     Subject = "Hallotjees :D",
                     Body = "TESSST D:",
-                    Recipients = new PersonList<MagisterPerson>() { mata.Person },
-                    CC = new PersonList<MagisterPerson>() { mata.Name },
+                    Recipients = new PersonList() { mata.Person },
+                    CC = new PersonList() { mata.Name },
                 }.Send();
                 mata.ComposeAndSendMessage("Hallotjees :D", "TESSST D:", new List<MagisterPerson>() { mata.Person });
                 //Both do the same thing, except the first method is more customizable and, in this example, adds a person to the CC field.
@@ -91,7 +91,7 @@ namespace MataTest
 
                 #region ForwardMessage
                 var ForwardMSG = msg.CreateForwardMessage();
-                ForwardMSG.Recipients = new PersonList<MagisterPerson>() { mata.Person };
+                ForwardMSG.Recipients = new PersonList() { mata.Person };
                 ForwardMSG.Send();
                 #endregion
                 #endregion
