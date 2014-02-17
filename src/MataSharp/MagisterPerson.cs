@@ -115,21 +115,23 @@ namespace MataSharp
         public string Voornamen { get; set; }
         public string Voorletters { get; set; }
 
-        private static List<MagisterStylePerson> GetPersons(string SearchFilter)
+        public Mata Mata { get; internal set; }
+
+        private List<MagisterStylePerson> GetPersons(string SearchFilter)
         {
             if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Length < 3) return new List<MagisterStylePerson>();
 
-            if (!_Session.checkedPersons.ContainsKey(SearchFilter))
+            if (!this.Mata.checkedPersons.ContainsKey(SearchFilter))
             {
-                string URL = "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
+                string URL = "https://" + this.Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
 
-                string personsRAW = _Session.HttpClient.DownloadString(URL);
+                string personsRAW = this.Mata.HttpClient.DownloadString(URL);
 
                 var persons = JsonConvert.DeserializeObject<MagisterStylePerson[]>(personsRAW).ToList();
-                _Session.checkedPersons.Add(SearchFilter, persons);
+                this.Mata.checkedPersons.Add(SearchFilter, persons);
                 return persons;
             }
-            else return _Session.checkedPersons.First(x => x.Key.ToUpper() == SearchFilter.ToUpper()).Value;
+            else return this.Mata.checkedPersons.First(x => x.Key.ToUpper() == SearchFilter.ToUpper()).Value;
         }
 
         public MagisterPerson ToPerson(bool download)
@@ -137,7 +139,7 @@ namespace MataSharp
             MagisterStylePerson tmpPerson;
             if (download)
             {
-                try { tmpPerson = (MagisterStylePerson.GetPersons(this.Naam).Count == 1) ? MagisterStylePerson.GetPersons(this.Naam)[0] : this; } //Main building ground.
+                try { tmpPerson = (GetPersons(this.Naam).Count == 1) ? GetPersons(this.Naam)[0] : this; } //Main building ground.
                 catch { tmpPerson = this; }
             }
             else tmpPerson = this;

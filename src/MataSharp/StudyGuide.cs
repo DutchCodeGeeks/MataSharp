@@ -73,17 +73,19 @@ namespace MataSharp
         public string[] VakCodes { get; set; }
         public string Van { get; set; }
 
+        public Mata Mata { get; internal set; }
+
         public StudyGuide ToStudyGuide()
         {
             var tmpStudyGuideParts = new List<StudyGuidePart>();
             foreach (var StudyGuidePartsListItem in this.Onderdelen.Items)
             {
-                string URL = "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/studiewijzers/" + this.Id + "/onderdelen/" + StudyGuidePartsListItem.Id;
+                string URL = "https://" + this.Mata.School.URL + "/api/leerlingen/" + this.Mata.UserID + "/studiewijzers/" + this.Id + "/onderdelen/" + StudyGuidePartsListItem.Id;
 
-                string partRaw = _Session.HttpClient.DownloadString(URL);
+                string partRaw = this.Mata.HttpClient.DownloadString(URL);
                 var partClean = JsonConvert.DeserializeObject<StudieWijzerOnderdeel>(partRaw);
 
-                tmpStudyGuideParts.Add(partClean.ToReadableStyle(this.Id));
+                tmpStudyGuideParts.Add(partClean.ToReadableStyle(this.Id, this.Mata));
             }
 
             return new StudyGuide()
@@ -134,12 +136,12 @@ namespace MataSharp
         public string Van { get; set; }
         public int Volgnummer { get; set; }
 
-        public StudyGuidePart ToReadableStyle(int ParentID) //;)
+        public StudyGuidePart ToReadableStyle(int parentID, Mata mata) //;)
         {
             var thisID = this.Id;
 
-            var tmpAttachments = this.Bronnen.ToList(AttachmentType.StudyGuide);
-            tmpAttachments.ForEach(a => a.StudyGuideID = ParentID);
+            var tmpAttachments = this.Bronnen.ToList(AttachmentType.StudyGuide, mata);
+            tmpAttachments.ForEach(a => a.StudyGuideID = parentID);
             tmpAttachments.ForEach(a => a.StudyGuidePartID = thisID);
 
             return new StudyGuidePart()

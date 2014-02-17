@@ -20,11 +20,11 @@ namespace MataTest
             MagisterSchool school = schools[Convert.ToInt32(Console.ReadLine())];
             #endregion
 
-            Console.Write("UserName: "); var userName = Console.ReadLine();
+            Console.Write("UserName: "); var username = Console.ReadLine();
             Console.Write("Password: "); var password = Console.ReadLine();
 
             #region Mata
-            using (Mata mata = new Mata(school, userName, password))
+            using (Mata mata = new Mata(school, username, password))
             {
                 #region GeneralInformation
                 Console.WriteLine("User's Name: " + mata.Name);
@@ -59,12 +59,12 @@ namespace MataTest
                 }
                 assignmentTest.First().Attachments.ForEach(a => a.Download(true));
 
-                new MagisterMessage()
+                new MagisterMessage(mata)
                 {
                     Subject = "Hallotjees :D",
                     Body = "TESSST D:",
-                    Recipients = new PersonList() { mata.Person },
-                    CC = new PersonList() { mata.Name },
+                    Recipients = new PersonList(mata) { mata.Person },
+                    CC = new PersonList(mata) { mata.Name },
                 }.Send();
                 mata.ComposeAndSendMessage("Hallotjees :D", "TESSST D:", new List<MagisterPerson>() { mata.Person });
                 //Both do the same thing, except the first method is more customizable and, in this example, adds a person to the CC field.
@@ -91,7 +91,7 @@ namespace MataTest
 
                 #region ForwardMessage
                 var ForwardMSG = msg.CreateForwardMessage();
-                ForwardMSG.Recipients = new PersonList() { mata.Person };
+                ForwardMSG.Recipients = new PersonList(mata) { mata.Person };
                 ForwardMSG.Send();
                 #endregion
                 #endregion

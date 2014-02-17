@@ -30,7 +30,7 @@ namespace MataSharp
 
                 this._IsRead = value;
 
-                _Session.HttpClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
+                this.Mata.HttpClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
             }
         }
 
@@ -65,41 +65,15 @@ namespace MataSharp
         private string URL { get { return "https://" + this.Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + this._Folder + "/berichten/" + this.ID; } }
 
         /// <summary>
-        /// Returns new MagisterMessage.
-        /// </summary>
-        public MagisterMessage()
-        {
-            if (_Session.Mata == null || (_Session.School == null && _Session.Mata.School == null))
-                throw new NullReferenceException("All usable Mata instances are null!\nTry to use 'MagisterMessage(Mata)' instead.");
-
-            //Auto Fill-In some magic things >:D
-            this.Mata = _Session.Mata;
-            this._CanSend = true;
-
-            this.ID = 0;
-            this._IsRead = false;
-            this.State = 0;
-            this.IDOriginal = 0;
-            this.IDOrginalReceiver = 0;
-            this._Folder = 0;
-            this.Deleted = false;
-            this.IDKey = 0;
-            this.SenderGroupID = this.Mata.Person.GroupID;
-            this.Sender = this.Mata.Person;
-            this.Recipients = new PersonList(this.Mata);
-            this.CC = new PersonList(this.Mata);
-        }
-
-        /// <summary>
         /// Returns new MagisterMessage
         /// </summary>
         /// <param name="Mata">The mata instance to use.</param>
         public MagisterMessage(Mata Mata)
         {
-            if ((_Session.Mata == null || (_Session.School == null && _Session.Mata.School == null)) && (Mata == null || (_Session.School == null && Mata.School == null)))
-                throw new NullReferenceException("All usable Mata instances are null!");
+            if (Mata == null)
+                throw new NullReferenceException("Mata instance is null!");
 
-            this.Mata = Mata ?? _Session.Mata;
+            this.Mata = Mata;
             this._CanSend = true;
 
             this.ID = 0;
@@ -124,7 +98,7 @@ namespace MataSharp
         {
             var tmpSubject = (this.Subject[0] != 'F' || this.Subject[1] != 'W' || this.Subject[2] != ':' || this.Subject[3] != ' ') ? "FW: " + this.Subject : this.Subject;
 
-            return new MagisterMessage()
+            return new MagisterMessage(this.Mata)
             {
                 Sender = this.Sender,//Magister's logic
                 _Folder = this._Folder,
@@ -157,7 +131,7 @@ namespace MataSharp
         {
             var tmpSubject = (this.Subject[0] != 'F' || this.Subject[1] != 'W' || this.Subject[2] != ':' || this.Subject[3] != ' ') ? "FW: " + this.Subject : this.Subject;
 
-            return new MagisterMessage()
+            return new MagisterMessage(this.Mata)
             {
                 Sender = this.Sender,//Magister's logic
                 _Folder = this._Folder,
@@ -193,7 +167,7 @@ namespace MataSharp
             if (this.CC != null) tmpCC.AddRange(this.CC.Where(p => p.ID != this.Mata.Person.ID));
             tmpCC.Sort();
 
-            return new MagisterMessage()
+            return new MagisterMessage(this.Mata)
             {
                 Sender = this.Sender,
                 _Folder = this._Folder,
@@ -226,7 +200,7 @@ namespace MataSharp
         {
             var tmpSubject = (this.Subject[0] != 'R' || this.Subject[1] != 'E' || this.Subject[2] != ':' || this.Subject[3] != ' ') ? "RE: " + this.Subject : this.Subject;
 
-            return new MagisterMessage()
+            return new MagisterMessage(this.Mata)
             {
                 Sender = this.Sender,//Magister's logic
                 _Folder = this._Folder,
@@ -274,7 +248,7 @@ namespace MataSharp
 
             this._Folder = FolderID;
 
-            _Session.HttpClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
+            this.Mata.HttpClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
             thisCopied.Delete();
         }
 
@@ -286,7 +260,7 @@ namespace MataSharp
             if (this.Deleted) return;
 
             this.Deleted = true;
-            _Session.HttpClient.Delete(this.URL, "SESSION_ID=" + this.Mata.SessionID + "&fileDownload=true");
+            this.Mata.HttpClient.Delete(this.URL, "SESSION_ID=" + this.Mata.SessionID + "&fileDownload=true");
         }
 
         /// <summary>
@@ -346,6 +320,7 @@ namespace MataSharp
                 IsDefinitiefVerwijderd = this.Deleted,
                 IdKey = this.IDKey,
                 IdDeelNameSoort = this.SenderGroupID,
+                Mata = this.Mata
             };
         }
 
@@ -392,17 +367,20 @@ namespace MataSharp
         public bool IsDefinitiefVerwijderd { get; set; }
         public int IdKey { get; set; }
         public int IdDeelNameSoort { get; set; }
+
+        [JsonIgnore]
+        public Mata Mata { get; internal set; }
         #endregion
 
         public MagisterMessage ToMagisterMessage(int index)
         {
-            var tmpReceivers = this.Ontvangers.ToList(true, true);
+            var tmpReceivers = this.Ontvangers.ToList(true, true, this.Mata);
             tmpReceivers.Sort();
 
-            var tmpCopiedReceivers = this.KopieOntvangers.ToList(true, true);
+            var tmpCopiedReceivers = this.KopieOntvangers.ToList(true, true, this.Mata);
             tmpCopiedReceivers.Sort();
 
-            return new MagisterMessage()
+            return new MagisterMessage(this.Mata)
             {
                 ID = this.Id,
                 Ref = this.Ref,
@@ -417,7 +395,7 @@ namespace MataSharp
                 IsFlagged = this.HeeftPrioriteit,
                 IDOriginal = this.IdOorspronkelijkeBericht,
                 IDOrginalReceiver = this.IdOntvangerOorspronkelijkeBericht,
-                Attachments = this.Bijlagen.ToList(AttachmentType.Message),
+                Attachments = this.Bijlagen.ToList(AttachmentType.Message, this.Mata),
                 _Folder = this.BerichtMapId,
                 Deleted = this.IsDefinitiefVerwijderd,
                 IDKey = this.IdKey,
@@ -430,7 +408,7 @@ namespace MataSharp
         internal void Send(Mata Mata)
         {
             string URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/";
-            _Session.HttpClient.Post(URL, JsonConvert.SerializeObject(this));
+            this.Mata.HttpClient.Post(URL, JsonConvert.SerializeObject(this));
         }
     }
 }

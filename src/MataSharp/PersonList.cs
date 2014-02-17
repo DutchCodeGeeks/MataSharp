@@ -3,16 +3,13 @@ using System.Collections.Generic;
 
 namespace MataSharp
 {
+    /// <summary>
+    /// Custom made list to store MagisterPerson instances.
+    /// </summary>
     public class PersonList : IList<MagisterPerson>
     {
         private Mata Mata;
         private List<MagisterPerson> List;
-
-        public PersonList()
-        {
-            this.List = new List<MagisterPerson>();
-            this.Mata = _Session.Mata;
-        }
 
         public PersonList(Mata mata)
         {
@@ -20,22 +17,22 @@ namespace MataSharp
             this.Mata = mata;
         }
 
-        public PersonList(int startSize, Mata mata = null)
+        public PersonList(int startSize, Mata mata)
         {
             this.List = new List<MagisterPerson>(startSize);
-            this.Mata = mata ?? _Session.Mata;
+            this.Mata = mata;
         }
 
-        public PersonList(IEnumerable<MagisterPerson> collection, Mata mata = null)
+        public PersonList(IEnumerable<MagisterPerson> collection, Mata mata)
         {
             this.List = new List<MagisterPerson>(collection);
-            this.Mata = mata ?? _Session.Mata;
+            this.Mata = mata;
         }
 
-        public PersonList(IEnumerable<string> collection, Mata mata = null)
+        public PersonList(IEnumerable<string> collection, Mata mata)
         {
             this.List = new List<MagisterPerson>(collection.Count());
-            this.Mata = mata ?? _Session.Mata;
+            this.Mata = mata;
             this.AddRange(collection);
         }
 
@@ -127,7 +124,6 @@ namespace MataSharp
 
         internal void InsertRange(int index, IEnumerable<MagisterStylePerson> collection, bool download)
         {
-            if (this.IsReadOnly) ThrowException();
             this.List.InsertRange(index, collection.ConvertAll(p => (MagisterPerson)p.ToPerson(download)));
         }
 
@@ -205,6 +201,6 @@ namespace MataSharp
             this.List.Sort();
         }
 
-        private static void ThrowException() { throw new System.Data.ReadOnlyException("The list is ReadOnly!"); }
+        private static void ThrowException() { throw new System.Data.ReadOnlyException("This list is ReadOnly!"); }
     }
 }

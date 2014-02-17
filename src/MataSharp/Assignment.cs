@@ -89,16 +89,18 @@ namespace MataSharp
         public string LeerlingOpmerking { get; set; }
         public string Titel { get; set; }
 
+        public Mata Mata { get; internal set; }
+
         public AssignmentVersion ToVersion()
         {
             return new AssignmentVersion()
             {
                 Grade = this.Beoordeling,
                 TeacherNotice = this.DocentOpmerking,
-                FeedbackAttachments = this.FeedbackBijlagen.ToList(AttachmentType.Assignment_teacher),
+                FeedbackAttachments = this.FeedbackBijlagen.ToList(AttachmentType.Assignment_teacher, this.Mata),
                 HandInTime = this.IngeleverdOp.ToDateTime(),
                 DeadLine = this.InleverenVoor.ToDateTime(),
-                HandedInAttachments = this.LeerlingBijlagen.ToList(AttachmentType.Assignment_pupil),
+                HandedInAttachments = this.LeerlingBijlagen.ToList(AttachmentType.Assignment_pupil, this.Mata),
                 HandedInFooter = this.LeerlingOpmerking,
                 Name = this.Titel
             };
@@ -121,15 +123,17 @@ namespace MataSharp
         public string Vak { get; set; }
         public MagisterStyleAssignmentListVersion[] VersieNavigatieItems { get; set; }
 
+        public Mata Mata { get; internal set; }
+
         public Assignment toAssignment()
         {
             var tmpVersions = new List<AssignmentVersion>();
             foreach(var compactAssignmentVersion in this.VersieNavigatieItems)
             {
-                string URL = "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/opdrachten/" + this.Id + "/versie/" + compactAssignmentVersion.Id;
+                string URL = "https://" + this.Mata.School.URL + "/api/leerlingen/" + this.Mata.UserID + "/opdrachten/" + this.Id + "/versie/" + compactAssignmentVersion.Id;
 
-                string versionRaw = _Session.HttpClient.DownloadString(URL);
-                var versionClean = JsonConvert.DeserializeObject<MagisterStyleAssignmentVersion>(versionRaw);
+                string versionRaw = this.Mata.HttpClient.DownloadString(URL);
+                var versionClean = JsonConvert.DeserializeObject<MagisterStyleAssignmentVersion>(versionRaw); versionClean.Mata = this.Mata;
 
                 tmpVersions.Add(versionClean.ToVersion());
             }
@@ -137,8 +141,8 @@ namespace MataSharp
             return new Assignment()
             {
                 Grade = this.Beoordeling,
-                Attachments = this.Bijlagen.ToList(AttachmentType.Assignment_teacher),
-                Teachers = this.Docenten.ToList(true, true),
+                Attachments = this.Bijlagen.ToList(AttachmentType.Assignment_teacher, this.Mata),
+                Teachers = this.Docenten.ToList(true, true, this.Mata),
                 ID = this.Id,
                 HandInTime = this.IngeleverdOp.ToDateTime(),
                 DeadLine = this.InleverenVoor.ToDateTime(),

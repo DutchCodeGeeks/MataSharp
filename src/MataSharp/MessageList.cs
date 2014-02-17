@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace MataSharp
 {
+    /// <summary>
+    /// Folder that contains MagisterMessage instances.
+    /// </summary>
     public partial class MagisterMessageFolder : IEnumerable<MagisterMessage>
     {
         /// <summary>
@@ -12,11 +15,11 @@ namespace MataSharp
         /// </summary>
         /// <param name="index">The zero-based index of the item to get.</param>
         /// <returns>The item on the given index.</returns>
-        public MagisterMessage this[int index] { get { return this.GetSpecificEnumerator().GetAt(index); } }
+        public MagisterMessage this[int index] { get { return this.ElementAt(index); } }
 
         public IEnumerator<MagisterMessage> GetEnumerator()
         {
-            return new Enumerator<MagisterMessage>(this);
+            return new Enumerator(this);
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -24,14 +27,14 @@ namespace MataSharp
             return GetEnumerator();
         }
 
-        private Enumerator<MagisterMessage> GetSpecificEnumerator()
+        private Enumerator GetSpecificEnumerator()
         {
-            return new Enumerator<MagisterMessage>(this);
+            return new Enumerator(this);
         }
 
         public MagisterMessage ElementAt(int index)
         {
-            return this[index];
+            return this.GetSpecificEnumerator().GetAt(index);
         }
 
         public List<MagisterMessage> Take(int count)
@@ -90,7 +93,7 @@ namespace MataSharp
         }
 
         /// <summary>
-        /// Get's the zero-based position of the given item on the server.
+        /// Gets the zero-based position of the given item on the server.
         /// </summary>
         /// <param name="item">The item to get its position from.</param>
         /// <returns>A zero-based index of the position of the given item.</returns>
@@ -267,102 +270,102 @@ namespace MataSharp
             return (!item.Deleted && this.FolderType == item.Folder);
         }
 
-        private class Enumerator<T> : IEnumerator<T>, IDisposable where T : MagisterMessage
+        private class Enumerator : IEnumerator<MagisterMessage>, IDisposable
         {
             private int Next = 0;
             private int Skip = -1;
             private Mata Mata { get { return this.Sender.Mata; } }
             private MagisterMessageFolder Sender { get; set; }
-            private const int MaxMessages = 750;
+            private const ushort MAX_MESSAGES = 750;
 
             public Enumerator(MagisterMessageFolder Sender)
             {
                 this.Sender = Sender;
             }
 
-            public T Current
+            public MagisterMessage Current
             {
                 get
                 {
                     string URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + Skip + "&$top=" + Next;
 
-                    string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
-                    var CompactMessage = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW).Items[0];
+                    string CompactMessageRAW = this.Mata.HttpClient.DownloadString(URL);
+                    var CompactMessage = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessageRAW).Items[0];
 
                     URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
-                    string MessageRAW = _Session.HttpClient.DownloadString(URL);
-                    var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                    return (T)MessageClean.ToMagisterMessage(this.Skip);
+                    string MessageRAW = this.Mata.HttpClient.DownloadString(URL);
+                    var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
+                    return MessageClean.ToMagisterMessage(this.Skip);
                 }
             }
 
-            public T GetAt(int index)
+            public MagisterMessage GetAt(int index)
             {
                 string URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + index + "&$top=" + index + 1;
 
-                string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
+                string CompactMessagesRAW = this.Mata.HttpClient.DownloadString(URL);
                 var CompactMessage = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW).Items[0];
 
                 URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
-                string MessageRAW = _Session.HttpClient.DownloadString(URL);
-                var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                return (T)MessageClean.ToMagisterMessage(index);
+                string MessageRAW = this.Mata.HttpClient.DownloadString(URL);
+                var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
+                return MessageClean.ToMagisterMessage(index);
             }
 
-            public List<T> GetRange(int Ammount, int Skip)
+            public List<MagisterMessage> GetRange(int Ammount, int Skip)
             {
                 string URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + Skip + "&$top=" + Ammount;
 
-                string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
+                string CompactMessagesRAW = this.Mata.HttpClient.DownloadString(URL);
                 var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
 
-                var list = new List<T>(); int i = 0;
+                var list = new List<MagisterMessage>(); int i = 0;
                 foreach (var CompactMessage in CompactMessages.Items)
                 {
                     URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
-                    string MessageRAW = _Session.HttpClient.DownloadString(URL);
-                    var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                    list.Add((T)MessageClean.ToMagisterMessage(i));
+                    string MessageRAW = this.Mata.HttpClient.DownloadString(URL);
+                    var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
+                    list.Add(MessageClean.ToMagisterMessage(i));
                     i++;
                 }
                 return list;
             }
 
-            public List<T> GetUnread(uint Ammount, uint Skip = 0)
+            public List<MagisterMessage> GetUnread(uint Ammount, uint Skip = 0)
             {
                 string URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + Skip + "&$top=" + Ammount;
 
-                string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
+                string CompactMessagesRAW = this.Mata.HttpClient.DownloadString(URL);
                 var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
 
-                var list = new List<T>(); int i = 0;
+                var list = new List<MagisterMessage>(); int i = 0;
                 foreach (var CompactMessage in CompactMessages.Items.Where(m => !m.IsGelezen))
                 {
                     URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
-                    string MessageRAW = _Session.HttpClient.DownloadString(URL);
-                    var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                    list.Add((T)MessageClean.ToMagisterMessage(i));
+                    string MessageRAW = this.Mata.HttpClient.DownloadString(URL);
+                    var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
+                    list.Add(MessageClean.ToMagisterMessage(i));
                     i++;
                 }
                 return list;
             }
 
-            public List<T> GetUnread()
+            public List<MagisterMessage> GetUnread()
             {
-                var list = new List<T>(); int index = 0;
+                var list = new List<MagisterMessage>(); int index = 0;
 
                 for (uint i = 0; (list.Count != this.Sender.UnreadMessagesCount - 1); i++)
                 {
                     string URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + (i * 25) + "&$top=" + ((i * 25) + 25);
 
-                    string CompactMessagesRAW = _Session.HttpClient.DownloadString(URL);
+                    string CompactMessagesRAW = this.Mata.HttpClient.DownloadString(URL);
                     var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
                     foreach (var CompactMessage in CompactMessages.Items.Where(m => !m.IsGelezen))
                     {
                         URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
-                        string MessageRAW = _Session.HttpClient.DownloadString(URL);
-                        var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                        list.Add((T)MessageClean.ToMagisterMessage(index));
+                        string MessageRAW = this.Mata.HttpClient.DownloadString(URL);
+                        var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
+                        list.Add(MessageClean.ToMagisterMessage(index));
                         i++;
                     }
                 }
@@ -378,7 +381,7 @@ namespace MataSharp
             {
                 Next++;
                 Skip++;
-                return (Next < MaxMessages);
+                return (Next < MAX_MESSAGES);
             }
 
             public void Reset()

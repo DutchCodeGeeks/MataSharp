@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 
 namespace MataSharp
 {
@@ -74,27 +75,34 @@ namespace MataSharp
         /// <summary>
         /// Convert the current Attachment[] to a List
         /// </summary>
-        /// <param name="AttachmentType">AttachmentType to give every attachment in the array.</param>
+        /// <param name="attachmentType">AttachmentType to give every attachment in the array.</param>
         /// <returns>The array as list</returns>
-        internal static ReadOnlyCollection<Attachment> ToList(this Attachment[] currentArray, AttachmentType AttachmentType)
+        internal static ReadOnlyCollection<Attachment> ToList(this Attachment[] currentArray, AttachmentType attachmentType, Mata mata)
         {
             var tmpList = new List<Attachment>(currentArray);
-            tmpList.ForEach(a => a.Type = AttachmentType);
+            tmpList.ForEach(a => a.Type = attachmentType);
+            tmpList.ForEach(a => a.Mata = mata);
             return new ReadOnlyCollection<Attachment>(tmpList);
         }
         #endregion
 
         #region PersonList
-        internal static PersonList ToList(this IEnumerable<MagisterStylePerson> collection, bool download,bool ReadOnly = false, Mata mata = null)
+        internal static PersonList ToList(this IEnumerable<MagisterStylePerson> collection, bool download, bool ReadOnly, Mata mata)
         {
-            var tmpMata = mata ?? _Session.Mata;
-            return new PersonList(tmpMata, collection,ReadOnly, download);
+            return new PersonList(mata, collection, ReadOnly, download);
         }
 
-        public  static PersonList ToList(this IEnumerable<MagisterPerson> collection, Mata mata = null)
+        public  static PersonList ToList(this IEnumerable<MagisterPerson> collection, Mata mata)
         {
             return new PersonList(collection, mata);
         }
         #endregion
+
+        internal static MagisterStyleMessage ToMagisterStyleMsg(this string rawData, Mata mata)
+        {
+            var tmpMsg = JsonConvert.DeserializeObject<MagisterStyleMessage>(rawData);
+            tmpMsg.Mata = mata;
+            return tmpMsg;
+        }
     }
 }

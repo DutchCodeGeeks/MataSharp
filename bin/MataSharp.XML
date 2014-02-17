@@ -37,12 +37,20 @@
             </summary>
             <returns>The string parsed as DateTime</returns>
         </member>
-        <member name="M:MataSharp.Extensions.ToList(MataSharp.Attachment[],MataSharp.AttachmentType)">
+        <member name="M:MataSharp.Extensions.ToList(MataSharp.Attachment[],MataSharp.AttachmentType,MataSharp.Mata)">
             <summary>
             Convert the current Attachment[] to a List
             </summary>
-            <param name="AttachmentType">AttachmentType to give every attachment in the array.</param>
+            <param name="attachmentType">AttachmentType to give every attachment in the array.</param>
             <returns>The array as list</returns>
+        </member>
+        <member name="T:MataSharp.MagisterMessageFolder">
+            <summary>
+            Folder that contains MagisterMessage instances.
+            </summary>
+            <summary>
+            Folder that contains MagisterMessage instances.
+            </summary>
         </member>
         <member name="M:MataSharp.MagisterMessageFolder.WhereUnread(System.UInt32,System.UInt32)">
             <summary>
@@ -81,7 +89,7 @@
         </member>
         <member name="M:MataSharp.MagisterMessageFolder.IndexOf(MataSharp.MagisterMessage)">
             <summary>
-            Get's the zero-based position of the given item on the server.
+            Gets the zero-based position of the given item on the server.
             </summary>
             <param name="item">The item to get its position from.</param>
             <returns>A zero-based index of the position of the given item.</returns>
@@ -183,11 +191,6 @@
             Clones the current MagisterPerson instance.
             </summary>
             <returns>A new MagisterPerson instance that's identical to the current one.</returns>
-        </member>
-        <member name="M:MataSharp.MagisterMessage.#ctor">
-            <summary>
-            Returns new MagisterMessage.
-            </summary>
         </member>
         <member name="M:MataSharp.MagisterMessage.#ctor(MataSharp.Mata)">
             <summary>
@@ -354,6 +357,11 @@
             </summary>
             <param name="SearchFilter">The search filter to use as string.</param>
             <returns>List containing MagisterSchool instances</returns>
+        </member>
+        <member name="T:MataSharp.PersonList">
+            <summary>
+            Custom made list to store MagisterPerson instances.
+            </summary>
         </member>
     </members>
 </doc>

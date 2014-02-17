@@ -19,7 +19,7 @@ namespace MataSharp
                 if (this._Done == value) return;
 
                 this._Done = value;
-                _Session.HttpClient.Put(this.URL(), JsonConvert.SerializeObject(this.ToMagisterStyle()));
+                this.Mata.HttpClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
             }
         }
         public PersonList Teachers { get; set; }
@@ -37,7 +37,9 @@ namespace MataSharp
         public string ClassName { get; set; }
         public string ClassAbbreviation { get; set; }
 
-        internal string URL() { return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/huiswerk/huiswerk/" + this.ID; }
+        public Mata Mata { get; internal set; }
+
+        internal string URL { get { return "https://" + this.Mata.School.URL + "/api/leerlingen/" + this.Mata.UserID + "/huiswerk/huiswerk/" + this.ID; } }
 
         internal Huiswerk ToMagisterStyle()
         {
@@ -126,13 +128,13 @@ namespace MataSharp
         public int Status { get; set; }
         public string VakOmschrijvingen { get; set; }
 
-        public Homework ToHomework()
+        public Homework ToHomework(Mata mata)
         {
             return new Homework()
             {
                 Notes = this.AantekeningLeerling,
                 _Done = this.Afgerond,
-                Teachers = this.Docenten.ToList(true, true),
+                Teachers = this.Docenten.ToList(true, true, mata),
                 End = this.Einde.ToDateTime(),
                 ID = this.Id,
                 InfoType = this.InfoType,
@@ -143,7 +145,8 @@ namespace MataSharp
                 ClassDescription = this.Omschrijving,
                 Start = this.Start.ToDateTime(),
                 State = this.Status,
-                ClassName = this.VakOmschrijvingen
+                ClassName = this.VakOmschrijvingen,
+                Mata = mata
             };
         }
     }

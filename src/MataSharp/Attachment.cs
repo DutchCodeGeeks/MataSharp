@@ -33,21 +33,24 @@ namespace MataSharp
             get { return (!string.IsNullOrWhiteSpace(this.Name)) ? MimeMapping.GetMimeMapping(this.Name) : "application/octet-stream"; }
         }
 
+        [JsonIgnore]
+        public Mata Mata { get; internal set; }
+
         private string URL
         {
             get
             {
                 if (this.Type == AttachmentType.Message)
-                    return "https://" + _Session.School.URL + "/api/personen/" + _Session.Mata.UserID + "/communicatie/berichten/bijlagen/" + this.ID;
+                    return "https://" + this.Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/bijlagen/" + this.ID;
 
                 else if (this.Type == AttachmentType.Assignment_pupil)
-                    return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/opdrachten/bijlagen/Ingeleverd/" + this.ID;
+                    return "https://" + this.Mata.School.URL + "/api/leerlingen/" + this.Mata.UserID + "/opdrachten/bijlagen/Ingeleverd/" + this.ID;
 
                 else if (this.Type == AttachmentType.Assignment_teacher)
-                    return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/opdrachten/bijlagen/" + this.ID;
+                    return "https://" + this.Mata.School.URL + "/api/leerlingen/" + this.Mata.UserID + "/opdrachten/bijlagen/" + this.ID;
 
                 else
-                    return "https://" + _Session.School.URL + "/api/leerlingen/" + _Session.Mata.UserID + "/studiewijzers/" + this.StudyGuideID + "/onderdelen/" + this.StudyGuidePartID + "/bijlagen/" + this.ID;
+                    return "https://" + this.Mata.School.URL + "/api/leerlingen/" + this.Mata.UserID + "/studiewijzers/" + this.StudyGuideID + "/onderdelen/" + this.StudyGuidePartID + "/bijlagen/" + this.ID;
             }
         }
 
@@ -59,8 +62,8 @@ namespace MataSharp
         /// <returns>A string containting the path to the location of the downloaded attachment.</returns>
         public string Download(bool AddUserID, string Directory = "")
         {
-            string fileName = (AddUserID) ? ("(" + _Session.Mata.UserID + ") " + this.Name) : (this.Name);
-            return _Session.HttpClient.DownloadFile(this.URL, fileName, Directory);
+            string fileName = (AddUserID) ? ("(" + this.Mata.UserID + ") " + this.Name) : (this.Name);
+            return this.Mata.HttpClient.DownloadFile(this.URL, fileName, Directory);
         }
 
         public int CompareTo(Attachment other)

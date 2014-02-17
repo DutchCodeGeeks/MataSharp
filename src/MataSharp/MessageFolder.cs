@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace MataSharp
 {
+    /// <summary>
+    /// Folder that contains MagisterMessage instances.
+    /// </summary>
     public partial class MagisterMessageFolder : IEnumerable<MagisterMessage>
     {
         public string Name { get; set; }
@@ -16,7 +19,6 @@ namespace MataSharp
         public object Ref { get; set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.
 
         internal Mata Mata { get; set; }
-        internal MagisterSchool School { get { return this.Mata.School; } }
     }
 
     public enum MessageFolder : int
