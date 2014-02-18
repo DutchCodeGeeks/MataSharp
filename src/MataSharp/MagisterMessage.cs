@@ -345,7 +345,7 @@ namespace MataSharp
         }
     }
 
-    internal partial class MagisterStyleMessage
+    sealed internal partial class MagisterStyleMessage
     {
         #region Content
         public int Id { get; set; }

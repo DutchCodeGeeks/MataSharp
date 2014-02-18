@@ -111,7 +111,7 @@ namespace MataSharp
         public string VakOmschrijvingen { get; set; }
     }
 
-    internal partial class Huiswerk
+    sealed internal class Huiswerk
     {
         public string AantekeningLeerling { get; set; }
         public bool Afgerond { get; set; }

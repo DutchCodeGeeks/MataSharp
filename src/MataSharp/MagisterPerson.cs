@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MataSharp
 {
-    public partial class MagisterPerson : IComparable<MagisterPerson>, ICloneable, IEqualityComparer<MagisterPerson>
+    sealed public partial class MagisterPerson : IComparable<MagisterPerson>, ICloneable, IEqualityComparer<MagisterPerson>
     {
         public uint ID { get; set; }
         public object Ref { get; set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.
@@ -100,7 +100,7 @@ namespace MataSharp
         Project = 8
     }
 
-    internal partial struct MagisterStylePerson
+    sealed internal class MagisterStylePerson
     {
         public uint Id { get; set; }
         public object Ref { get; set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.

@@ -53,12 +53,12 @@ namespace MataSharp
         public void Add(string name)
         {
             if (this.IsReadOnly) ThrowException();
-            this.List.Add((MagisterPerson)this.Mata.GetPersons(name)[0]);
+            this.List.Add(this.Mata.GetPersons(name)[0]);
         }
 
         internal void Add(MagisterStylePerson item, bool download)
         {
-            this.List.Add((MagisterPerson)item.ToPerson(download));
+            this.List.Add(item.ToPerson(download));
         }
 
         public void AddRange(IEnumerable<MagisterPerson> collection)
@@ -70,18 +70,18 @@ namespace MataSharp
         public void AddRange(IEnumerable<string> collection)
         {
             if (this.IsReadOnly) ThrowException();
-            this.List.AddRange(collection.ConvertAll(x => (MagisterPerson)this.Mata.GetPersons(x)[0]));
+            this.List.AddRange(collection.ConvertAll(x => this.Mata.GetPersons(x)[0]));
         }
 
         public void AddRange(string name)
         {
             if (this.IsReadOnly) ThrowException();
-            this.List.AddRange((IEnumerable<MagisterPerson>)this.Mata.GetPersons(name));
+            this.List.AddRange(this.Mata.GetPersons(name));
         }
 
         internal void AddRange(IEnumerable<MagisterStylePerson> collection, bool download)
         {
-            this.List.AddRange(collection.ConvertAll(p => (MagisterPerson)p.ToPerson(download)));
+            this.List.AddRange(collection.ConvertAll(p => p.ToPerson(download)));
         }
 
         public void Clear()

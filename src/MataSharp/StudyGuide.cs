@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace MataSharp
 {
-    public partial class StudyGuide : IComparable<StudyGuide>
+    public class StudyGuide : IComparable<StudyGuide>
     {
         public string Name { get; set; }
         public int ID { get; set; }
@@ -24,7 +24,7 @@ namespace MataSharp
         }
     }
 
-    public partial class StudyGuidePart : IComparable<StudyGuidePart>
+    public class StudyGuidePart : IComparable<StudyGuidePart>
     {
         public ReadOnlyCollection<Attachment> Attachments { get; set; }
         public int ID { get; set; }
@@ -42,14 +42,14 @@ namespace MataSharp
         }
     }
 
-    internal partial struct StudieWijzerLijst
+    internal struct StudieWijzerLijst
     {
         public StudieWijzerLijstItem[] Items { get; set; }
         public object Paging { get; set; }
         public int TotalCount { get; set; }
     }
 
-    internal partial struct StudieWijzerLijstItem
+    internal struct StudieWijzerLijstItem
     {
         public int Id { get; set; }
         public string Omschrijving { get; set; }
@@ -60,7 +60,7 @@ namespace MataSharp
         public string Van { get; set; }
     }
 
-    internal partial struct StudieWijzer
+    sealed internal class StudieWijzer
     {
         public int Id { get; set; }
         public bool InLeerlingArchief { get; set; }
@@ -73,19 +73,17 @@ namespace MataSharp
         public string[] VakCodes { get; set; }
         public string Van { get; set; }
 
-        public Mata Mata { get; internal set; }
-
-        public StudyGuide ToStudyGuide()
+        public StudyGuide ToStudyGuide(Mata mata)
         {
             var tmpStudyGuideParts = new List<StudyGuidePart>();
             foreach (var StudyGuidePartsListItem in this.Onderdelen.Items)
             {
-                string URL = "https://" + this.Mata.School.URL + "/api/leerlingen/" + this.Mata.UserID + "/studiewijzers/" + this.Id + "/onderdelen/" + StudyGuidePartsListItem.Id;
+                string URL = "https://" + mata.School.URL + "/api/leerlingen/" + mata.UserID + "/studiewijzers/" + this.Id + "/onderdelen/" + StudyGuidePartsListItem.Id;
 
-                string partRaw = this.Mata.HttpClient.DownloadString(URL);
+                string partRaw = mata.HttpClient.DownloadString(URL);
                 var partClean = JsonConvert.DeserializeObject<StudieWijzerOnderdeel>(partRaw);
 
-                tmpStudyGuideParts.Add(partClean.ToReadableStyle(this.Id, this.Mata));
+                tmpStudyGuideParts.Add(partClean.ToReadableStyle(this.Id, mata));
             }
 
             return new StudyGuide()
@@ -102,14 +100,14 @@ namespace MataSharp
         }
     }
 
-    internal partial struct StudieWijzerOnderdeelLijst
+    internal struct StudieWijzerOnderdeelLijst
     {
         public StudieWijzerOnderdeelLijstItem[] Items { get; set; }
         public object Paging { get; set; }
         public int TotalCount { get; set; }
     }
 
-    internal partial struct StudieWijzerOnderdeelLijstItem
+    internal struct StudieWijzerOnderdeelLijstItem
     {
         public object Bronnen { get; set; } //Have to take a look at that
         public int Id { get; set; }
@@ -123,7 +121,7 @@ namespace MataSharp
         public int Volgnummer { get; set; }
     }
 
-    internal partial struct StudieWijzerOnderdeel
+    sealed internal class StudieWijzerOnderdeel
     {
         public Attachment[] Bronnen { get; set; }
         public int Id { get; set; }

@@ -47,14 +47,14 @@ namespace MataSharp
         public override string ToString() { return this.Name; }
     }
 
-    internal partial struct AssignmentFolder
+    internal struct AssignmentFolder
     {
         public AssignmentFolderItem[] Items { get; set; }
         public object Paging { get; set; }
         public int TotalCount { get; set; } //Looks like that's broken at their side.
     }
 
-    internal partial struct AssignmentFolderListItem
+    internal struct AssignmentFolderListItem
     {
         public uint? Beoordeling { get; set; }
         public Attachment[] Bijlagen { get; set; }
@@ -71,14 +71,14 @@ namespace MataSharp
         public object VersieNavigatieItems { get; set; }
     }
 
-    internal partial struct MagisterStyleAssignmentListVersion
+    internal struct MagisterStyleAssignmentListVersion
     {
         public int Id { get; set; }
         public string Omschrijving { get; set; }
         public object Ref { get; set; }
     }
 
-    internal partial struct MagisterStyleAssignmentVersion
+    sealed internal class MagisterStyleAssignmentVersion
     {
         public uint? Beoordeling { get; set; }
         public string DocentOpmerking { get; set; }
@@ -89,25 +89,23 @@ namespace MataSharp
         public string LeerlingOpmerking { get; set; }
         public string Titel { get; set; }
 
-        public Mata Mata { get; internal set; }
-
-        public AssignmentVersion ToVersion()
+        public AssignmentVersion ToVersion(Mata mata)
         {
             return new AssignmentVersion()
             {
                 Grade = this.Beoordeling,
                 TeacherNotice = this.DocentOpmerking,
-                FeedbackAttachments = this.FeedbackBijlagen.ToList(AttachmentType.Assignment_teacher, this.Mata),
+                FeedbackAttachments = this.FeedbackBijlagen.ToList(AttachmentType.Assignment_teacher, mata),
                 HandInTime = this.IngeleverdOp.ToDateTime(),
                 DeadLine = this.InleverenVoor.ToDateTime(),
-                HandedInAttachments = this.LeerlingBijlagen.ToList(AttachmentType.Assignment_pupil, this.Mata),
+                HandedInAttachments = this.LeerlingBijlagen.ToList(AttachmentType.Assignment_pupil, mata),
                 HandedInFooter = this.LeerlingOpmerking,
                 Name = this.Titel
             };
         }
     }
 
-    internal partial struct AssignmentFolderItem
+    sealed internal class AssignmentFolderItem
     {
         public uint? Beoordeling { get; set; }
         public Attachment[] Bijlagen { get; set; }
@@ -123,26 +121,24 @@ namespace MataSharp
         public string Vak { get; set; }
         public MagisterStyleAssignmentListVersion[] VersieNavigatieItems { get; set; }
 
-        public Mata Mata { get; internal set; }
-
-        public Assignment toAssignment()
+        public Assignment toAssignment(Mata mata)
         {
             var tmpVersions = new List<AssignmentVersion>();
             foreach(var compactAssignmentVersion in this.VersieNavigatieItems)
             {
-                string URL = "https://" + this.Mata.School.URL + "/api/leerlingen/" + this.Mata.UserID + "/opdrachten/" + this.Id + "/versie/" + compactAssignmentVersion.Id;
+                string URL = "https://" + mata.School.URL + "/api/leerlingen/" + mata.UserID + "/opdrachten/" + this.Id + "/versie/" + compactAssignmentVersion.Id;
 
-                string versionRaw = this.Mata.HttpClient.DownloadString(URL);
-                var versionClean = JsonConvert.DeserializeObject<MagisterStyleAssignmentVersion>(versionRaw); versionClean.Mata = this.Mata;
+                string versionRaw = mata.HttpClient.DownloadString(URL);
+                var versionClean = JsonConvert.DeserializeObject<MagisterStyleAssignmentVersion>(versionRaw);
 
-                tmpVersions.Add(versionClean.ToVersion());
+                tmpVersions.Add(versionClean.ToVersion(mata));
             }
 
             return new Assignment()
             {
                 Grade = this.Beoordeling,
-                Attachments = this.Bijlagen.ToList(AttachmentType.Assignment_teacher, this.Mata),
-                Teachers = this.Docenten.ToList(true, true, this.Mata),
+                Attachments = this.Bijlagen.ToList(AttachmentType.Assignment_teacher, mata),
+                Teachers = this.Docenten.ToList(true, true, mata),
                 ID = this.Id,
                 HandInTime = this.IngeleverdOp.ToDateTime(),
                 DeadLine = this.InleverenVoor.ToDateTime(),

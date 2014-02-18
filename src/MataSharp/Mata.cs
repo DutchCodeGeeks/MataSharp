@@ -20,10 +20,10 @@ namespace MataSharp
         public string SessionID { get; private set; }
 
         public string UserName { get; private set; }
-        internal MagisterSchool School { get; private set; }
+        public MagisterSchool School { get; private set; }
         public MagisterPerson Person { get; private set; }
 
-        internal readonly MataHTTPClient HttpClient;
+        internal readonly MataHTTPClient HttpClient = new MataHTTPClient();
         internal readonly Dictionary<string, List<MagisterStylePerson>> checkedPersons = new Dictionary<string, List<MagisterStylePerson>>();
 
         /// <summary>
@@ -34,8 +34,6 @@ namespace MataSharp
         /// <param name="UserPassword">Password to log in with.</param>
         public Mata(MagisterSchool School, string UserName, string UserPassword)
         {
-            this.HttpClient = new MataHTTPClient();
-
             this.School = School;
             this.UserName = UserName;
 
@@ -52,7 +50,7 @@ namespace MataSharp
 
             this.HttpClient.Cookie = "SESSION_ID=" + this.SessionID + "&fileDownload=true"; //yummy! cookies!
 
-            this.Person = this.GetPersons(this.Name)[0]; //Get itself as MagisterPerson from the servers.
+            this.Person = this.GetPersons(this.Name).Single(); //Get itself as MagisterPerson from the servers.
         }
 
         /// <summary>
@@ -108,7 +106,7 @@ namespace MataSharp
         /// </summary>
         /// <param name="Subject">Subject to use</param>
         /// <param name="Body">Body to use</param>
-        /// <param name="Recipients">MagisterPersons to send to</param>
+        /// <param name="Recipients">Name of the persons to send to</param>
         public bool ComposeAndTrySendMessage(string Subject, string Body, IEnumerable<string> Recipients)
         {
             return new MagisterMessage(this)
@@ -140,8 +138,7 @@ namespace MataSharp
                     ParentID = messageFolder.ParentId,
                     Ref = messageFolder.Ref,
                     MessagesURI = messageFolder.BerichtenUri,
-                    Mata = this,
-                    FolderType = (MessageFolder)messageFolder.Id
+                    Mata = this
                 });
             }
             return tmplst;
@@ -253,9 +250,9 @@ namespace MataSharp
                 URL = "https://" + School.URL + "/api/leerlingen/" + this.UserID + "/studiewijzers/" + compactStudyGuide.Id;
 
                 string studyGuideRaw = this.HttpClient.DownloadString(URL);
-                var studyGuideClean = JsonConvert.DeserializeObject<StudieWijzer>(studyGuideRaw); studyGuideClean.Mata = this;
+                var studyGuideClean = JsonConvert.DeserializeObject<StudieWijzer>(studyGuideRaw);
 
-                list.Add(studyGuideClean.ToStudyGuide());
+                list.Add(studyGuideClean.ToStudyGuide(this));
             }
             return list;
         }
@@ -272,8 +269,8 @@ namespace MataSharp
             {
                 URL = "https://" + School.URL + "/api/leerlingen/" + this.UserID + "/opdrachten/" + CompactAssignment.Id;
                 string AssignmentRaw = this.HttpClient.DownloadString(URL);
-                var AssignmentClean = JsonConvert.DeserializeObject<AssignmentFolderItem>(AssignmentRaw); AssignmentClean.Mata = this;
-                list.Add(AssignmentClean.toAssignment());
+                var AssignmentClean = JsonConvert.DeserializeObject<AssignmentFolderItem>(AssignmentRaw);
+                list.Add(AssignmentClean.toAssignment(this));
             }
             return list;
         }
@@ -359,7 +356,7 @@ namespace MataSharp
         }
     }
 
-    internal partial struct MagisterStyleMata
+    internal struct MagisterStyleMata
     {
         public string Naam { get; set; }
         public string GebruikersId { get; set; }

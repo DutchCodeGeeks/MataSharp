@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace MataSharp
 {
-    public partial class DigitalSchoolUtility : IComparable<DigitalSchoolUtility>
+    public class DigitalSchoolUtility : IComparable<DigitalSchoolUtility>
     {
         public long EAN { get; set; }
         public DateTime End { get; set; }
@@ -29,7 +29,7 @@ namespace MataSharp
         }
     }
 
-    public partial class DigitalSchoolUtilityClass : IComparable<DigitalSchoolUtilityClass>
+    public class DigitalSchoolUtilityClass : IComparable<DigitalSchoolUtilityClass>
     {
         public string ClassAbbreviation { get; set; }
         public int ID { get; set; }
@@ -43,7 +43,7 @@ namespace MataSharp
         }
     }
 
-    internal partial struct DigitaalLesMatriaalLijstItem
+    internal struct DigitaalLesMatriaalLijstItem
     {
         public string Afkorting { get; set; }
         public int Id { get; set; }
@@ -52,7 +52,7 @@ namespace MataSharp
         public object Ref { get; set; }
     }
 
-    internal partial struct DigitaalLesMatriaal
+    sealed internal class DigitaalLesMatriaal
     {
         public long EAN { get; set; }
         public string Eind { get; set; }
@@ -85,7 +85,7 @@ namespace MataSharp
         }
     }
 
-    internal partial struct DigitaalLesMatriaalVakDetails
+    sealed internal class DigitaalLesMatriaalVakDetails
     {
         public string Afkorting { get; set; }
         public int Id { get; set; }

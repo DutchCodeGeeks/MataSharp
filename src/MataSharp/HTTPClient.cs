@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MataSharp
 {
-    internal class MataHTTPClient : IDisposable
+    sealed internal class MataHTTPClient : IDisposable
     {
         private WebClient Client = new WebClient();
 
