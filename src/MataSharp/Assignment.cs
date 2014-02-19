@@ -128,7 +128,7 @@ namespace MataSharp
             {
                 string URL = "https://" + mata.School.URL + "/api/leerlingen/" + mata.UserID + "/opdrachten/" + this.Id + "/versie/" + compactAssignmentVersion.Id;
 
-                string versionRaw = mata.HttpClient.DownloadString(URL);
+                string versionRaw = mata.WebClient.DownloadString(URL);
                 var versionClean = JsonConvert.DeserializeObject<MagisterStyleAssignmentVersion>(versionRaw);
 
                 tmpVersions.Add(versionClean.ToVersion(mata));

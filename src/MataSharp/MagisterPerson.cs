@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MataSharp
 {
-    sealed public partial class MagisterPerson : IComparable<MagisterPerson>, ICloneable, IEqualityComparer<MagisterPerson>
+    sealed public class MagisterPerson : IComparable<MagisterPerson>, ICloneable, IEqualityComparer<MagisterPerson>
     {
         public uint ID { get; set; }
         public object Ref { get; set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.
@@ -18,8 +18,8 @@ namespace MataSharp
         public string Description { get; set; }
         public string Group { get; set; }
         public string TeacherCode { get; set; }
-        internal int GroupID;
-        public PersonType Type { get { return (PersonType)this.GroupID; } }
+        internal int _GroupID;
+        public PersonType Type { get { return (PersonType)this._GroupID; } }
 
         internal MagisterPerson Original { get; set; }
 
@@ -55,7 +55,7 @@ namespace MataSharp
                     Omschrijving = tmpPerson.Description,
                     Groep = tmpPerson.Group,
                     DocentCode = tmpPerson.TeacherCode,
-                    Type = tmpPerson.GroupID
+                    Type = tmpPerson._GroupID
                 };
         }
 
@@ -115,31 +115,29 @@ namespace MataSharp
         public string Voornamen { get; set; }
         public string Voorletters { get; set; }
 
-        public Mata Mata { get; internal set; }
-
-        private List<MagisterStylePerson> GetPersons(string SearchFilter)
+        private MagisterStylePerson[] GetPersons(string SearchFilter, Mata mata)
         {
-            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Length < 3) return new List<MagisterStylePerson>();
+            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Length < 3) return new MagisterStylePerson[0];
 
-            if (!this.Mata.checkedPersons.ContainsKey(SearchFilter))
+            if (!mata.CheckedPersons.ContainsKey(SearchFilter))
             {
-                string URL = "https://" + this.Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
+                string URL = "https://" + mata.School.URL + "/api/personen/" + mata.UserID + "/communicatie/contactpersonen?q=" + SearchFilter;
 
-                string personsRAW = this.Mata.HttpClient.DownloadString(URL);
+                string personsRAW = mata.WebClient.DownloadString(URL);
 
-                var persons = JsonConvert.DeserializeObject<MagisterStylePerson[]>(personsRAW).ToList();
-                this.Mata.checkedPersons.Add(SearchFilter, persons);
+                var persons = JsonConvert.DeserializeObject<MagisterStylePerson[]>(personsRAW);
+                mata.CheckedPersons.Add(SearchFilter, persons);
                 return persons;
             }
-            else return this.Mata.checkedPersons.First(x => x.Key.ToUpper() == SearchFilter.ToUpper()).Value;
+            else return mata.CheckedPersons.First(x => x.Key.ToUpper() == SearchFilter.ToUpper()).Value;
         }
 
-        public MagisterPerson ToPerson(bool download)
+        public MagisterPerson ToPerson(bool download, Mata mata)
         {
             MagisterStylePerson tmpPerson;
             if (download)
             {
-                try { tmpPerson = (GetPersons(this.Naam).Count == 1) ? GetPersons(this.Naam)[0] : this; } //Main building ground.
+                try { tmpPerson = (GetPersons(this.Naam, mata).Length == 1) ? GetPersons(this.Naam, mata).Single() : this; } //Main building ground.
                 catch { tmpPerson = this; }
             }
             else tmpPerson = this;
@@ -179,7 +177,7 @@ namespace MataSharp
                 Description = tmpPerson.Omschrijving ?? tmpName,
                 Group = tmpPerson.Groep,
                 TeacherCode = (!string.IsNullOrWhiteSpace(tmpPerson.DocentCode)) ? tmpPerson.DocentCode : null,
-                GroupID = tmpPerson.Type,
+                _GroupID = tmpPerson.Type,
                 Initials = tmpPerson.Voorletters,
             };
 

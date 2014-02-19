@@ -8,7 +8,7 @@ namespace MataSharp
     /// <summary>
     /// Folder that contains MagisterMessage instances.
     /// </summary>
-    public partial class MagisterMessageFolder : IEnumerable<MagisterMessage>
+    sealed public partial class MagisterMessageFolder : IEnumerable<MagisterMessage>
     {
         public string Name { get; set; }
         public uint UnreadMessagesCount { get; set; }

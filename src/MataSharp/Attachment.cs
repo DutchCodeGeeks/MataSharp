@@ -63,7 +63,7 @@ namespace MataSharp
         public string Download(bool AddUserID, string Directory = "")
         {
             string fileName = (AddUserID) ? ("(" + this.Mata.UserID + ") " + this.Name) : (this.Name);
-            return this.Mata.HttpClient.DownloadFile(this.URL, fileName, Directory);
+            return this.Mata.WebClient.DownloadFile(this.URL, fileName, Directory);
         }
 
         public int CompareTo(Attachment other)

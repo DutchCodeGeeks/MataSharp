@@ -4,12 +4,13 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Collections.Specialized;
 using System.Text;
+using System.Security.Authentication;
 
 namespace MataSharp
 {
-    sealed internal class MataHTTPClient : IDisposable
+    sealed internal class MataWebClient : IDisposable
     {
-        private WebClient Client = new WebClient();
+        WebClient Client = new WebClient();
 
         internal string Cookie
         {
@@ -42,8 +43,7 @@ namespace MataSharp
             try { tmpArr = this.Client.UploadValues(URL, Values); }
             catch(WebException e)
             {
-                if (((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.Unauthorized)
-                    throw new System.Security.Authentication.AuthenticationException("Wrong username and/or password.");
+                if (((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.Unauthorized) throw new AuthenticationException("Wrong username and/or password.");
                 else throw e;
             }
             return stripString(Encoding.ASCII.GetString(tmpArr));
@@ -55,11 +55,11 @@ namespace MataSharp
             this.Client.UploadData(URL, System.Text.Encoding.ASCII.GetBytes(Content));
         }
 
-        public void Delete(string URL, string Cookie)
+        public void Delete(string URL)
         {
             HttpWebRequest req = (HttpWebRequest)HttpWebRequest.Create(URL);
             req.Method = "DELETE";
-            req.Headers[HttpRequestHeader.Cookie] = Cookie;
+            req.Headers[HttpRequestHeader.Cookie] = this.Cookie;
             req.Timeout = 15000;
             req.GetResponse();
         }
@@ -81,7 +81,7 @@ namespace MataSharp
             return fullPath;
         }
 
-        ~MataHTTPClient() { this.Dispose(); }
+        ~MataWebClient() { this.Dispose(); }
         public void Dispose() { this.Client.Dispose(); }
     }
 }

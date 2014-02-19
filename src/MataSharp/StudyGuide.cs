@@ -80,7 +80,7 @@ namespace MataSharp
             {
                 string URL = "https://" + mata.School.URL + "/api/leerlingen/" + mata.UserID + "/studiewijzers/" + this.Id + "/onderdelen/" + StudyGuidePartsListItem.Id;
 
-                string partRaw = mata.HttpClient.DownloadString(URL);
+                string partRaw = mata.WebClient.DownloadString(URL);
                 var partClean = JsonConvert.DeserializeObject<StudieWijzerOnderdeel>(partRaw);
 
                 tmpStudyGuideParts.Add(partClean.ToReadableStyle(this.Id, mata));

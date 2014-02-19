@@ -8,7 +8,7 @@ namespace MataSharp
     /// <summary>
     /// Folder that contains MagisterMessage instances.
     /// </summary>
-    public partial class MagisterMessageFolder : IEnumerable<MagisterMessage>
+    sealed public partial class MagisterMessageFolder : IReadOnlyList<MagisterMessage>
     {
         /// <summary>
         /// Gets the item on the given index.
@@ -270,6 +270,14 @@ namespace MataSharp
             return (!item.Deleted && this.FolderType == item.Folder);
         }
 
+        /// <summary>
+        /// Count is unknown.
+        /// </summary>
+        public int Count
+        {
+            get { return -1; }
+        }
+
         private class Enumerator : IEnumerator<MagisterMessage>, IDisposable
         {
             private int Next = 0;
@@ -289,11 +297,11 @@ namespace MataSharp
                 {
                     string URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + Skip + "&$top=" + Next;
 
-                    string CompactMessageRAW = this.Mata.HttpClient.DownloadString(URL);
+                    string CompactMessageRAW = this.Mata.WebClient.DownloadString(URL);
                     var CompactMessage = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessageRAW).Items[0];
 
                     URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
-                    string MessageRAW = this.Mata.HttpClient.DownloadString(URL);
+                    string MessageRAW = this.Mata.WebClient.DownloadString(URL);
                     var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
                     return MessageClean.ToMagisterMessage(this.Skip);
                 }
@@ -303,11 +311,11 @@ namespace MataSharp
             {
                 string URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + index + "&$top=" + index + 1;
 
-                string CompactMessagesRAW = this.Mata.HttpClient.DownloadString(URL);
+                string CompactMessagesRAW = this.Mata.WebClient.DownloadString(URL);
                 var CompactMessage = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW).Items[0];
 
                 URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
-                string MessageRAW = this.Mata.HttpClient.DownloadString(URL);
+                string MessageRAW = this.Mata.WebClient.DownloadString(URL);
                 var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
                 return MessageClean.ToMagisterMessage(index);
             }
@@ -316,14 +324,14 @@ namespace MataSharp
             {
                 string URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + Skip + "&$top=" + Ammount;
 
-                string CompactMessagesRAW = this.Mata.HttpClient.DownloadString(URL);
+                string CompactMessagesRAW = this.Mata.WebClient.DownloadString(URL);
                 var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
 
                 var list = new List<MagisterMessage>(); int i = 0;
                 foreach (var CompactMessage in CompactMessages.Items)
                 {
                     URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
-                    string MessageRAW = this.Mata.HttpClient.DownloadString(URL);
+                    string MessageRAW = this.Mata.WebClient.DownloadString(URL);
                     var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
                     list.Add(MessageClean.ToMagisterMessage(i));
                     i++;
@@ -335,14 +343,14 @@ namespace MataSharp
             {
                 string URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + Skip + "&$top=" + Ammount;
 
-                string CompactMessagesRAW = this.Mata.HttpClient.DownloadString(URL);
+                string CompactMessagesRAW = this.Mata.WebClient.DownloadString(URL);
                 var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
 
                 var list = new List<MagisterMessage>(); int i = 0;
                 foreach (var CompactMessage in CompactMessages.Items.Where(m => !m.IsGelezen))
                 {
                     URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
-                    string MessageRAW = this.Mata.HttpClient.DownloadString(URL);
+                    string MessageRAW = this.Mata.WebClient.DownloadString(URL);
                     var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
                     list.Add(MessageClean.ToMagisterMessage(i));
                     i++;
@@ -358,12 +366,12 @@ namespace MataSharp
                 {
                     string URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + (i * 25) + "&$top=" + ((i * 25) + 25);
 
-                    string CompactMessagesRAW = this.Mata.HttpClient.DownloadString(URL);
+                    string CompactMessagesRAW = this.Mata.WebClient.DownloadString(URL);
                     var CompactMessages = JsonConvert.DeserializeObject<MagisterStyleMessageFolder>(CompactMessagesRAW);
                     foreach (var CompactMessage in CompactMessages.Items.Where(m => !m.IsGelezen))
                     {
                         URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
-                        string MessageRAW = this.Mata.HttpClient.DownloadString(URL);
+                        string MessageRAW = this.Mata.WebClient.DownloadString(URL);
                         var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
                         list.Add(MessageClean.ToMagisterMessage(index));
                         i++;

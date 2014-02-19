@@ -19,7 +19,7 @@ namespace MataSharp
                 if (this._Done == value) return;
 
                 this._Done = value;
-                this.Mata.HttpClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
+                this.Mata.WebClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
             }
         }
         public PersonList Teachers { get; set; }

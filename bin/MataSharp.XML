@@ -180,6 +180,11 @@
             <param name="index">The zero-based index of the item to get.</param>
             <returns>The item on the given index.</returns>
         </member>
+        <member name="P:MataSharp.MagisterMessageFolder.Count">
+            <summary>
+            Count is unknown.
+            </summary>
+        </member>
         <member name="M:MataSharp.MagisterPerson.ToMagisterStyle">
             <summary>
             Converts the current MagisterPerson instance to a MagisterStylePerson

@@ -23,7 +23,7 @@ namespace MataSharp
         /// <returns>List containing MagisterSchool instances</returns>
         public static List<MagisterSchool> GetSchools(string SearchFilter)
         {
-            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Length < 3) return new List<MagisterSchool>();
+            if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Length < 3) return new List<MagisterSchool>(0);
 
             string URL = "https://schoolkiezer.magister.net/home/query?filter=" + SearchFilter;
 

@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace MataSharp
 {
-    public partial class MagisterMessage : IComparable<MagisterMessage>, ICloneable
+    sealed public partial class MagisterMessage : IComparable<MagisterMessage>, ICloneable
     {
         #region Contents
         public int ID { get; set; }
@@ -30,7 +30,7 @@ namespace MataSharp
 
                 this._IsRead = value;
 
-                this.Mata.HttpClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
+                this.Mata.WebClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
             }
         }
 
@@ -84,7 +84,7 @@ namespace MataSharp
             this._Folder = 0;
             this.Deleted = false;
             this.IDKey = 0;
-            this.SenderGroupID = this.Mata.Person.GroupID;
+            this.SenderGroupID = this.Mata.Person._GroupID;
             this.Sender = this.Mata.Person;
             this.Recipients = new PersonList(this.Mata);
             this.CC = new PersonList(this.Mata);
@@ -248,7 +248,7 @@ namespace MataSharp
 
             this._Folder = FolderID;
 
-            this.Mata.HttpClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
+            this.Mata.WebClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
             thisCopied.Delete();
         }
 
@@ -260,7 +260,7 @@ namespace MataSharp
             if (this.Deleted) return;
 
             this.Deleted = true;
-            this.Mata.HttpClient.Delete(this.URL, "SESSION_ID=" + this.Mata.SessionID + "&fileDownload=true");
+            this.Mata.WebClient.Delete(this.URL);
         }
 
         /// <summary>
@@ -385,7 +385,7 @@ namespace MataSharp
                 ID = this.Id,
                 Ref = this.Ref,
                 Subject = this.Onderwerp,
-                Sender = this.Afzender.ToPerson(true),
+                Sender = this.Afzender.ToPerson(true, this.Mata),
                 Body = this.Inhoud.Trim(),
                 Recipients = tmpReceivers,
                 CC = tmpCopiedReceivers,
@@ -408,7 +408,7 @@ namespace MataSharp
         internal void Send(Mata Mata)
         {
             string URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/";
-            this.Mata.HttpClient.Post(URL, JsonConvert.SerializeObject(this));
+            this.Mata.WebClient.Post(URL, JsonConvert.SerializeObject(this));
         }
     }
 }

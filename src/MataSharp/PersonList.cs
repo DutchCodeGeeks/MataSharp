@@ -6,7 +6,7 @@ namespace MataSharp
     /// <summary>
     /// Custom made list to store MagisterPerson instances.
     /// </summary>
-    public class PersonList : IList<MagisterPerson>
+    sealed public class PersonList : IList<MagisterPerson>
     {
         private Mata Mata;
         private List<MagisterPerson> List;
@@ -58,7 +58,7 @@ namespace MataSharp
 
         internal void Add(MagisterStylePerson item, bool download)
         {
-            this.List.Add(item.ToPerson(download));
+            this.List.Add(item.ToPerson(download, this.Mata));
         }
 
         public void AddRange(IEnumerable<MagisterPerson> collection)
@@ -81,7 +81,7 @@ namespace MataSharp
 
         internal void AddRange(IEnumerable<MagisterStylePerson> collection, bool download)
         {
-            this.List.AddRange(collection.ConvertAll(p => p.ToPerson(download)));
+            this.List.AddRange(collection.ConvertAll(p => p.ToPerson(download, this.Mata)));
         }
 
         public void Clear()
@@ -113,7 +113,7 @@ namespace MataSharp
         public void InsertRange(int index, IEnumerable<string> collection)
         {
             if (this.IsReadOnly) ThrowException();
-            this.List.InsertRange(index, collection.ConvertAll(x => (MagisterPerson)this.Mata.GetPersons(x)[0]));
+            this.List.InsertRange(index, collection.ConvertAll(x => this.Mata.GetPersons(x)[0]));
         }
 
         public void InsertRange(int index, string name)
@@ -124,7 +124,7 @@ namespace MataSharp
 
         internal void InsertRange(int index, IEnumerable<MagisterStylePerson> collection, bool download)
         {
-            this.List.InsertRange(index, collection.ConvertAll(p => (MagisterPerson)p.ToPerson(download)));
+            this.List.InsertRange(index, collection.ConvertAll(p => p.ToPerson(download, this.Mata)));
         }
 
         public bool IsReadOnly { get; private set; }
