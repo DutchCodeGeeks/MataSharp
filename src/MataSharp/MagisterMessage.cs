@@ -372,12 +372,12 @@ namespace MataSharp
         public Mata Mata { get; internal set; }
         #endregion
 
-        public MagisterMessage ToMagisterMessage(int index)
+        public MagisterMessage ToMagisterMessage(bool download, int index)
         {
-            var tmpReceivers = this.Ontvangers.ToList(true, true, this.Mata);
+            var tmpReceivers = this.Ontvangers.ToList(download, true, this.Mata);
             tmpReceivers.Sort();
 
-            var tmpCopiedReceivers = this.KopieOntvangers.ToList(true, true, this.Mata);
+            var tmpCopiedReceivers = this.KopieOntvangers.ToList(download, true, this.Mata);
             tmpCopiedReceivers.Sort();
 
             return new MagisterMessage(this.Mata)
@@ -385,7 +385,7 @@ namespace MataSharp
                 ID = this.Id,
                 Ref = this.Ref,
                 Subject = this.Onderwerp,
-                Sender = this.Afzender.ToPerson(true, this.Mata),
+                Sender = this.Afzender.ToPerson(download, this.Mata),
                 Body = this.Inhoud.Trim(),
                 Recipients = tmpReceivers,
                 CC = tmpCopiedReceivers,

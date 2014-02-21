@@ -32,14 +32,19 @@ namespace MataSharp
             return new Enumerator(this);
         }
 
-        public MagisterMessage ElementAt(int index)
+        public MagisterMessage ElementAt(int index, bool download = true)
         {
-            return this.GetSpecificEnumerator().GetAt(index);
+            return this.GetSpecificEnumerator().GetAt(download, index);
         }
 
         public List<MagisterMessage> Take(int count)
         {
-            return this.GetRange(0, count);
+            return this.GetRange(0, count, true);
+        }
+
+        public List<MagisterMessage> Take(int count, bool download)
+        {
+            return this.GetRange(0, count, download);
         }
 
         /// <summary>
@@ -48,18 +53,18 @@ namespace MataSharp
         /// <param name="Ammount">Ammount to ask for on the server.</param>
         /// <param name="Skip">Ammount of messages to skip | Default = 0</param>
         /// <returns>List of unread MagisterMessages.</returns>
-        public List<MagisterMessage> WhereUnread(uint Ammount, uint Skip = 0)
+        public List<MagisterMessage> WhereUnread(uint Ammount, bool download = true, uint Skip = 0)
         {
-            return this.GetSpecificEnumerator().GetUnread(Ammount, Skip);
+            return this.GetSpecificEnumerator().GetUnread(download, Ammount, Skip);
         }
 
         /// <summary>
         /// Gets ALL the new messages on the parent's mata server.
         /// </summary>
         /// <returns>List of unread MagisterMessages.</returns>
-        public List<MagisterMessage> WhereUnread()
+        public List<MagisterMessage> WhereUnread(bool download = true)
         {
-            return this.GetSpecificEnumerator().GetUnread();
+            return this.GetSpecificEnumerator().GetUnread(download);
         }
 
         /// <summary>
@@ -68,7 +73,7 @@ namespace MataSharp
         /// <param name="index">The zero-based index of the element to remove.</param>
         public void RemoveAt(int index)
         {
-            this.GetSpecificEnumerator().GetAt(index).Delete();
+            this.GetSpecificEnumerator().GetAt(false, index).Delete();
         }
 
         /// <summary>
@@ -78,7 +83,7 @@ namespace MataSharp
         /// <param name="count">The number of elements to remove.</param>
         public void RemoveRange(int index, int count)
         {
-            this.GetSpecificEnumerator().GetRange(count, index).ForEach(m => m.Delete());
+            this.GetSpecificEnumerator().GetRange(false, count, index).ForEach(m => m.Delete());
         }
 
         /// <summary>
@@ -87,9 +92,9 @@ namespace MataSharp
         /// <param name="index">The zero-based index at which the range starts.</param>
         /// <param name="count">The number of elements in the range.</param>
         /// <returns>The given range of MagisterMessages as a List</returns>
-        public List<MagisterMessage> GetRange(int index, int count)
+        public List<MagisterMessage> GetRange(int index, int count, bool download = true)
         {
-            return this.GetSpecificEnumerator().GetRange(count, index);
+            return this.GetSpecificEnumerator().GetRange(download, count, index);
         }
 
         /// <summary>
@@ -118,7 +123,7 @@ namespace MataSharp
         /// <param name="predicate">The predicate the messages must match to.</param>
         public void RemoveAll(int max, Predicate<MagisterMessage> predicate)
         {
-            this.GetSpecificEnumerator().GetRange(max, 0).Where(m => predicate(m)).ToList().ForEach(m => m.Delete());
+            this.GetSpecificEnumerator().GetRange(true, max, 0).Where(m => predicate(m)).ToList().ForEach(m => m.Delete());
         }
 
         /// <summary>
@@ -127,9 +132,9 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the messages must match</param>
         /// <returns>A List containing the messages that matched the predicate.</returns>
-        public List<MagisterMessage> Where(int max, Func<MagisterMessage, bool> predicate)
+        public List<MagisterMessage> Where(int max, Func<MagisterMessage, bool> predicate, bool download = true)
         {
-            return this.GetSpecificEnumerator().GetRange(max, 0).Where(m => predicate(m)).ToList();
+            return this.GetSpecificEnumerator().GetRange(download, max, 0).Where(m => predicate(m)).ToList();
         }
 
         /// <summary>
@@ -138,12 +143,12 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>The first message on the server that matches the predicate.</returns>
-        public MagisterMessage First(int max, Func<MagisterMessage, bool> predicate)
+        public MagisterMessage First(int max, Func<MagisterMessage, bool> predicate, bool download = true)
         {
             var enumerator = this.GetSpecificEnumerator();
             for (int i = 0; i < max; i++)
             {
-                var msg = enumerator.GetAt(i);
+                var msg = enumerator.GetAt(download, i);
                 if (predicate(msg)) return msg;
             }
             throw new Exception("No messages found.");
@@ -155,9 +160,9 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>The last message on the server that matches the predicate.</returns>
-        public MagisterMessage Last(int max, Func<MagisterMessage, bool> predicate)
+        public MagisterMessage Last(int max, Func<MagisterMessage, bool> predicate, bool download = true)
         {
-            return this.GetSpecificEnumerator().GetRange(max, 0).Last(m => predicate(m));
+            return this.GetSpecificEnumerator().GetRange(download, max, 0).Last(m => predicate(m));
         }
 
         /// <summary>
@@ -166,12 +171,12 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>The first message on the server that matches the predicate.</returns>
-        public MagisterMessage FirstOrDefault(int max, Func<MagisterMessage, bool> predicate)
+        public MagisterMessage FirstOrDefault(int max, Func<MagisterMessage, bool> predicate, bool download = true)
         {
             var enumerator = this.GetSpecificEnumerator();
             for (int i = 0; i < max; i++)
             {
-                var msg = enumerator.GetAt(i);
+                var msg = enumerator.GetAt(download, i);
                 if (predicate(msg)) return msg;
             }
             return default(MagisterMessage);
@@ -183,13 +188,13 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>The last message on the server that matches the predicate.</returns>
-        public MagisterMessage LastOrDefault(int max, Func<MagisterMessage, bool> predicate)
+        public MagisterMessage LastOrDefault(int max, Func<MagisterMessage, bool> predicate, bool download = true)
         {
             var enumerator = this.GetSpecificEnumerator();
             MagisterMessage msg = null;
             for(int i = 0; i < max; i++)
             {
-                var tmpMsg = enumerator.GetAt(i);
+                var tmpMsg = enumerator.GetAt(download, i);
                 if (predicate(tmpMsg)) msg = tmpMsg;
             }
             if (msg != null) return msg;
@@ -202,12 +207,12 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the message must match.</param>
         /// <returns>A boolean value that tells if there is a message matching the given predicate.</returns>
-        public bool Any(int max, Func<MagisterMessage, bool> predicate)
+        public bool Any(int max, Func<MagisterMessage, bool> predicate, bool download = true)
         {
             var enumerator = this.GetSpecificEnumerator();
             for(int i = 0; i < max; i++)
             {
-                var msg = enumerator.GetAt(i);
+                var msg = enumerator.GetAt(download, i);
                 if (predicate(msg)) return true;
             }
             return false;
@@ -219,13 +224,13 @@ namespace MataSharp
         /// <param name="predicate">The predicate that the message must match to.</param>
         /// <param name="max">The max ammount of messages to get from the server.</param>
         /// <returns>A single MagisterMessage matching the given predicate.</returns>
-        public MagisterMessage Single(int max, Func<MagisterMessage, bool> predicate)
+        public MagisterMessage Single(int max, Func<MagisterMessage, bool> predicate, bool download = true)
         {
             var enumerator = this.GetSpecificEnumerator();
             MagisterMessage msg = null;
             for(int i = 0; i <= max; i++)
             {
-                var tmpMsg = enumerator.GetAt(i);
+                var tmpMsg = enumerator.GetAt(download, i);
                 if (predicate(tmpMsg))
                 {
                     if (msg == null) msg = tmpMsg;
@@ -243,13 +248,13 @@ namespace MataSharp
         /// <param name="max">The max ammount of messages to get from the server.</param>
         /// <param name="predicate">The predicate that the message must match to.</param>
         /// <returns>A single MagisterMessage matching the given predicate.</returns>
-        public MagisterMessage SingleOrDefault(int max, Func<MagisterMessage, bool> predicate)
+        public MagisterMessage SingleOrDefault(int max, Func<MagisterMessage, bool> predicate, bool download = true)
         {
             var enumerator = this.GetSpecificEnumerator();
             MagisterMessage msg = null;
             for (int i = 0; i <= max; i++)
             {
-                var tmpMsg = enumerator.GetAt(i);
+                var tmpMsg = enumerator.GetAt(download, i);
                 if (predicate(tmpMsg))
                 {
                     if (msg == null) msg = tmpMsg;
@@ -303,11 +308,11 @@ namespace MataSharp
                     URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                     string MessageRAW = this.Mata.WebClient.DownloadString(URL);
                     var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
-                    return MessageClean.ToMagisterMessage(this.Skip);
+                    return MessageClean.ToMagisterMessage(true, this.Skip);
                 }
             }
 
-            public MagisterMessage GetAt(int index)
+            public MagisterMessage GetAt(bool download, int index)
             {
                 string URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + index + "&$top=" + index + 1;
 
@@ -317,10 +322,10 @@ namespace MataSharp
                 URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                 string MessageRAW = this.Mata.WebClient.DownloadString(URL);
                 var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
-                return MessageClean.ToMagisterMessage(index);
+                return MessageClean.ToMagisterMessage(download, index);
             }
 
-            public List<MagisterMessage> GetRange(int Ammount, int Skip)
+            public List<MagisterMessage> GetRange(bool download, int Ammount, int Skip)
             {
                 string URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + Skip + "&$top=" + Ammount;
 
@@ -333,13 +338,13 @@ namespace MataSharp
                     URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                     string MessageRAW = this.Mata.WebClient.DownloadString(URL);
                     var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
-                    list.Add(MessageClean.ToMagisterMessage(i));
+                    list.Add(MessageClean.ToMagisterMessage(download, i));
                     i++;
                 }
                 return list;
             }
 
-            public List<MagisterMessage> GetUnread(uint Ammount, uint Skip = 0)
+            public List<MagisterMessage> GetUnread(bool download, uint Ammount, uint Skip = 0)
             {
                 string URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + Skip + "&$top=" + Ammount;
 
@@ -352,13 +357,13 @@ namespace MataSharp
                     URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                     string MessageRAW = this.Mata.WebClient.DownloadString(URL);
                     var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
-                    list.Add(MessageClean.ToMagisterMessage(i));
+                    list.Add(MessageClean.ToMagisterMessage(download, i));
                     i++;
                 }
                 return list;
             }
 
-            public List<MagisterMessage> GetUnread()
+            public List<MagisterMessage> GetUnread(bool download)
             {
                 var list = new List<MagisterMessage>(); int index = 0;
 
@@ -373,7 +378,7 @@ namespace MataSharp
                         URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                         string MessageRAW = this.Mata.WebClient.DownloadString(URL);
                         var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
-                        list.Add(MessageClean.ToMagisterMessage(index));
+                        list.Add(MessageClean.ToMagisterMessage(download, index));
                         i++;
                     }
                 }

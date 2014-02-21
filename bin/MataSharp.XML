@@ -52,7 +52,7 @@
             Folder that contains MagisterMessage instances.
             </summary>
         </member>
-        <member name="M:MataSharp.MagisterMessageFolder.WhereUnread(System.UInt32,System.UInt32)">
+        <member name="M:MataSharp.MagisterMessageFolder.WhereUnread(System.UInt32,System.Boolean,System.UInt32)">
             <summary>
             Checks for new messages on the parent's mata server.
             </summary>
@@ -60,7 +60,7 @@
             <param name="Skip">Ammount of messages to skip | Default = 0</param>
             <returns>List of unread MagisterMessages.</returns>
         </member>
-        <member name="M:MataSharp.MagisterMessageFolder.WhereUnread">
+        <member name="M:MataSharp.MagisterMessageFolder.WhereUnread(System.Boolean)">
             <summary>
             Gets ALL the new messages on the parent's mata server.
             </summary>
@@ -79,7 +79,7 @@
             <param name="index">The zero-based starting index of the range of elements to remove.</param>
             <param name="count">The number of elements to remove.</param>
         </member>
-        <member name="M:MataSharp.MagisterMessageFolder.GetRange(System.Int32,System.Int32)">
+        <member name="M:MataSharp.MagisterMessageFolder.GetRange(System.Int32,System.Int32,System.Boolean)">
             <summary>
             Gets the given range of MagisterMessages.
             </summary>
@@ -101,7 +101,7 @@
             <param name="max">The ammount of messages to check for on the server.</param>
             <param name="predicate">The predicate the messages must match to.</param>
         </member>
-        <member name="M:MataSharp.MagisterMessageFolder.Where(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+        <member name="M:MataSharp.MagisterMessageFolder.Where(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean},System.Boolean)">
             <summary>
             Gets the messages that matches the given predicate.
             </summary>
@@ -109,7 +109,7 @@
             <param name="predicate">The predicate the messages must match</param>
             <returns>A List containing the messages that matched the predicate.</returns>
         </member>
-        <member name="M:MataSharp.MagisterMessageFolder.First(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+        <member name="M:MataSharp.MagisterMessageFolder.First(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean},System.Boolean)">
             <summary>
             Gets the first message that matches the given predicate. Throws exception when nothing is found.
             </summary>
@@ -117,7 +117,7 @@
             <param name="predicate">The predicate the message must match.</param>
             <returns>The first message on the server that matches the predicate.</returns>
         </member>
-        <member name="M:MataSharp.MagisterMessageFolder.Last(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+        <member name="M:MataSharp.MagisterMessageFolder.Last(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean},System.Boolean)">
             <summary>
             Gets the last message that matches the given predicate. Throws exception when nothing is found.
             </summary>
@@ -125,7 +125,7 @@
             <param name="predicate">The predicate the message must match.</param>
             <returns>The last message on the server that matches the predicate.</returns>
         </member>
-        <member name="M:MataSharp.MagisterMessageFolder.FirstOrDefault(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+        <member name="M:MataSharp.MagisterMessageFolder.FirstOrDefault(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean},System.Boolean)">
             <summary>
             Gets the first message that matches the given predicate. Gives back the default of the object if nothing is found.
             </summary>
@@ -133,7 +133,7 @@
             <param name="predicate">The predicate the message must match.</param>
             <returns>The first message on the server that matches the predicate.</returns>
         </member>
-        <member name="M:MataSharp.MagisterMessageFolder.LastOrDefault(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+        <member name="M:MataSharp.MagisterMessageFolder.LastOrDefault(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean},System.Boolean)">
             <summary>
             Gets the last message that matches the given predicate. Gives back the default of the object if nothing is found.
             </summary>
@@ -141,7 +141,7 @@
             <param name="predicate">The predicate the message must match.</param>
             <returns>The last message on the server that matches the predicate.</returns>
         </member>
-        <member name="M:MataSharp.MagisterMessageFolder.Any(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+        <member name="M:MataSharp.MagisterMessageFolder.Any(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean},System.Boolean)">
             <summary>
             Checks if there is a message on the server that matches the given predicate.
             </summary>
@@ -149,7 +149,7 @@
             <param name="predicate">The predicate the message must match.</param>
             <returns>A boolean value that tells if there is a message matching the given predicate.</returns>
         </member>
-        <member name="M:MataSharp.MagisterMessageFolder.Single(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+        <member name="M:MataSharp.MagisterMessageFolder.Single(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean},System.Boolean)">
             <summary>
             Returns the single message on the server that matches the given predicate. Throws expception when more matching messages or none are found.
             </summary>
@@ -157,7 +157,7 @@
             <param name="max">The max ammount of messages to get from the server.</param>
             <returns>A single MagisterMessage matching the given predicate.</returns>
         </member>
-        <member name="M:MataSharp.MagisterMessageFolder.SingleOrDefault(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean})">
+        <member name="M:MataSharp.MagisterMessageFolder.SingleOrDefault(System.Int32,System.Func{MataSharp.MagisterMessage,System.Boolean},System.Boolean)">
             <summary>
             Returns the single message on the server that matches the given predicate. Throws expception when more matching messages are found.
             When no matching messages are found, returns the default value.
