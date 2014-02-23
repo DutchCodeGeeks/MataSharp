@@ -9,9 +9,9 @@ namespace MataSharp
     public static class Extensions
     {
         #region General
-        public static void ForEach<T>(this IEnumerable<T> current, Action<T> action)
+        public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
         {
-            foreach (var item in current) action(item);
+            foreach (var item in collection) action(item);
         }
 
         public static List<Tout> ConvertAll<Tin, Tout>(this IEnumerable<Tin> current, Converter<Tin, Tout> converter)
@@ -97,12 +97,5 @@ namespace MataSharp
             return new PersonList(collection, mata);
         }
         #endregion
-
-        internal static MagisterStyleMessage ToMagisterStyleMsg(this string rawData, Mata mata)
-        {
-            var tmpMsg = JsonConvert.DeserializeObject<MagisterStyleMessage>(rawData);
-            tmpMsg.Mata = mata;
-            return tmpMsg;
-        }
     }
 }

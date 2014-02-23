@@ -5,14 +5,13 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Newtonsoft.Json;
-//using Newtonsoft.Json.Linq;
 
 namespace MataSharp
 {
     /// <summary>
     /// Type to communicate with a Magister School's server.
     /// </summary>
-    sealed public partial class Mata : IDisposable, ICloneable
+    sealed public class Mata : IDisposable, ICloneable
     {
         public string Name { get; private set; }
         public uint UserID { get; private set; }
@@ -162,7 +161,7 @@ namespace MataSharp
                 this.CheckedPersons.Add(SearchFilter, personRaw);
                 return new PersonList(this, personRaw, false, false);
             }
-            else return new PersonList(this, this.CheckedPersons.First(x => x.Key.ToUpper() == SearchFilter.ToUpper()).Value,false, false);
+            else return new PersonList(this, this.CheckedPersons.First(x => x.Key.ToUpper() == SearchFilter.ToUpper()).Value, false, false);
         }
 
         public List<Homework> GetHomework()

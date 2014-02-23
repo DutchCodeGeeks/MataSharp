@@ -104,6 +104,18 @@ namespace MataSharp
             get { return this.List.Count; }
         }
 
+        public void Insert(int index, MagisterPerson item)
+        {
+            if (this.IsReadOnly) ThrowException();
+            this.List.Insert(index, item);
+        }
+
+        public void Insert(int index, string name)
+        {
+            if (this.IsReadOnly) ThrowException();
+            this.List.Insert(index, this.Mata.GetPersons(name)[0]);
+        }
+
         public void InsertRange(int index, IEnumerable<MagisterPerson> collection)
         {
             if (this.IsReadOnly) ThrowException();
@@ -119,7 +131,7 @@ namespace MataSharp
         public void InsertRange(int index, string name)
         {
             if (this.IsReadOnly) ThrowException();
-            this.List.InsertRange(index, (IEnumerable<MagisterPerson>)this.Mata.GetPersons(name));
+            this.List.InsertRange(index, this.Mata.GetPersons(name));
         }
 
         internal void InsertRange(int index, IEnumerable<MagisterStylePerson> collection, bool download)
@@ -176,12 +188,6 @@ namespace MataSharp
         public int IndexOf(MagisterPerson item)
         {
             return this.List.IndexOf(item);
-        }
-
-        public void Insert(int index, MagisterPerson item)
-        {
-            if (this.IsReadOnly) ThrowException();
-            this.List.Insert(index, item);
         }
 
         public MagisterPerson this[int index]

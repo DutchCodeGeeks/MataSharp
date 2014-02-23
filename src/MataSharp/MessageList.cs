@@ -123,7 +123,7 @@ namespace MataSharp
         /// <param name="predicate">The predicate the messages must match to.</param>
         public void RemoveAll(int max, Predicate<MagisterMessage> predicate)
         {
-            this.GetSpecificEnumerator().GetRange(true, max, 0).Where(m => predicate(m)).ToList().ForEach(m => m.Delete());
+            this.Take(max, true).Where(m => predicate(m)).ForEach(m => m.Delete());
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace MataSharp
         /// <returns>A List containing the messages that matched the predicate.</returns>
         public List<MagisterMessage> Where(int max, Func<MagisterMessage, bool> predicate, bool download = true)
         {
-            return this.GetSpecificEnumerator().GetRange(download, max, 0).Where(m => predicate(m)).ToList();
+            return this.Take(max, download).Where(m => predicate(m)).ToList();
         }
 
         /// <summary>
@@ -307,8 +307,8 @@ namespace MataSharp
 
                     URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                     string MessageRAW = this.Mata.WebClient.DownloadString(URL);
-                    var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
-                    return MessageClean.ToMagisterMessage(true, this.Skip);
+                    var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
+                    return MessageClean.ToMagisterMessage(this.Mata, true, this.Skip);
                 }
             }
 
@@ -321,8 +321,8 @@ namespace MataSharp
 
                 URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                 string MessageRAW = this.Mata.WebClient.DownloadString(URL);
-                var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
-                return MessageClean.ToMagisterMessage(download, index);
+                var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
+                return MessageClean.ToMagisterMessage(this.Mata, download, index);
             }
 
             public List<MagisterMessage> GetRange(bool download, int Ammount, int Skip)
@@ -337,8 +337,8 @@ namespace MataSharp
                 {
                     URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                     string MessageRAW = this.Mata.WebClient.DownloadString(URL);
-                    var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
-                    list.Add(MessageClean.ToMagisterMessage(download, i));
+                    var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
+                    list.Add(MessageClean.ToMagisterMessage(this.Mata, download, i));
                     i++;
                 }
                 return list;
@@ -356,8 +356,8 @@ namespace MataSharp
                 {
                     URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                     string MessageRAW = this.Mata.WebClient.DownloadString(URL);
-                    var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
-                    list.Add(MessageClean.ToMagisterMessage(download, i));
+                    var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
+                    list.Add(MessageClean.ToMagisterMessage(this.Mata, download, i));
                     i++;
                 }
                 return list;
@@ -377,8 +377,8 @@ namespace MataSharp
                     {
                         URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                         string MessageRAW = this.Mata.WebClient.DownloadString(URL);
-                        var MessageClean = MessageRAW.ToMagisterStyleMsg(this.Mata);
-                        list.Add(MessageClean.ToMagisterMessage(download, index));
+                        var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
+                        list.Add(MessageClean.ToMagisterMessage(this.Mata, download, index));
                         i++;
                     }
                 }

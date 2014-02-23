@@ -8,7 +8,7 @@ namespace MataTest
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             #region MagisterSchool
             Console.WriteLine("Typ gedeelte van je school in: ");

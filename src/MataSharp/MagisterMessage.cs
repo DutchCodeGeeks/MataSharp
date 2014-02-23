@@ -319,8 +319,7 @@ namespace MataSharp
                 BerichtMapId = this._Folder,
                 IsDefinitiefVerwijderd = this.Deleted,
                 IdKey = this.IDKey,
-                IdDeelNameSoort = this.SenderGroupID,
-                Mata = this.Mata
+                IdDeelNameSoort = this.SenderGroupID
             };
         }
 
@@ -367,25 +366,22 @@ namespace MataSharp
         public bool IsDefinitiefVerwijderd { get; set; }
         public int IdKey { get; set; }
         public int IdDeelNameSoort { get; set; }
-
-        [JsonIgnore]
-        public Mata Mata { get; internal set; }
         #endregion
 
-        public MagisterMessage ToMagisterMessage(bool download, int index)
+        public MagisterMessage ToMagisterMessage(Mata mata, bool download, int index)
         {
-            var tmpReceivers = this.Ontvangers.ToList(download, true, this.Mata);
+            var tmpReceivers = this.Ontvangers.ToList(download, true, mata);
             tmpReceivers.Sort();
 
-            var tmpCopiedReceivers = this.KopieOntvangers.ToList(download, true, this.Mata);
+            var tmpCopiedReceivers = this.KopieOntvangers.ToList(download, true, mata);
             tmpCopiedReceivers.Sort();
 
-            return new MagisterMessage(this.Mata)
+            return new MagisterMessage(mata)
             {
                 ID = this.Id,
                 Ref = this.Ref,
                 Subject = this.Onderwerp,
-                Sender = this.Afzender.ToPerson(download, this.Mata),
+                Sender = this.Afzender.ToPerson(download, mata),
                 Body = this.Inhoud.Trim(),
                 Recipients = tmpReceivers,
                 CC = tmpCopiedReceivers,
@@ -395,7 +391,7 @@ namespace MataSharp
                 IsFlagged = this.HeeftPrioriteit,
                 IDOriginal = this.IdOorspronkelijkeBericht,
                 IDOrginalReceiver = this.IdOntvangerOorspronkelijkeBericht,
-                Attachments = this.Bijlagen.ToList(AttachmentType.Message, this.Mata),
+                Attachments = this.Bijlagen.ToList(AttachmentType.Message, mata),
                 _Folder = this.BerichtMapId,
                 Deleted = this.IsDefinitiefVerwijderd,
                 IDKey = this.IdKey,
@@ -405,10 +401,10 @@ namespace MataSharp
             };
         }
 
-        internal void Send(Mata Mata)
+        internal void Send(Mata mata)
         {
-            string URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/";
-            this.Mata.WebClient.Post(URL, JsonConvert.SerializeObject(this));
+            string URL = "https://" + mata.School.URL + "/api/personen/" + mata.UserID + "/communicatie/berichten/";
+            mata.WebClient.Post(URL, JsonConvert.SerializeObject(this));
         }
     }
 }
