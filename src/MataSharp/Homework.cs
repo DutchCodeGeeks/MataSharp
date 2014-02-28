@@ -22,11 +22,11 @@ namespace MataSharp
                 this.Mata.WebClient.Put(this.URL, JsonConvert.SerializeObject(this.ToMagisterStyle()));
             }
         }
-        public PersonList Teachers { get; set; }
+        public PersonList Teachers { get; internal set; }
         public DateTime End { get; set; }
         public int ID { get; set; }
         internal int InfoType;
-        public HomeworkType Type { get { return (HomeworkType)this.InfoType; } }
+        public HomeworkType HomeworkType { get { return (HomeworkType)this.InfoType; } }
         public string Content { get; set; }
         public int EndBySchoolHour { get; set; }
         public int BeginBySchoolHour { get; set; }

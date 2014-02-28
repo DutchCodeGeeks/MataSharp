@@ -19,7 +19,7 @@ namespace MataSharp
         public string Group { get; set; }
         public string TeacherCode { get; set; }
         internal int _GroupID;
-        public PersonType Type { get { return (PersonType)this._GroupID; } }
+        public PersonType PersonType { get { return (PersonType)this._GroupID; } }
 
         internal MagisterPerson Original { get; set; }
 
@@ -70,10 +70,10 @@ namespace MataSharp
 
         public override string ToString() { return this.Description; }
 
-        public int CompareTo(MagisterPerson PersonB)
+        public int CompareTo(MagisterPerson other)
         {
-            var surNameCompared = this.SurName.CompareTo(PersonB.SurName);
-            return (surNameCompared != 0) ? surNameCompared : this.FirstName.CompareTo(PersonB.FirstName);
+            var surNameCompared = this.SurName.CompareTo(other.SurName);
+            return (surNameCompared != 0) ? surNameCompared : this.FirstName.CompareTo(other.FirstName);
         }
 
         object ICloneable.Clone()
@@ -115,7 +115,7 @@ namespace MataSharp
         public string Voornamen { get; set; }
         public string Voorletters { get; set; }
 
-        private MagisterStylePerson[] GetPersons(string SearchFilter, Mata mata)
+        private static MagisterStylePerson[] GetPersons(string SearchFilter, Mata mata)
         {
             if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Length < 3) return new MagisterStylePerson[0];
 

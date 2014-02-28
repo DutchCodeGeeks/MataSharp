@@ -12,9 +12,9 @@ namespace MataSharp
         public int ID { get; set; }
         public bool Archived { get; set; }
         public bool Visible { get; set; }
-        public List<StudyGuidePart> StudyGuideParts { get; set; }
+        public List<StudyGuidePart> StudyGuideParts { get; internal set; }
         public DateTime ExpireDate { get; set; }
-        public List<string> ClassCodes { get; set; }
+        public IReadOnlyList<string> ClassCodes { get; internal set; }
         public DateTime BeginDate { get; set; }
 
         public int CompareTo(StudyGuide other)
@@ -26,7 +26,7 @@ namespace MataSharp
 
     public class StudyGuidePart : IComparable<StudyGuidePart>
     {
-        public ReadOnlyCollection<Attachment> Attachments { get; set; }
+        public ReadOnlyCollection<Attachment> Attachments { get; internal set; }
         public int ID { get; set; }
         public bool Visible { get; set; }
         public string Description { get; set; }

@@ -44,7 +44,7 @@ namespace MataSharp
             catch(WebException e)
             {
                 if (((HttpWebResponse)e.Response).StatusCode == HttpStatusCode.Unauthorized) throw new AuthenticationException("Wrong username and/or password.");
-                else throw e;
+                else throw;
             }
             return stripString(Encoding.ASCII.GetString(tmpArr));
         }
@@ -82,6 +82,6 @@ namespace MataSharp
         }
 
         ~MataWebClient() { this.Dispose(); }
-        public void Dispose() { this.Client.Dispose(); }
+        public void Dispose() { this.Client.Dispose(); GC.SuppressFinalize(this); }
     }
 }

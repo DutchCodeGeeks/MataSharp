@@ -14,7 +14,7 @@ namespace MataSharp
         public int ID { get; set; }
         public object Ref { get; set; } // Even Schoolmaster doesn't know what this is, it's mysterious. Just keep it in case.
         public string Subject { get; set; }
-        public MagisterPerson Sender { get; internal set; }
+        public MagisterPerson Sender { get; set; }
         public string Body { get; set; }
         public PersonList Recipients { get; set; }
         public PersonList CC { get; set; }

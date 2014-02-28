@@ -37,12 +37,12 @@ namespace MataSharp
             return this.GetSpecificEnumerator().GetAt(download, index);
         }
 
-        public List<MagisterMessage> Take(int count)
+        public IEnumerable<MagisterMessage> Take(int count)
         {
             return this.GetRange(0, count, true);
         }
 
-        public List<MagisterMessage> Take(int count, bool download)
+        public IEnumerable<MagisterMessage> Take(int count, bool download)
         {
             return this.GetRange(0, count, download);
         }
@@ -53,7 +53,7 @@ namespace MataSharp
         /// <param name="Ammount">Ammount to ask for on the server.</param>
         /// <param name="Skip">Ammount of messages to skip | Default = 0</param>
         /// <returns>List of unread MagisterMessages.</returns>
-        public List<MagisterMessage> WhereUnread(uint Ammount, bool download = true, uint Skip = 0)
+        public IEnumerable<MagisterMessage> WhereUnread(uint Ammount, bool download = true, uint Skip = 0)
         {
             return this.GetSpecificEnumerator().GetUnread(download, Ammount, Skip);
         }
@@ -62,7 +62,7 @@ namespace MataSharp
         /// Gets ALL the new messages on the parent's mata server.
         /// </summary>
         /// <returns>List of unread MagisterMessages.</returns>
-        public List<MagisterMessage> WhereUnread(bool download = true)
+        public IEnumerable<MagisterMessage> WhereUnread(bool download = true)
         {
             return this.GetSpecificEnumerator().GetUnread(download);
         }
@@ -92,7 +92,7 @@ namespace MataSharp
         /// <param name="index">The zero-based index at which the range starts.</param>
         /// <param name="count">The number of elements in the range.</param>
         /// <returns>The given range of MagisterMessages as a List</returns>
-        public List<MagisterMessage> GetRange(int index, int count, bool download = true)
+        public IEnumerable<MagisterMessage> GetRange(int index, int count, bool download = true)
         {
             return this.GetSpecificEnumerator().GetRange(download, count, index);
         }
@@ -132,7 +132,7 @@ namespace MataSharp
         /// <param name="max">The max value to check for on the server.</param>
         /// <param name="predicate">The predicate the messages must match</param>
         /// <returns>A List containing the messages that matched the predicate.</returns>
-        public List<MagisterMessage> Where(int max, Func<MagisterMessage, bool> predicate, bool download = true)
+        public IEnumerable<MagisterMessage> Where(int max, Func<MagisterMessage, bool> predicate, bool download = true)
         {
             return this.Take(max, download).Where(m => predicate(m)).ToList();
         }
@@ -408,6 +408,7 @@ namespace MataSharp
             {
                 this.Reset();
                 this.Sender = null;
+                GC.SuppressFinalize(this);
                 GC.Collect();
             }
         }

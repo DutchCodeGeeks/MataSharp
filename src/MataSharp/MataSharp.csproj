@@ -34,6 +34,12 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <NoWarn>1591;1573;0659</NoWarn>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>MataSharp.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -67,6 +73,7 @@
     <Compile Include="StudyGuide.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="MataSharp.pfx" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

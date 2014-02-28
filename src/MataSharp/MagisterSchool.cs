@@ -21,7 +21,7 @@ namespace MataSharp
         /// </summary>
         /// <param name="SearchFilter">The search filter to use as string.</param>
         /// <returns>List containing MagisterSchool instances</returns>
-        public static List<MagisterSchool> GetSchools(string SearchFilter)
+        public static IReadOnlyList<MagisterSchool> GetSchools(string SearchFilter)
         {
             if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Length < 3) return new List<MagisterSchool>(0);
 

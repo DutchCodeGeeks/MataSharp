@@ -118,7 +118,7 @@ namespace MataSharp
         /// <summary>
         /// <para>Get all messagefolders linked with the current Mata instance.</para>
         /// </summary>
-        public List<MagisterMessageFolder> GetMessageFolders()
+        public IReadOnlyList<MagisterMessageFolder> GetMessageFolders()
         {
             string url = "https://" + this.School.URL + "/api/personen/" + this.UserID + "/communicatie/berichten/mappen?$skip=0&$top=50";
 
@@ -164,7 +164,7 @@ namespace MataSharp
             else return new PersonList(this, this.CheckedPersons.First(x => x.Key.ToUpper() == SearchFilter.ToUpper()).Value, false, false);
         }
 
-        public List<Homework> GetHomework()
+        public IReadOnlyList<Homework> GetHomework()
         {
             string URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/huiswerk/huiswerk";
 
@@ -189,7 +189,7 @@ namespace MataSharp
             return tmpList;
         }
 
-        public List<Homework> GetTasks()
+        public IReadOnlyList<Homework> GetTasks()
         {
             string URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/huiswerk/taken";
 
@@ -212,7 +212,7 @@ namespace MataSharp
             return tmpList;
         }
 
-        public List<Homework> GetTests()
+        public IReadOnlyList<Homework> GetTests()
         {
             string URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/huiswerk/toetsen";
 
@@ -235,7 +235,7 @@ namespace MataSharp
             return tmpList;
         }
 
-        public List<StudyGuide> GetStudyGuides()
+        public IReadOnlyList<StudyGuide> GetStudyGuides()
         {
             string URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/studiewijzers?$skip=0&$top=50";
 
@@ -255,7 +255,7 @@ namespace MataSharp
             return list;
         }
 
-        public List<Assignment> GetAssignments()
+        public IReadOnlyList<Assignment> GetAssignments()
         {
             string URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/opdrachten/status/openstaand?$skip=0&$top=30";
 
@@ -273,7 +273,7 @@ namespace MataSharp
             return list;
         }
 
-        public List<DigitalSchoolUtility> GetDigitalSchoolUtilities()
+        public IReadOnlyList<DigitalSchoolUtility> GetDigitalSchoolUtilities()
         {
             string URL = "https://" + this.School.URL + "/api/leerlingen/" + this.UserID + "/digitaallesmateriaal/vakken";
 
@@ -330,7 +330,7 @@ namespace MataSharp
         /// <summary>
         /// Disposes the current Mata instance.
         /// </summary>
-        public void Dispose() { this.WebClient.Dispose(); GC.Collect(); }
+        public void Dispose() { this.WebClient.Dispose(); GC.SuppressFinalize(this); GC.Collect(); }
 
 
         /// <summary>

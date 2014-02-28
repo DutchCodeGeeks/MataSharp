@@ -13,8 +13,8 @@ namespace MataSharp
         public string Description { get; set; }
         public uint? Grade { get; set; }
         public string Class { get; set; }
-        public ReadOnlyCollection<Attachment> Attachments { get; set; }
-        public PersonList Teachers { get; set; }
+        public ReadOnlyCollection<Attachment> Attachments { get; internal set; }
+        public PersonList Teachers { get; internal set; }
         public int ID { get; set; }
         public DateTime HandInTime { get; set; }
         public DateTime DeadLine { get; set; }
@@ -22,7 +22,7 @@ namespace MataSharp
         public object Ref { get; set; } //Good old friend
         public int StateLastAssignmentVersion { get; set; } //???
 
-        public List<AssignmentVersion> Versions { get; set; }
+        public List<AssignmentVersion> Versions { get; internal set; }
 
         public override string ToString() { return this.Name; }
 
@@ -38,10 +38,10 @@ namespace MataSharp
         public string Name { get; set; }
         public uint? Grade { get; set; }
         public string TeacherNotice { get; set; }
-        public ReadOnlyCollection<Attachment> FeedbackAttachments { get; set; }
+        public ReadOnlyCollection<Attachment> FeedbackAttachments { get; internal set; }
         public DateTime DeadLine { get; set; }
         public DateTime HandInTime { get; set; }
-        public ReadOnlyCollection<Attachment> HandedInAttachments { get; set; }
+        public ReadOnlyCollection<Attachment> HandedInAttachments { get; internal set; }
         public string HandedInFooter { get; set; }
 
         public override string ToString() { return this.Name; }
