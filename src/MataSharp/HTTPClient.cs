@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Specialized;
-using System.Text;
 using System.Security.Authentication;
 
 namespace MataSharp
@@ -75,7 +75,6 @@ namespace MataSharp
                 if (!Directory.Exists(DIR)) Directory.CreateDirectory(DIR);
                 this.Client.DownloadFile(URL, fullPath);
             }
-
             else this.Client.DownloadFile(URL, Filename);
 
             return fullPath;

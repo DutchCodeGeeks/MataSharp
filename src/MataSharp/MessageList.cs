@@ -104,16 +104,7 @@ namespace MataSharp
         /// <returns>A zero-based index of the position of the given item.</returns>
         public int IndexOf(MagisterMessage item)
         {
-            var enumerator = this.GetSpecificEnumerator();
-            MagisterMessage currentItem = null;
-            int pos = -1;
-            do
-            {
-                enumerator.MoveNext();
-                currentItem = enumerator.Current;
-                pos++;
-            } while (currentItem.ID != item.ID);
-            return pos;
+            return item.Index;
         }
 
         /// <summary>
