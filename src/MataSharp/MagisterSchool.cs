@@ -25,9 +25,9 @@ namespace MataSharp
             if (string.IsNullOrWhiteSpace(SearchFilter) || SearchFilter.Length < 3) return new List<MagisterSchool>(0);
 
             string URL = "https://schoolkiezer.magister.net/home/query?filter=" + SearchFilter;
-
+            
             string schoolsRAW = new System.Net.WebClient().DownloadString(URL);
-            return JsonConvert.DeserializeObject<MagisterSchool[]>(schoolsRAW).ToList();
+            return JsonConvert.DeserializeObject<MagisterSchool[]>(schoolsRAW);
         }
 
         public MagisterSchool Clone()

@@ -5,7 +5,7 @@ namespace MataSharp
     /// <summary>
     /// Folder that contains MagisterMessage instances.
     /// </summary>
-    sealed public partial class MagisterMessageFolder : IEnumerable<MagisterMessage>
+    sealed public partial class MagisterMessageFolder : IReadOnlyList<MagisterMessage>
     {
         public string Name { get; set; }
         public uint UnreadMessagesCount { get; set; }
@@ -20,9 +20,9 @@ namespace MataSharp
 
     public enum MessageFolder : int
     { //Defines the folders where messages possibly are in, server handles it as ID's. We? We handle it as an enum :D
-        Inbox = -101,
-        SentMessages = -103,
-        Bin = -102
+        Inbox = 1,
+        SentMessages = 2,
+        Bin = 3
     }
 
     internal partial struct MagisterStyleMessageFolderListItem

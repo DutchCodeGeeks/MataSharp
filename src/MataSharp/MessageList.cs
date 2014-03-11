@@ -53,7 +53,7 @@ namespace MataSharp
         /// <param name="Ammount">Ammount to ask for on the server.</param>
         /// <param name="Skip">Ammount of messages to skip | Default = 0</param>
         /// <returns>List of unread MagisterMessages.</returns>
-        public IEnumerable<MagisterMessage> WhereUnread(uint Ammount, bool download = true, uint Skip = 0)
+        public IList<MagisterMessage> WhereUnread(uint Ammount, bool download = true, uint Skip = 0)
         {
             return this.GetSpecificEnumerator().GetUnread(download, Ammount, Skip);
         }
@@ -62,7 +62,7 @@ namespace MataSharp
         /// Gets ALL the new messages on the parent's mata server.
         /// </summary>
         /// <returns>List of unread MagisterMessages.</returns>
-        public IEnumerable<MagisterMessage> WhereUnread(bool download = true)
+        public IList<MagisterMessage> WhereUnread(bool download = true)
         {
             return this.GetSpecificEnumerator().GetUnread(download);
         }
