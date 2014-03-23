@@ -269,6 +269,7 @@ namespace MataSharp
         /// <summary>
         /// Count is unknown.
         /// </summary>
+        [Obsolete("Count is unknown.")]
         public int Count
         {
             get { return -1; }

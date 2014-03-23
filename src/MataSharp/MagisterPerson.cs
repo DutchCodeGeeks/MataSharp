@@ -136,7 +136,9 @@ namespace MataSharp
             MagisterStylePerson tmpPerson;
             if (download)
             {
-                try { tmpPerson = (GetPersons(this.Naam, mata).Length == 1) ? GetPersons(this.Naam, mata).Single() : this; } //Main building ground.
+                var downloadedPersons = GetPersons(this.Naam, mata);
+
+                try { tmpPerson = (downloadedPersons.Length == 1) ? downloadedPersons.Single() : this; } //Main building ground.
                 catch { tmpPerson = this; }
             }
             else tmpPerson = this;
