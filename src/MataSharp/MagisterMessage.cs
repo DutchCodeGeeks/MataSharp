@@ -324,7 +324,13 @@ namespace MataSharp
 
         public override string ToString()
         {
-            return "From: " + this.Sender.Description + "\nSent: " + this.SentDate.ToString(false) + "\nTo: " + String.Join(", ", this.Recipients.Select(x => x.Name)) + ((this.CC != null && this.CC.Count > 0) ? string.Join(", ", this.CC) : "") + ((this.Attachments.Count > 0) ? ("\nAttachments (" + this.Attachments.Count + "): " + String.Join(", ", this.Attachments)) : "") + "\nSubject: " + this.Subject + "\n\n\"" + this.Body + "\"";
+            return "From: " + this.Sender.Description +
+                "\nSent: " + this.SentDate.ToString(false) + 
+                "\nTo: " + String.Join(", ", this.Recipients.Select(x => x.Name)) +
+                ((this.CC.Count > 0) ? "\nCC: " + string.Join(", ", this.CC) : "") +
+                ((this.Attachments.Count > 0) ? ("\nAttachments (" + this.Attachments.Count + "): " + String.Join(", ", this.Attachments)) : "") +
+                "\nSubject: " + this.Subject +
+                "\n\n\"" + this.Body + "\"";
         }
 
         public int CompareTo(MagisterMessage other)
