@@ -52,6 +52,12 @@
             Folder that contains MagisterMessage instances.
             </summary>
         </member>
+        <member name="M:MataSharp.MagisterMessageFolder.GetSpecificEnumerator">
+            <summary>
+            Gets the Enumerator with specific methods (like GetRange).
+            </summary>
+            <returns>The Enumerator with specific methods</returns>
+        </member>
         <member name="M:MataSharp.MagisterMessageFolder.WhereUnread(System.UInt32,System.Boolean,System.UInt32)">
             <summary>
             Checks for new messages on the parent's mata server.

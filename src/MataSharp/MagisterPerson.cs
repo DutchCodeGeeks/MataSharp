@@ -24,7 +24,10 @@ namespace MataSharp
 
         public override bool Equals(object obj)
         {
-            return this.Equals((MagisterPerson)obj);
+            var person = obj as MagisterPerson;
+            if (person == null) throw new ArgumentException("Argument must implicitly convertible to MagisterPerson");
+
+            return this.Equals(person);
         }
 
         public bool Equals(MagisterPerson Person)

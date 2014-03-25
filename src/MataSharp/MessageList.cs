@@ -27,6 +27,10 @@ namespace MataSharp
             return GetEnumerator();
         }
 
+        /// <summary>
+        /// Gets the Enumerator with specific methods (like GetRange).
+        /// </summary>
+        /// <returns>The Enumerator with specific methods</returns>
         private Enumerator GetSpecificEnumerator()
         {
             return new Enumerator(this);
@@ -55,7 +59,7 @@ namespace MataSharp
         /// <returns>List of unread MagisterMessages.</returns>
         public IList<MagisterMessage> WhereUnread(uint Ammount, bool download = true, uint Skip = 0)
         {
-            return this.GetSpecificEnumerator().GetUnread(download, Ammount, Skip);
+            return this.GetSpecificEnumerator().GetUnread(download, Ammount, (int)Skip);
         }
 
         /// <summary>
@@ -83,7 +87,7 @@ namespace MataSharp
         /// <param name="count">The number of elements to remove.</param>
         public void RemoveRange(int index, int count)
         {
-            this.GetSpecificEnumerator().GetRange(false, count, index).ForEach(m => m.Delete());
+            this.GetRange(index, count, false).ForEach(m => m.Delete());
         }
 
         /// <summary>
@@ -153,7 +157,7 @@ namespace MataSharp
         /// <returns>The last message on the server that matches the predicate.</returns>
         public MagisterMessage Last(int max, Func<MagisterMessage, bool> predicate, bool download = true)
         {
-            return this.GetSpecificEnumerator().GetRange(download, max, 0).Last(m => predicate(m));
+            return this.GetRange(0, max, download).Last(m => predicate(m));
         }
 
         /// <summary>
@@ -304,7 +308,7 @@ namespace MataSharp
                 }
             }
 
-            public MagisterMessage GetAt(bool download, int index)
+            public MagisterMessage GetAt(bool download, int index) //Download is 0 based here.
             {
                 string URL = "https://" + Mata.School.URL + "/api/personen/" + Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + index + "&$top=" + index + 1;
 
@@ -330,13 +334,13 @@ namespace MataSharp
                     URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                     string MessageRAW = this.Mata.WebClient.DownloadString(URL);
                     var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                    list.Add(MessageClean.ToMagisterMessage(this.Mata, download, i));
+                    list.Add(MessageClean.ToMagisterMessage(this.Mata, download, i + Skip));
                     i++;
                 }
                 return list;
             }
 
-            public List<MagisterMessage> GetUnread(bool download, uint Ammount, uint Skip = 0)
+            public List<MagisterMessage> GetUnread(bool download, uint Ammount, int Skip = 0)
             {
                 string URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten?$skip=" + Skip + "&$top=" + Ammount;
 
@@ -349,7 +353,7 @@ namespace MataSharp
                     URL = "https://" + Mata.School.URL + "/api/personen/" + this.Mata.UserID + "/communicatie/berichten/mappen/" + Sender.ID + "/berichten/" + CompactMessage.Id;
                     string MessageRAW = this.Mata.WebClient.DownloadString(URL);
                     var MessageClean = JsonConvert.DeserializeObject<MagisterStyleMessage>(MessageRAW);
-                    list.Add(MessageClean.ToMagisterMessage(this.Mata, download, i));
+                    list.Add(MessageClean.ToMagisterMessage(this.Mata, download, i + Skip));
                     i++;
                 }
                 return list;
