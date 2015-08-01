@@ -3,7 +3,7 @@ MataSharp
 
 Public C# implementation of the non public 'Mata' API.
 
-For a fun talk join: irc.geekshed.net @ channel #magister
+For a fun talk join: irc.freenode.net @ channel ##magister
 
 For a PHP implementation, see: https://github.com/tkon99/MATA-PHP
 
